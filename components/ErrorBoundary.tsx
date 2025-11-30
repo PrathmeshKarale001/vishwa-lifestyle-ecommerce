@@ -27,7 +27,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    log.error("Error caught by boundary", error, errorInfo);
+    log.error("Error caught by boundary", error, { componentStack: errorInfo.componentStack });
     
     // Sentry temporarily disabled
   }

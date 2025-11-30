@@ -182,7 +182,7 @@ export async function POST(request: NextRequest) {
       }
 
       default:
-        log.warn('Unhandled webhook event', undefined, { eventType });
+        log.warn('Unhandled webhook event', { eventType });
     }
 
     return NextResponse.json({ received: true });

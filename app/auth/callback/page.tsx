@@ -59,7 +59,7 @@ export default function AuthCallbackPage() {
       const {
         data: { subscription: authSubscription },
       } = supabase.auth.onAuthStateChange(async (event, session) => {
-        log.debug("Auth state changed", undefined, { event, hasSession: !!session });
+        log.debug("Auth state changed", { event, hasSession: !!session });
 
         if (event === "SIGNED_IN" && session) {
           log.info("User signed in via auth state change");

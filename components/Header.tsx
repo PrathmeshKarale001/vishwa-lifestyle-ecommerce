@@ -34,11 +34,10 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
-          isSolidHeader
-            ? "bg-white py-3 sm:py-4 md:py-5 shadow-sm text-black border-b border-gray-100"
-            : "bg-transparent py-6 sm:py-7 md:py-8 text-white"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out border-b ${isSolidHeader
+          ? "bg-white py-3 sm:py-4 md:py-5 text-black border-gray-100"
+          : "bg-transparent py-6 sm:py-7 md:py-8 text-white border-transparent"
+          }`}
       >
         <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between relative">
           {/* Mobile Menu Button */}
@@ -52,18 +51,20 @@ export default function Header() {
 
           {/* Navigation - Left */}
           <nav
-            className={`hidden lg:flex items-center space-x-8 text-sm tracking-[0.15em] uppercase font-medium transition-colors duration-300 ${
-              isSolidHeader ? "text-black" : "text-white"
-            }`}
+            className={`hidden lg:flex items-center space-x-8 text-sm tracking-[0.15em] uppercase font-medium transition-colors duration-300 ${isSolidHeader ? "text-black" : "text-white"
+              }`}
           >
             <Link href="/shop" className="hover:text-accent-gold transition-colors">
               Shop
             </Link>
-            <Link href="/ingredients" className="hover:text-accent-gold transition-colors">
-              Ingredients
-            </Link>
             <Link href="/story" className="hover:text-accent-gold transition-colors">
               Our Story
+            </Link>
+            <Link href="/philosophy" className="hover:text-accent-gold transition-colors">
+              Philosophy
+            </Link>
+            <Link href="/contact" className="hover:text-accent-gold transition-colors">
+              Contact
             </Link>
           </nav>
 
@@ -75,11 +76,10 @@ export default function Header() {
                 alt="Vishwa Lifestyle"
                 width={120}
                 height={40}
-                className={`transition-all duration-500 ${
-                  isSolidHeader 
-                    ? "h-9 sm:h-11 w-auto" 
-                    : "h-11 sm:h-14 w-auto"
-                }`}
+                className={`transition-all duration-500 ${isSolidHeader
+                  ? "h-9 sm:h-11 w-auto"
+                  : "h-11 sm:h-14 w-auto"
+                  }`}
                 priority
               />
             </Link>
@@ -87,14 +87,13 @@ export default function Header() {
 
           {/* Actions - Right */}
           <div
-            className={`flex items-center space-x-3 sm:space-x-4 md:space-x-6 transition-colors duration-300 z-10 ${
-              isSolidHeader ? "text-black" : "text-white"
-            }`}
+            className={`flex items-center space-x-3 sm:space-x-4 md:space-x-6 transition-colors duration-300 z-10 ${isSolidHeader ? "text-black" : "text-white"
+              }`}
           >
             <button className="hover:text-accent-gold transition-colors hidden lg:flex items-center">
               <span className="text-xs tracking-widest mr-2">IN (₹)</span>
             </button>
-            
+
             <button
               onClick={() => setIsSearchOpen(true)}
               className="hover:text-accent-gold transition-colors"
@@ -178,18 +177,25 @@ export default function Header() {
                 Shop
               </Link>
               <Link
-                href="/ingredients"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="hover:text-accent-gold transition-colors"
-              >
-                Ingredients
-              </Link>
-              <Link
                 href="/story"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="hover:text-accent-gold transition-colors"
               >
                 Our Story
+              </Link>
+              <Link
+                href="/philosophy"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="hover:text-accent-gold transition-colors"
+              >
+                Philosophy
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="hover:text-accent-gold transition-colors"
+              >
+                Contact
               </Link>
               <div className="pt-8 border-t border-gray-100 space-y-4">
                 <Link

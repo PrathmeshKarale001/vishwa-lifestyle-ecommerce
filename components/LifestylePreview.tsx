@@ -8,7 +8,7 @@ const categories = [
     {
         id: 1,
         title: "Vishwa Kurta",
-        image: "/products/home-productgrid/vishwa-kurta.jpg",
+        image: "/products/home-productgrid/Kurta.png",
         link: "/shop/apparel",
         gridArea: "col-span-1 row-span-2",
         imgAlt: "Vishwa Kurta",
@@ -16,7 +16,7 @@ const categories = [
     {
         id: 2,
         title: "Sacred Candles",
-        image: "/products/home-productgrid/sacred-candles.jpg",
+        image: "/products/home-productgrid/Candle.jpeg",
         link: "/shop/candles",
         gridArea: "col-span-1 row-span-1",
         imgAlt: "Sacred Candles",
@@ -24,7 +24,7 @@ const categories = [
     {
         id: 3,
         title: "Artifacts & Decor",
-        image: "/products/home-productgrid/artifacts-decor.jpg",
+        image: "/products/home-productgrid/artifacts.jpeg",
         link: "/shop/decor",
         gridArea: "col-span-1 row-span-1",
         imgAlt: "Artifacts & Decor",
@@ -32,7 +32,7 @@ const categories = [
     {
         id: 4,
         title: "Bags",
-        image: "/products/home-productgrid/bags.jpg",
+        image: "/products/home-productgrid/Bags.jpeg",
         link: "/shop/mats",
         gridArea: "col-span-1 row-span-1",
         imgAlt: "Bags",
@@ -40,7 +40,7 @@ const categories = [
     {
         id: 5,
         title: "Juti",
-        image: "/products/home-productgrid/juti.jpg",
+        image: "/products/home-productgrid/juti.png",
         link: "/shop/rituals",
         gridArea: "col-span-1 row-span-1",
         imgAlt: "Juti",
@@ -65,11 +65,10 @@ export default function LifestylePreview() {
                             <motion.div
                                 key={cat.id}
                                 variants={fadeInUp}
-                                className={`relative group overflow-hidden ${
-                                    isFirstItem 
-                                        ? "sm:col-span-2 md:col-span-1 md:row-span-2 h-64 sm:h-80 md:h-full" 
-                                        : "h-48 sm:h-64 md:h-auto"
-                                }`}
+                                className={`relative group overflow-hidden ${isFirstItem
+                                    ? "sm:col-span-2 md:col-span-1 md:row-span-2 h-64 sm:h-80 md:h-full"
+                                    : "h-48 sm:h-64 md:h-auto"
+                                    }`}
                             >
                                 <Link href={cat.link} className="block w-full h-full">
                                     <div

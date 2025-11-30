@@ -64,7 +64,7 @@ export default function StoryPage() {
                     className="absolute inset-0 bg-cover bg-center opacity-50"
                     style={{
                         backgroundImage:
-                            "url(https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2000&auto=format&fit=crop)",
+                            "url(/products/3.jpg)",
                     }}
                 />
                 <motion.div
@@ -98,7 +98,7 @@ export default function StoryPage() {
                         >
                             <div className="relative aspect-[4/5] overflow-hidden rounded-lg shadow-2xl">
                                 <img
-                                    src="https://images.unsplash.com/photo-1604881991720-f91add269bed?q=80&w=1200&auto=format&fit=crop"
+                                    src="/products/34.jpg"
                                     alt="Agnihotra ritual"
                                     className="w-full h-full object-cover"
                                 />

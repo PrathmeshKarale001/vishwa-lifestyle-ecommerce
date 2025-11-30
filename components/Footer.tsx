@@ -60,6 +60,7 @@ export default function Footer() {
                         <ul className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-foreground-muted">
                             <li><Link href="/story" className="hover:text-accent-gold transition-colors">Our Story</Link></li>
                             <li><Link href="/philosophy" className="hover:text-accent-gold transition-colors">Philosophy</Link></li>
+                            <li><Link href="/ingredients" className="hover:text-accent-gold transition-colors">Ingredients</Link></li>
                             <li><Link href="/contact" className="hover:text-accent-gold transition-colors">Contact Us</Link></li>
                             <li><Link href="/faq" className="hover:text-accent-gold transition-colors">FAQ</Link></li>
                         </ul>

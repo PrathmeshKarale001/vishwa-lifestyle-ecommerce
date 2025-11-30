@@ -7,7 +7,7 @@ import Link from "next/link";
 const slides = [
     {
         id: 1,
-        image: "https://images.unsplash.com/photo-1560780551-0756d8562e04",
+        image: "/products/hero-swipe/6.png",
         title: "Har Ghar Agnihotra",
         subtitle: "The Ritual of Peace",
         cta: "Shop Rituals",
@@ -15,7 +15,7 @@ const slides = [
     },
     {
         id: 2,
-        image: "https://images.unsplash.com/photo-1603006905003-be475563bc59?q=80&w=1920&auto=format&fit=crop",
+        image: "/products/hero-swipe/3.jpg",
         title: "Vishwa Living",
         subtitle: "Pure. Sacred. Inspired.",
         cta: "Explore Lifestyle",
@@ -23,7 +23,7 @@ const slides = [
     },
     {
         id: 3,
-        image: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=1920&auto=format&fit=crop",
+        image: "/products/hero-swipe/2.jpeg",
         title: "Experience the Vedic Way",
         subtitle: "From Rituals to Everyday Living",
         cta: "Discover More",
@@ -37,7 +37,7 @@ export default function Hero() {
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % slides.length);
-        }, 6000);
+        }, 7000);
         return () => clearInterval(timer);
     }, []);
 
@@ -56,7 +56,7 @@ export default function Hero() {
                         className="absolute inset-0 bg-cover bg-center"
                         style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
                     />
-                    <div className="absolute inset-0 bg-black/30" /> {/* Overlay */}
+                    <div className="absolute inset-0 bg-black/60" /> {/* Overlay */}
                 </motion.div>
             </AnimatePresence>
 

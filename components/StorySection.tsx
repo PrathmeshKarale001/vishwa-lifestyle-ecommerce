@@ -20,9 +20,9 @@ export default function StorySection() {
                             {/* Using a div with background image for now to avoid Next.js Image config issues with external domains if not configured, 
                   but standard img tag is safer for this demo. */}
                             <img
-                                src="https://images.unsplash.com/photo-1606293926075-69a00dbfde81?q=80&w=1200&auto=format&fit=crop"
+                                src="/products/philosophy/1.jpg"
                                 alt="Vedic Living"
-                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
+                                className="w-full h-full object-cover object-bottom hover:scale-105 transition-transform duration-1000"
                             />
                         </div>
                     </motion.div>

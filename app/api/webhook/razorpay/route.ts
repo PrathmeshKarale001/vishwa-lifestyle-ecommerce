@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyPaymentSignature } from '@/lib/razorpay';
 import { updateOrderByRazorpayId, supabase } from '@/lib/supabase';
-import { sendOrderConfirmationEmail, sendAdminOrderNotification } from '@/lib/email';
+import { sendOrderConfirmationEmail, sendOrderNotificationToAdmin } from '@/lib/email';
 import crypto from 'crypto';
 import { log } from '@/lib/logger';
 
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const eventType = event.event;
     const payload = event.payload;
 
-    log.info('Razorpay webhook event received', undefined, { eventType });
+    log.info('Razorpay webhook event received', { eventType });
 
     switch (eventType) {
       case 'payment.captured': {
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
             payment_status: 'paid',
             payment_id: paymentId,
           });
-          log.info(`Order marked as paid`, undefined, { razorpayOrderId, paymentId });
+          log.info(`Order marked as paid`, { razorpayOrderId, paymentId });
 
           // Fetch order details for email
           if (supabase) {
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
             status: 'cancelled',
             payment_status: 'failed',
           });
-          log.info(`Order marked as failed`, undefined, { orderId });
+          log.info(`Order marked as failed`, { orderId });
         } catch (error) {
           log.error('Failed to update order status to failed', error, { orderId });
         }
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
         const paymentId = refund.payment_id;
 
         // Note: Need to find order by payment_id and update
-        log.info(`Refund created`, undefined, { paymentId, refundId: refund.id });
+        log.info(`Refund created`, { paymentId, refundId: refund.id });
 
         break;
       }

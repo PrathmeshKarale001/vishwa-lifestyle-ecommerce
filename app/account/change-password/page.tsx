@@ -8,6 +8,7 @@ import { Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
+import { log } from "@/lib/logger";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

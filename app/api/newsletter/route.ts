@@ -24,12 +24,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  let email: string | undefined;
+  let name: string | undefined;
+  
   try {
-    let { email, name } = await request.json();
-    
-    // Sanitize inputs
-    email = sanitizeEmail(email);
-    if (name) name = sanitizeText(name);
+    const body = await request.json();
+    email = sanitizeEmail(body.email);
+    name = body.name ? sanitizeText(body.name) : undefined;
 
     if (!email) {
       return NextResponse.json(

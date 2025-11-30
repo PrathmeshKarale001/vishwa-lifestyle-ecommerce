@@ -139,7 +139,7 @@ export default function AdminOrdersPage() {
       );
       toast.success(`Order status updated to ${newStatus}`);
       } catch (error) {
-        log.error("Error updating order", error, { orderId: id, status });
+        log.error("Error updating order", error, { orderId, status: newStatus });
         toast.error("Unable to update order. Please try again.");
     } finally {
       setUpdatingId(null);

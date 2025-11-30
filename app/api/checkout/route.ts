@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createRazorpayOrder } from '@/lib/razorpay';
 import { createOrder, generateOrderNumber } from '@/lib/supabase';
 import { rateLimit, getClientIP } from '@/lib/rate-limit';
-import { sanitizeEmail, sanitizeText } from '@/lib/sanitize';
+import { sanitizeEmail, sanitizeText, sanitizePhone } from '@/lib/sanitize';
 import { log } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {

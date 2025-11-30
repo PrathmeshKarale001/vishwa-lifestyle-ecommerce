@@ -5,6 +5,8 @@ import { sendOrderConfirmationEmail, sendOrderNotificationToAdmin } from '@/lib/
 import crypto from 'crypto';
 import { log } from '@/lib/logger';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.text();
@@ -16,7 +18,7 @@ export async function POST(request: NextRequest) {
 
     // Verify webhook signature
     const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
-    
+
     if (webhookSecret) {
       const expectedSignature = crypto
         .createHmac('sha256', webhookSecret)

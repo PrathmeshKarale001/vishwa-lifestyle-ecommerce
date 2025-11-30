@@ -24,7 +24,9 @@ const resetPasswordSchema = z
 
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
-export default function ResetPasswordPage() {
+import { Suspense } from "react";
+
+function ResetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
@@ -138,9 +140,8 @@ export default function ResetPasswordPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
-                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${
-                    errors.password ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${errors.password ? "border-red-500" : "border-gray-200"
+                    }`}
                   placeholder="Enter new password"
                 />
                 <button
@@ -167,9 +168,8 @@ export default function ResetPasswordPage() {
                 <input
                   type={showConfirm ? "text" : "password"}
                   {...register("confirmPassword")}
-                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${
-                    errors.confirmPassword ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${errors.confirmPassword ? "border-red-500" : "border-gray-200"
+                    }`}
                   placeholder="Confirm new password"
                 />
                 <button
@@ -212,6 +212,18 @@ export default function ResetPasswordPage() {
         </motion.div>
       </div>
     </main>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white pt-24 pb-16 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-accent-gold" />
+      </div>
+    }>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
 

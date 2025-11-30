@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateCsrfToken } from '@/lib/csrf';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/csrf - Get CSRF token
  * This endpoint generates and returns a CSRF token for the client
@@ -8,7 +10,7 @@ import { generateCsrfToken } from '@/lib/csrf';
 export async function GET(request: NextRequest) {
   try {
     const token = generateCsrfToken();
-    
+
     return NextResponse.json(
       { token },
       {

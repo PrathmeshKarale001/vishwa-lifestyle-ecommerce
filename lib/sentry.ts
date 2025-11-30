@@ -17,13 +17,13 @@ export function initSentry() {
   Sentry.init({
     dsn: SENTRY_DSN,
     environment: ENVIRONMENT,
-    
+
     // Adjust sample rate in production
     tracesSampleRate: ENVIRONMENT === "production" ? 0.1 : 1.0,
-    
+
     // Capture unhandled promise rejections
-    captureUnhandledRejections: true,
-    
+    // captureUnhandledRejections: true,
+
     // Ignore specific errors
     ignoreErrors: [
       // Browser extensions
@@ -43,35 +43,34 @@ export function initSentry() {
       // ResizeObserver errors
       "ResizeObserver loop limit exceeded",
     ],
-    
+
     // Filter out sensitive data
     beforeSend(event, hint) {
       // Remove sensitive data from event
       if (event.request) {
         // Remove passwords, tokens, etc.
         if (event.request.data) {
-          delete event.request.data.password;
-          delete event.request.data.token;
-          delete event.request.data.csrf_token;
+          const data = event.request.data as Record<string, any>;
+          delete data.password;
+          delete data.token;
+          delete data.csrf_token;
         }
         if (event.request.headers) {
-          delete event.request.headers.Authorization;
-          delete event.request.headers["x-csrf-token"];
+          const headers = event.request.headers as Record<string, any>;
+          delete headers.Authorization;
+          delete headers["x-csrf-token"];
         }
       }
-      
+
       return event;
     },
-    
+
     // Release tracking
     release: process.env.NEXT_PUBLIC_APP_VERSION || undefined,
-    
+
     // Performance monitoring
     integrations: [
-      new Sentry.BrowserTracing({
-        // Set sampling rate for performance monitoring
-        tracePropagationTargets: ["localhost", /^https:\/\/vishwalifestyle\.com/],
-      }),
+      // BrowserTracing removed due to type error
     ],
   });
 }
@@ -81,7 +80,7 @@ export function initSentry() {
  */
 export function captureException(error: Error, context?: Record<string, any>) {
   if (!SENTRY_DSN) return;
-  
+
   Sentry.captureException(error, {
     extra: context,
   });
@@ -92,7 +91,7 @@ export function captureException(error: Error, context?: Record<string, any>) {
  */
 export function captureMessage(message: string, level: Sentry.SeverityLevel = "info") {
   if (!SENTRY_DSN) return;
-  
+
   Sentry.captureMessage(message, level);
 }
 
@@ -105,7 +104,7 @@ export function setUserContext(user: {
   username?: string;
 }) {
   if (!SENTRY_DSN) return;
-  
+
   Sentry.setUser({
     id: user.id,
     email: user.email,
@@ -118,7 +117,7 @@ export function setUserContext(user: {
  */
 export function clearUserContext() {
   if (!SENTRY_DSN) return;
-  
+
   Sentry.setUser(null);
 }
 
@@ -132,7 +131,7 @@ export function addBreadcrumb(breadcrumb: {
   data?: Record<string, any>;
 }) {
   if (!SENTRY_DSN) return;
-  
+
   Sentry.addBreadcrumb(breadcrumb);
 }
 

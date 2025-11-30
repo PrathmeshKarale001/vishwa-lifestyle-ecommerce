@@ -6,15 +6,17 @@ import { sanitizeEmail, sanitizeText, sanitizePhone } from '@/lib/sanitize';
 import { log } from '@/lib/logger';
 import { verifyCsrfTokenServer } from '@/lib/csrf';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   // Rate limiting - 10 requests per minute
   const ip = getClientIP(request);
   const limit = rateLimit(`contact:${ip}`, { windowMs: 60000, maxRequests: 10 });
-  
+
   if (!limit.allowed) {
     return NextResponse.json(
       { success: false, error: 'Too many requests. Please try again in a moment.' },
-      { 
+      {
         status: 429,
         headers: {
           'X-RateLimit-Limit': '10',
@@ -29,7 +31,7 @@ export async function POST(request: NextRequest) {
     // Verify CSRF token (optional for now, can be enforced later)
     const csrfToken = request.headers.get('x-csrf-token');
     const sessionToken = request.cookies.get('csrf_token')?.value;
-    
+
     // Only verify if token is provided (backward compatible)
     if (csrfToken && sessionToken && !verifyCsrfTokenServer(csrfToken, sessionToken)) {
       log.warn('Invalid CSRF token in contact form', { ip });
@@ -40,7 +42,7 @@ export async function POST(request: NextRequest) {
     }
 
     let { name, email, phone, subject, message } = await request.json();
-    
+
     // Sanitize inputs
     name = sanitizeText(name);
     email = sanitizeEmail(email);
@@ -72,7 +74,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, message: 'Message received (dev mode)' });
     }
 
-      // Save to database
+    // Save to database
     try {
       await submitContactForm({
         name,
@@ -92,13 +94,13 @@ export async function POST(request: NextRequest) {
         log.error('Failed to send contact auto-reply', err);
       });
 
-      return NextResponse.json({ 
-        success: true, 
-        message: 'Your message has been sent successfully. We\'ll get back to you soon!' 
+      return NextResponse.json({
+        success: true,
+        message: 'Your message has been sent successfully. We\'ll get back to you soon!'
       });
     } catch (error: any) {
       log.error('Contact form error', error, { email, subject });
-      
+
       // Handle duplicate or other database errors gracefully
       if (error.code === '23505') {
         return NextResponse.json(
@@ -106,7 +108,7 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
-      
+
       return NextResponse.json(
         { success: false, error: 'Failed to submit message. Please try again or contact us directly.' },
         { status: 500 }

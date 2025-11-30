@@ -3,12 +3,14 @@ import { verifyPaymentSignature } from '@/lib/razorpay';
 import { updateOrderByRazorpayId, getOrderByNumber } from '@/lib/supabase';
 import { log } from '@/lib/logger';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      razorpay_order_id, 
-      razorpay_payment_id, 
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
       razorpay_signature,
       orderNumber,
     } = body;

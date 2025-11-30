@@ -4,15 +4,17 @@ import { rateLimit, getClientIP } from '@/lib/rate-limit';
 import { sanitizeText } from '@/lib/sanitize';
 import { log } from '@/lib/logger';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   // Rate limiting - 20 requests per minute
   const ip = getClientIP(request);
   const limit = rateLimit(`coupons:${ip}`, { windowMs: 60000, maxRequests: 20 });
-  
+
   if (!limit.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again in a moment.' },
-      { 
+      {
         status: 429,
         headers: {
           'X-RateLimit-Limit': '20',
@@ -28,7 +30,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     let { code, subtotal, user_id } = body;
     couponCode = code || 'unknown';
-    
+
     // Sanitize coupon code
     if (code) code = sanitizeText(code.toUpperCase().trim());
 

@@ -3,6 +3,8 @@ import { getAbandonedCartsForReminder, markEmailSent } from '@/lib/abandoned-car
 import { sendAbandonedCartEmail } from '@/lib/email';
 import { log } from '@/lib/logger';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     // This should be called by a cron job or scheduled task

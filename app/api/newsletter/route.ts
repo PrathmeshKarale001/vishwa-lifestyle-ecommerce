@@ -5,15 +5,17 @@ import { rateLimit, getClientIP } from '@/lib/rate-limit';
 import { sanitizeEmail, sanitizeText } from '@/lib/sanitize';
 import { log } from '@/lib/logger';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   // Rate limiting - 5 requests per minute
   const ip = getClientIP(request);
   const limit = rateLimit(`newsletter:${ip}`, { windowMs: 60000, maxRequests: 5 });
-  
+
   if (!limit.allowed) {
     return NextResponse.json(
       { success: false, error: 'Too many requests. Please try again in a moment.' },
-      { 
+      {
         status: 429,
         headers: {
           'X-RateLimit-Limit': '5',
@@ -26,7 +28,7 @@ export async function POST(request: NextRequest) {
 
   let email: string | undefined;
   let name: string | undefined;
-  
+
   try {
     const body = await request.json();
     email = sanitizeEmail(body.email);
@@ -79,7 +81,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error: any) {
     log.error('Newsletter error', error, { email });
-    
+
     // Handle duplicate email error gracefully
     if (error.code === '23505') {
       return NextResponse.json(
@@ -87,7 +89,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     return NextResponse.json(
       { success: false, error: 'Unable to subscribe. Please try again later.' },
       { status: 500 }

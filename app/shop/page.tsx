@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronDown, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
@@ -44,7 +44,7 @@ interface Product {
   tags?: string[];
 }
 
-export default function ShopPage() {
+function ShopContent() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,7 +60,7 @@ export default function ShopPage() {
     const categoryParam = searchParams.get("category");
     const searchParam = searchParams.get("search");
     const pageParam = searchParams.get("page");
-    
+
     if (categoryParam) {
       const categoryMap: Record<string, string> = {
         rituals: "ritual",
@@ -72,7 +72,7 @@ export default function ShopPage() {
       };
       setActiveCategory(categoryMap[categoryParam] || categoryParam);
     }
-    
+
     if (searchParam) {
       setSearchQuery(searchParam);
     }
@@ -106,11 +106,11 @@ export default function ShopPage() {
     let result = activeCategory === "all"
       ? products
       : products.filter((p) => {
-          const productCategory = typeof p.category === 'string' 
-            ? p.category.toLowerCase() 
-            : '';
-          return productCategory === activeCategory;
-        });
+        const productCategory = typeof p.category === 'string'
+          ? p.category.toLowerCase()
+          : '';
+        return productCategory === activeCategory;
+      });
 
     // Filter by search query
     if (searchQuery) {
@@ -207,7 +207,7 @@ export default function ShopPage() {
       </section>
 
       {/* Category Navigation */}
-      <nav 
+      <nav
         className="sticky top-16 sm:top-20 z-40 bg-white/95 backdrop-blur border-b border-gray-100 py-3 sm:py-4"
         aria-label="Product categories"
       >
@@ -219,11 +219,10 @@ export default function ShopPage() {
                 onClick={() => setActiveCategory(cat.id)}
                 role="tab"
                 aria-selected={activeCategory === cat.id}
-                className={`text-xs sm:text-sm uppercase tracking-widest transition-colors duration-300 whitespace-nowrap px-2 sm:px-0 ${
-                  activeCategory === cat.id
-                    ? "text-accent-gold font-medium border-b-2 border-accent-gold pb-1"
-                    : "text-foreground-muted hover:text-foreground"
-                }`}
+                className={`text-xs sm:text-sm uppercase tracking-widest transition-colors duration-300 whitespace-nowrap px-2 sm:px-0 ${activeCategory === cat.id
+                  ? "text-accent-gold font-medium border-b-2 border-accent-gold pb-1"
+                  : "text-foreground-muted hover:text-foreground"
+                  }`}
               >
                 {cat.name}
               </button>
@@ -295,7 +294,7 @@ export default function ShopPage() {
               aria-expanded={isFilterOpen}
               aria-controls="filter-panel"
             >
-              <SlidersHorizontal size={14} className="sm:w-4 sm:h-4" aria-hidden="true" /> 
+              <SlidersHorizontal size={14} className="sm:w-4 sm:h-4" aria-hidden="true" />
               <span className="hidden sm:inline">Filter</span>
             </button>
           </div>
@@ -318,10 +317,10 @@ export default function ShopPage() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8 gap-y-8 sm:gap-y-10 md:gap-y-12"
             >
               {paginatedProducts.map((product) => {
-                const tag = product.isBestSeller ? "Best Seller" : 
-                           product.isNew ? "New" : 
-                           product.tags?.[0] || undefined;
-                
+                const tag = product.isBestSeller ? "Best Seller" :
+                  product.isNew ? "New" :
+                    product.tags?.[0] || undefined;
+
                 return (
                   <ProductCard
                     key={product._id}
@@ -354,23 +353,23 @@ export default function ShopPage() {
             action={
               searchQuery
                 ? {
-                    label: "View All Products",
-                    href: "/shop",
-                  }
+                  label: "View All Products",
+                  href: "/shop",
+                }
                 : {
-                    label: "Browse All Products",
-                    href: "/shop",
-                  }
+                  label: "Browse All Products",
+                  href: "/shop",
+                }
             }
             secondaryAction={
               searchQuery
                 ? {
-                    label: "Clear Search",
-                    onClick: () => {
-                      setSearchQuery("");
-                      window.history.replaceState({}, '', '/shop');
-                    },
-                  }
+                  label: "Clear Search",
+                  onClick: () => {
+                    setSearchQuery("");
+                    window.history.replaceState({}, '', '/shop');
+                  },
+                }
                 : undefined
             }
           />
@@ -387,7 +386,7 @@ export default function ShopPage() {
             >
               <ChevronLeft size={18} className="sm:w-5 sm:h-5" />
             </button>
-            
+
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
               // Show first, last, current, and adjacent pages
               if (
@@ -399,11 +398,10 @@ export default function ShopPage() {
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center border text-xs sm:text-sm ${
-                      currentPage === page
-                        ? "bg-foreground text-white border-foreground"
-                        : "border-gray-200 hover:bg-gray-50"
-                    }`}
+                    className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center border text-xs sm:text-sm ${currentPage === page
+                      ? "bg-foreground text-white border-foreground"
+                      : "border-gray-200 hover:bg-gray-50"
+                      }`}
                     aria-label={`Page ${page}`}
                     aria-current={currentPage === page ? "page" : undefined}
                   >
@@ -411,7 +409,7 @@ export default function ShopPage() {
                   </button>
                 );
               }
-              
+
               // Show ellipsis
               if (page === currentPage - 2 || page === currentPage + 2) {
                 return (
@@ -420,10 +418,10 @@ export default function ShopPage() {
                   </span>
                 );
               }
-              
+
               return null;
             })}
-            
+
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
@@ -460,7 +458,7 @@ export default function ShopPage() {
             >
               <div className="p-4 sm:p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-10">
                 <h2 className="font-serif text-lg sm:text-xl">Filters</h2>
-                <button 
+                <button
                   onClick={() => setIsFilterOpen(false)}
                   aria-label="Close filters"
                   className="p-1"
@@ -556,5 +554,19 @@ export default function ShopPage() {
 
       <Footer />
     </main>
+  );
+}
+
+export default function ShopPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-white pt-16 sm:pt-20">
+        <section className="relative h-[30vh] sm:h-[35vh] md:h-[40vh] bg-background-alt flex items-center justify-center">
+          <div className="animate-pulse text-accent-gold">Loading...</div>
+        </section>
+      </main>
+    }>
+      <ShopContent />
+    </Suspense>
   );
 }

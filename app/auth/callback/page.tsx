@@ -7,7 +7,9 @@ import toast from "react-hot-toast";
 import React from "react";
 import { log } from "@/lib/logger";
 
-export default function AuthCallbackPage() {
+import { Suspense } from "react";
+
+function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
@@ -35,7 +37,7 @@ export default function AuthCallbackPage() {
       // Check for errors in URL
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
       const errorParam = hashParams.get("error") || searchParams.get("error");
-      
+
       if (errorParam) {
         log.error("OAuth error", errorParam, { errorParam });
         toast.error("Authentication failed. Please try again.");
@@ -48,10 +50,10 @@ export default function AuthCallbackPage() {
       const hasHash = window.location.hash && window.location.hash.length > 1;
       const accessToken = hashParams.get("access_token");
       const refreshToken = hashParams.get("refresh_token");
-      
-      log.debug("Processing OAuth callback", { 
+
+      log.debug("Processing OAuth callback", {
         hasHash,
-        hasAccessToken: !!accessToken, 
+        hasAccessToken: !!accessToken,
         hasRefreshToken: !!refreshToken,
       });
 
@@ -66,10 +68,10 @@ export default function AuthCallbackPage() {
           showSuccessToast();
           setStatus("success");
           window.history.replaceState(null, "", "/auth/callback");
-          
+
           if (timeoutId) clearTimeout(timeoutId);
           if (subscription) subscription.unsubscribe();
-          
+
           setTimeout(() => {
             router.push("/account");
             router.refresh();
@@ -83,7 +85,7 @@ export default function AuthCallbackPage() {
       if (accessToken && refreshToken) {
         try {
           log.debug("Setting session with tokens from hash");
-          
+
           // Use setSession to establish the session
           const { data: { session }, error: setError } = await supabase.auth.setSession({
             access_token: accessToken,
@@ -101,10 +103,10 @@ export default function AuthCallbackPage() {
             showSuccessToast();
             setStatus("success");
             window.history.replaceState(null, "", "/auth/callback");
-            
+
             if (timeoutId) clearTimeout(timeoutId);
             if (subscription) subscription.unsubscribe();
-            
+
             setTimeout(() => {
               router.push("/account");
               router.refresh();
@@ -131,7 +133,7 @@ export default function AuthCallbackPage() {
 
         try {
           const { data: { session }, error } = await supabase.auth.getSession();
-          
+
           if (error) {
             log.error("Get session error", error);
             if (attempts < maxAttempts) {
@@ -149,10 +151,10 @@ export default function AuthCallbackPage() {
             showSuccessToast();
             setStatus("success");
             window.history.replaceState(null, "", "/auth/callback");
-            
+
             if (timeoutId) clearTimeout(timeoutId);
             if (subscription) subscription.unsubscribe();
-            
+
             setTimeout(() => {
               router.push("/account");
               router.refresh();
@@ -214,6 +216,18 @@ export default function AuthCallbackPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-gold"></div>
+      </div>
+    }>
+      <AuthCallbackContent />
+    </Suspense>
   );
 }
 

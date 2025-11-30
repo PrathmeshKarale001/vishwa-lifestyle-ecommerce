@@ -5,15 +5,17 @@ import { rateLimit, getClientIP } from '@/lib/rate-limit';
 import { sanitizeEmail, sanitizeText, sanitizePhone } from '@/lib/sanitize';
 import { log } from '@/lib/logger';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   // Rate limiting - 5 requests per minute for checkout
   const ip = getClientIP(request);
   const limit = rateLimit(`checkout:${ip}`, { windowMs: 60000, maxRequests: 5 });
-  
+
   if (!limit.allowed) {
     return NextResponse.json(
       { success: false, error: 'Too many requests. Please try again in a moment.' },
-      { 
+      {
         status: 429,
         headers: {
           'X-RateLimit-Limit': '5',
@@ -26,12 +28,12 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    let { 
-      items, 
-      subtotal, 
-      discount, 
-      shipping, 
-      tax, 
+    let {
+      items,
+      subtotal,
+      discount,
+      shipping,
+      tax,
       total,
       shippingAddress,
       email,
@@ -67,12 +69,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate shipping address structure
-    if (!shippingAddress || 
-        !shippingAddress.name || 
-        !shippingAddress.line1 || 
-        !shippingAddress.city || 
-        !shippingAddress.state || 
-        !shippingAddress.postal_code) {
+    if (!shippingAddress ||
+      !shippingAddress.name ||
+      !shippingAddress.line1 ||
+      !shippingAddress.city ||
+      !shippingAddress.state ||
+      !shippingAddress.postal_code) {
       return NextResponse.json(
         { success: false, error: 'Missing required shipping address fields' },
         { status: 400 }
@@ -81,9 +83,9 @@ export async function POST(request: NextRequest) {
 
     // Validate numeric values
     if (typeof subtotal !== 'number' || subtotal < 0 ||
-        typeof total !== 'number' || total < 0 ||
-        typeof shipping !== 'number' || shipping < 0 ||
-        typeof tax !== 'number' || tax < 0) {
+      typeof total !== 'number' || total < 0 ||
+      typeof shipping !== 'number' || shipping < 0 ||
+      typeof tax !== 'number' || tax < 0) {
       return NextResponse.json(
         { success: false, error: 'Invalid amount values' },
         { status: 400 }

@@ -75,7 +75,8 @@ export async function reserveInventory(
     const { error } = await serverClient
       .from('inventory')
       .update({
-        reserved_quantity: supabase.rpc('increment', { x: quantity }),
+        // Note: Manual increment instead of RPC
+        // reserved_quantity will be updated in the fallback below
         last_updated_at: new Date().toISOString(),
       })
       .eq('product_id', productId);
@@ -181,11 +182,16 @@ export async function getLowStockItems(): Promise<InventoryItem[]> {
       .from('inventory')
       .select('*')
       .eq('is_tracked', true)
-      .lte('quantity', supabase.raw('low_stock_threshold'))
       .order('quantity', { ascending: true });
 
     if (error) throw error;
-    return (data || []) as InventoryItem[];
+    
+    // Filter low stock items in JavaScript
+    const lowStockItems = (data || []).filter(
+      (item: InventoryItem) => item.quantity <= (item.low_stock_threshold || 0)
+    ) as InventoryItem[];
+    
+    return lowStockItems;
   } catch (error) {
     console.error('Error fetching low stock items:', error);
     return [];

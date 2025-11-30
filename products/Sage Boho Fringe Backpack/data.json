@@ -1,0 +1,22 @@
+{
+  "name": "Sage Boho Fringe Backpack",
+  "slug": "sage-boho-fringe-backpack",
+  "price": 1200,
+  "compareAtPrice": 1500,
+  "description": "A soft sage-toned backpack that lets you carry your wellness world anywhere. Perfect for your Agnihotra kit, journal, or travel essentials — the embodiment of conscious living.",
+  "category": "lifestyle",
+  "inventory": 18,
+  "tags": ["lifestyle", "backpack", "boho", "travel", "wellness"],
+  "features": [
+    "Woven canvas body",
+    "Fringe detail",
+    "Inner pocket",
+    "Adjustable drawstring straps"
+  ],
+  "ritualSignificance": "Designed for the conscious traveler, carrying your spiritual practice wherever you go.",
+  "isNew": true,
+  "isBestSeller": false,
+  "rating": 4.4,
+  "reviewCount": 8
+}
+

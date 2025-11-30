@@ -1,0 +1,5 @@
+name,slug,price,description,category,inventory,sku,isNew,isBestSeller,tags,features,ritualSignificance
+Agnihotra Kit,agnihotra-kit,2100,Complete Agnihotra kit with everything you need to begin your daily practice,ritual,15,VL-001,false,true,"ritual;essential","Copper Pyramid;Dried Cow Dung Cakes;Pure Cow Ghee;Rice Grains;Instruction Booklet",Agnihotra is performed at sunrise and sunset synchronized with the biorhythms of nature
+Pure Cow Ghee,pure-cow-ghee,850,100% pure desi cow ghee for Agnihotra rituals,ritual,30,VL-002,false,true,"ritual;organic","100% Pure;Desi Cow;200ml Bottle",Essential ingredient for Agnihotra offering
+Copper Pyramid,copper-pyramid,1200,Precision-crafted copper pyramid for Agnihotra rituals,ritual,20,VL-003,false,false,"ritual;essential","99.9% Pure Copper;Traditional Vedic Proportions;Hand-polished Finish",The pyramid shape channels subtle energies during the Agnihotra process
+

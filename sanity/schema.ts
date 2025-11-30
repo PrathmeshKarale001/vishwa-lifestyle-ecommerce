@@ -1,6 +1,6 @@
-import { type SchemaTypeDefinition } from 'sanity'
+import { type SchemaTypeDefinition } from 'sanity';
 
-// Define your schema types here
+// Product Schema
 const product: SchemaTypeDefinition = {
   name: 'product',
   title: 'Product',
@@ -24,11 +24,17 @@ const product: SchemaTypeDefinition = {
     },
     {
       name: 'image',
-      title: 'Image',
+      title: 'Main Image',
       type: 'image',
       options: {
         hotspot: true,
       },
+    },
+    {
+      name: 'images',
+      title: 'Gallery Images',
+      type: 'array',
+      of: [{ type: 'image', options: { hotspot: true } }],
     },
     {
       name: 'price',
@@ -37,28 +43,291 @@ const product: SchemaTypeDefinition = {
       validation: (Rule) => Rule.required().positive(),
     },
     {
+      name: 'compareAtPrice',
+      title: 'Compare at Price',
+      type: 'number',
+      description: 'Original price for showing discounts',
+    },
+    {
       name: 'description',
       title: 'Description',
       type: 'text',
     },
     {
+      name: 'features',
+      title: 'Features',
+      type: 'array',
+      of: [{ type: 'string' }],
+    },
+    {
+      name: 'ritualSignificance',
+      title: 'Ritual Significance',
+      type: 'text',
+      description: 'Spiritual or ritual importance of the product',
+    },
+    {
       name: 'category',
       title: 'Category',
-      type: 'string',
+      type: 'reference',
+      to: [{ type: 'category' }],
+    },
+    {
+      name: 'inventory',
+      title: 'Inventory',
+      type: 'number',
+      validation: (Rule) => Rule.min(0),
+    },
+    {
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{ type: 'string' }],
       options: {
-        list: [
-          { title: 'Agnihotra', value: 'agnihotra' },
-          { title: 'Home Decor', value: 'home-decor' },
-          { title: 'Lifestyle', value: 'lifestyle' },
-          { title: 'Rituals', value: 'rituals' },
-        ],
+        layout: 'tags',
       },
     },
+    {
+      name: 'isNew',
+      title: 'Is New',
+      type: 'boolean',
+      initialValue: false,
+    },
+    {
+      name: 'isBestSeller',
+      title: 'Is Best Seller',
+      type: 'boolean',
+      initialValue: false,
+    },
+    {
+      name: 'rating',
+      title: 'Rating',
+      type: 'number',
+      validation: (Rule) => Rule.min(0).max(5),
+    },
+    {
+      name: 'reviewCount',
+      title: 'Review Count',
+      type: 'number',
+    },
   ],
-}
+  preview: {
+    select: {
+      title: 'name',
+      media: 'image',
+      price: 'price',
+    },
+    prepare({ title, media, price }) {
+      return {
+        title,
+        subtitle: `₹${price}`,
+        media,
+      };
+    },
+  },
+};
+
+// Category Schema
+const category: SchemaTypeDefinition = {
+  name: 'category',
+  title: 'Category',
+  type: 'document',
+  fields: [
+    {
+      name: 'name',
+      title: 'Name',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'name',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+    },
+    {
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      name: 'order',
+      title: 'Display Order',
+      type: 'number',
+    },
+  ],
+};
+
+// Blog Post Schema
+const post: SchemaTypeDefinition = {
+  name: 'post',
+  title: 'Blog Post',
+  type: 'document',
+  fields: [
+    {
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'author',
+      title: 'Author',
+      type: 'reference',
+      to: [{ type: 'author' }],
+    },
+    {
+      name: 'mainImage',
+      title: 'Main Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      name: 'excerpt',
+      title: 'Excerpt',
+      type: 'text',
+      rows: 3,
+    },
+    {
+      name: 'body',
+      title: 'Body',
+      type: 'array',
+      of: [
+        { type: 'block' },
+        { type: 'image', options: { hotspot: true } },
+      ],
+    },
+    {
+      name: 'publishedAt',
+      title: 'Published At',
+      type: 'datetime',
+    },
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      author: 'author.name',
+      media: 'mainImage',
+    },
+    prepare({ title, author, media }) {
+      return {
+        title,
+        subtitle: author && `by ${author}`,
+        media,
+      };
+    },
+  },
+};
+
+// Author Schema
+const author: SchemaTypeDefinition = {
+  name: 'author',
+  title: 'Author',
+  type: 'document',
+  fields: [
+    {
+      name: 'name',
+      title: 'Name',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'name',
+        maxLength: 96,
+      },
+    },
+    {
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      name: 'bio',
+      title: 'Bio',
+      type: 'text',
+    },
+  ],
+};
+
+// Site Settings Schema
+const siteSettings: SchemaTypeDefinition = {
+  name: 'siteSettings',
+  title: 'Site Settings',
+  type: 'document',
+  fields: [
+    {
+      name: 'title',
+      title: 'Site Title',
+      type: 'string',
+    },
+    {
+      name: 'description',
+      title: 'Site Description',
+      type: 'text',
+    },
+    {
+      name: 'logo',
+      title: 'Logo',
+      type: 'image',
+    },
+    {
+      name: 'socialLinks',
+      title: 'Social Links',
+      type: 'object',
+      fields: [
+        { name: 'instagram', title: 'Instagram', type: 'url' },
+        { name: 'facebook', title: 'Facebook', type: 'url' },
+        { name: 'twitter', title: 'Twitter', type: 'url' },
+      ],
+    },
+    {
+      name: 'contactEmail',
+      title: 'Contact Email',
+      type: 'string',
+    },
+    {
+      name: 'contactPhone',
+      title: 'Contact Phone',
+      type: 'string',
+    },
+    {
+      name: 'address',
+      title: 'Address',
+      type: 'text',
+    },
+  ],
+};
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [product],
-}
-
-
+  types: [product, category, post, author, siteSettings],
+};

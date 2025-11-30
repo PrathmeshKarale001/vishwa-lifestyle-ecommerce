@@ -14,14 +14,14 @@ const benefits = [
 
 export default function BenefitStrip() {
     return (
-        <section className="py-16 bg-background-alt border-y border-gray-100">
-            <div className="container mx-auto px-6">
+        <section className="py-10 sm:py-12 md:py-16 bg-background-alt border-y border-gray-100">
+            <div className="container mx-auto px-4 sm:px-6">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
                     variants={staggerContainer}
-                    className="grid grid-cols-2 md:grid-cols-4 gap-8"
+                    className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8"
                 >
                     {benefits.map((benefit, index) => (
                         <motion.div
@@ -29,8 +29,8 @@ export default function BenefitStrip() {
                             variants={fadeInUp}
                             className="flex flex-col items-center text-center"
                         >
-                            <benefit.icon size={32} strokeWidth={1} className="text-accent-gold mb-4" />
-                            <span className="text-sm uppercase tracking-widest font-medium text-foreground-muted">
+                            <benefit.icon size={24} strokeWidth={1} className="text-accent-gold mb-3 sm:mb-4 sm:w-8 sm:h-8" />
+                            <span className="text-xs sm:text-sm uppercase tracking-widest font-medium text-foreground-muted px-2">
                                 {benefit.text}
                             </span>
                         </motion.div>

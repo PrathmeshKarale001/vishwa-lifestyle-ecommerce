@@ -44,39 +44,47 @@ const categories = [
 
 export default function LifestylePreview() {
     return (
-        <section className="py-20 bg-white">
-            <div className="container mx-auto px-6">
+        <section className="py-12 sm:py-16 md:py-20 bg-white">
+            <div className="container mx-auto px-4 sm:px-6">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
                     variants={staggerContainer}
-                    className="grid grid-cols-1 md:grid-cols-3 grid-rows-2 gap-4 h-[120vh] md:h-[80vh]"
+                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid-rows-auto md:grid-rows-2 gap-3 sm:gap-4 h-auto md:h-[80vh]"
                 >
-                    {categories.map((cat) => (
-                        <motion.div
-                            key={cat.id}
-                            variants={fadeInUp}
-                            className={`relative group overflow-hidden ${cat.gridArea}`}
-                        >
-                            <Link href={cat.link} className="block w-full h-full">
-                                <div
-                                    className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110"
-                                    style={{ backgroundImage: `url(${cat.image})` }}
-                                />
-                                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300" />
+                    {categories.map((cat, index) => {
+                        // First item spans full width on mobile, 2 rows on desktop
+                        const isFirstItem = index === 0;
+                        return (
+                            <motion.div
+                                key={cat.id}
+                                variants={fadeInUp}
+                                className={`relative group overflow-hidden ${
+                                    isFirstItem 
+                                        ? "sm:col-span-2 md:col-span-1 md:row-span-2 h-64 sm:h-80 md:h-full" 
+                                        : "h-48 sm:h-64 md:h-auto"
+                                }`}
+                            >
+                                <Link href={cat.link} className="block w-full h-full">
+                                    <div
+                                        className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110"
+                                        style={{ backgroundImage: `url(${cat.image})` }}
+                                    />
+                                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300" />
 
-                                <div className="absolute bottom-8 left-8 text-white">
-                                    <h3 className="text-2xl font-serif mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                        {cat.title}
-                                    </h3>
-                                    <span className="text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                                        Shop Now
-                                    </span>
-                                </div>
-                            </Link>
-                        </motion.div>
-                    ))}
+                                    <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-8 text-white">
+                                        <h3 className="text-xl sm:text-2xl md:text-2xl font-serif mb-1 sm:mb-2 translate-y-2 sm:translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                            {cat.title}
+                                        </h3>
+                                        <span className="text-[10px] sm:text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                                            Shop Now
+                                        </span>
+                                    </div>
+                                </Link>
+                            </motion.div>
+                        );
+                    })}
                 </motion.div>
             </div>
         </section>

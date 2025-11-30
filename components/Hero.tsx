@@ -60,22 +60,23 @@ export default function Hero() {
                 </motion.div>
             </AnimatePresence>
 
-            <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white px-4">
+            <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white px-4 sm:px-6">
                 <motion.div
                     key={`text-${currentSlide}`}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, delay: 0.5 }}
+                    className="max-w-4xl mx-auto"
                 >
-                    <span className="block text-sm md:text-base tracking-[0.3em] uppercase mb-4 opacity-90">
+                    <span className="block text-xs sm:text-sm md:text-base tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-3 sm:mb-4 opacity-90">
                         {slides[currentSlide].subtitle}
                     </span>
-                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif mb-8 tracking-wide">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-serif mb-6 sm:mb-8 tracking-wide leading-tight">
                         {slides[currentSlide].title}
                     </h2>
                     <Link
                         href={slides[currentSlide].link}
-                        className="inline-block border border-white px-8 py-3 text-sm tracking-[0.2em] uppercase hover:bg-white hover:text-black transition-colors duration-300"
+                        className="inline-block border border-white px-6 sm:px-8 py-2.5 sm:py-3 text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.2em] uppercase hover:bg-white hover:text-black transition-colors duration-300"
                     >
                         {slides[currentSlide].cta}
                     </Link>
@@ -83,13 +84,14 @@ export default function Hero() {
             </div>
 
             {/* Slide Indicators */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex space-x-3 z-20">
+            <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex space-x-2 sm:space-x-3 z-20">
                 {slides.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => setCurrentSlide(index)}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentSlide ? "bg-white w-8" : "bg-white/50"
+                        className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${index === currentSlide ? "bg-white w-6 sm:w-8" : "bg-white/50 w-1.5 sm:w-2"
                             }`}
+                        aria-label={`Go to slide ${index + 1}`}
                     />
                 ))}
             </div>

@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
         .digest('hex');
 
       if (signature !== expectedSignature) {
-        log.error('Invalid webhook signature', undefined, { signature: signature.substring(0, 10) + '...' });
+        log.error('Invalid webhook signature', new Error('Invalid signature'), { signature: signature.substring(0, 10) + '...' });
         return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
       }
     }

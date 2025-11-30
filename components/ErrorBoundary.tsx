@@ -3,7 +3,7 @@
 import { Component, ReactNode } from "react";
 import Link from "next/link";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
-import * as Sentry from "@sentry/nextjs";
+// Sentry temporarily disabled
 import { log } from "@/lib/logger";
 
 interface Props {
@@ -29,19 +29,7 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     log.error("Error caught by boundary", error, errorInfo);
     
-    // Send to Sentry
-    if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
-      Sentry.captureException(error, {
-        contexts: {
-          react: {
-            componentStack: errorInfo.componentStack,
-          },
-        },
-        tags: {
-          errorBoundary: true,
-        },
-      });
-    }
+    // Sentry temporarily disabled
   }
 
   render() {

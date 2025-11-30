@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 import { log } from "@/lib/logger";
-import * as Sentry from "@sentry/nextjs";
+// Sentry temporarily disabled
 
 export default function Error({
   error,
@@ -20,17 +20,7 @@ export default function Error({
       stack: error.stack,
     });
     
-    // Send to Sentry
-    if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
-      Sentry.captureException(error, {
-        tags: {
-          errorBoundary: true,
-        },
-        extra: {
-          digest: error.digest,
-        },
-      });
-    }
+    // Sentry temporarily disabled
   }, [error]);
 
   return (

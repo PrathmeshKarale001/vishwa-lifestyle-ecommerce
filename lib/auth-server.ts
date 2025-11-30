@@ -1,5 +1,7 @@
 import { createServerClient } from './supabase';
 import { redirect } from 'next/navigation';
+import { requireAuth as requireApiAuth } from './api-auth';
+import { NextRequest } from 'next/server';
 
 /**
  * Get authenticated user on server-side using service role
@@ -60,10 +62,14 @@ export async function isServerAdmin(userId: string): Promise<boolean> {
  * Check if user owns a resource (e.g., order, address)
  */
 export async function requireResourceOwnership(
+  request: NextRequest,
   resourceType: 'order' | 'address',
   resourceId: string
 ) {
-  const user = await requireAuth();
+  const user = await requireApiAuth(request);
+  if (!user || typeof user === 'object' && 'error' in user) {
+    throw new Error('Unauthorized');
+  }
   const serverClient = createServerClient();
   if (!serverClient) {
     throw new Error('Server client not available');

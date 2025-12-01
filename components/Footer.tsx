@@ -21,7 +21,7 @@ export default function Footer() {
                     <div className="sm:col-span-2 md:col-span-1">
                         <Link href="/" className="inline-block mb-3 sm:mb-4">
                             <Image
-                                src="/vishwalogo.png"
+                                src="/vishwalogo-v2.png"
                                 alt="Vishwa Lifestyle"
                                 width={120}
                                 height={40}

@@ -118,12 +118,12 @@ export function generateProductSchema(product: {
     },
     ...(product.rating && product.reviewCount
       ? {
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: product.rating,
-            reviewCount: product.reviewCount,
-          },
-        }
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: product.rating,
+          reviewCount: product.reviewCount,
+        },
+      }
       : {}),
   };
 }
@@ -135,7 +135,7 @@ export function generateOrganizationSchema() {
     '@type': 'Organization',
     name: siteConfig.name,
     url: siteConfig.url,
-    logo: `${siteConfig.url}/logo.png`,
+    logo: `${siteConfig.url}/vishwalogo-v2.png`,
     description: siteConfig.description,
     sameAs: [
       'https://instagram.com/vishwalifestyle',

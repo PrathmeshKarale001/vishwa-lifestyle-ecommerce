@@ -72,7 +72,7 @@ export default function Header() {
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-0">
             <Link href="/" className="flex items-center justify-center">
               <Image
-                src="/vishwalogo.png"
+                src="/vishwalogo-v2.png"
                 alt="Vishwa Lifestyle"
                 width={120}
                 height={40}

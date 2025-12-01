@@ -51,7 +51,7 @@ export function PageLoader() {
           className="mb-8"
         >
           <Image
-            src="/vishwalogo.png"
+            src="/vishwalogo-v2.png"
             alt="Vishwa Lifestyle"
             width={150}
             height={50}

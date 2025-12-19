@@ -1,0 +1,38 @@
+SOURCE SHEET: Bags & Accessories 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: The Rustic Weave Handcrafted Tote is a perfect blend of earthy elegance and modern functionality. Made with intricately woven natural fibers and finished with sturdy tan faux leather handles, this eco-chic tote is lightweight yet spacious. Ideal for daily use, beach outings, shopping trips, or casual getaways, it adds a touch of sustainable style to your wardrobe.
+HSN CODE: 4202
+PRODUCT NAME: Rustic Weave Handcrafted Tote
+SKU: VG-BG-05
+SKU (Folder Name): VG-BG-05
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Bag
+Segments: Shoulder Bag
+SUB-CATEGORY: Women's
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1299
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: Pcs
+PACKAGING: Plastic Bags / Craton
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -11
+SUPPLIER NAME: Vijaynika Jaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085714493
+Sr No: 5

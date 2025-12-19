@@ -1,0 +1,42 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Illuminate your sacred space with this beautiful Brass Oil Diya crafted in a lotus petal design. The lotus, a symbol of purity and divine energy, makes this diya a perfect addition to your daily prayers, rituals, and festive celebrations. Its sturdy design allows it to hold oil or ghee for long-lasting lighting.
+HSN Code: 74181021
+PRODUCT NAME: Brass Lotus Design Oil Diya / Deepak - Pair (2.25 Inches )
+SKU: VG-PN-17
+SKU (Folder Name): VG-PN-17
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+Segments: Oil
+SUB-CATEGORY: Diya
+Sub -Segments: Brass
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 699
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 90*100 inches
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 817 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716633
+Sr No: 17

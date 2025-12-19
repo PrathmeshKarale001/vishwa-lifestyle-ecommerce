@@ -113,6 +113,13 @@ export default function CheckoutSuccessPage() {
             >
               View Order History
             </Link>
+            <button
+              onClick={() => window.print()}
+              className="border border-accent-gold text-accent-gold px-8 py-4 uppercase tracking-widest text-sm hover:bg-accent-gold hover:text-white transition-colors"
+            >
+              Download Invoice
+            </button>
+
           </div>
 
           {/* Support */}

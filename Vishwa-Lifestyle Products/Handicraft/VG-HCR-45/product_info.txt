@@ -1,0 +1,39 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Immerse yourself in the divine romance of Radha and Krishna with this elegant Lotus of Love – Rajasthani Miniature Painting on Marble. This exquisite artwork showcases Lord Krishna offering a lotus flower to Radha, symbolizing purity, love, and spiritual connection. The detailed hand-painted floral background and soft expressions reflect the traditional miniature painting style of Rajasthan.
+HSN CODE: 4421
+PRODUCT NAME: Lotus of Love – Radha Krishna Marble Miniature Painting
+SKU: VG-HCR-45
+SKU (Folder Name): VG-HCR-45
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+SUB-CATEGORY: Wall painting
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1699
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+Sr no: 45

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRazorpayOrder } from '@/lib/razorpay';
+// import { createRazorpayOrder } from '@/lib/razorpay'; // Disabled for migration
 import { createOrder, generateOrderNumber } from '@/lib/supabase';
 import { rateLimit, getClientIP } from '@/lib/rate-limit';
 import { sanitizeEmail, sanitizeText, sanitizePhone } from '@/lib/sanitize';
@@ -119,6 +119,8 @@ export async function POST(request: NextRequest) {
     // Generate order number
     const orderNumber = generateOrderNumber();
 
+    /* 
+    // RAZORPAY DISABLED - MIGRATION TO CCAVENUE IN PROGRESS
     // Create Razorpay order
     const razorpayResult = await createRazorpayOrder({
       amount: total,
@@ -136,6 +138,7 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+    */
 
     // Create order in database (pending status)
     try {
@@ -152,20 +155,18 @@ export async function POST(request: NextRequest) {
         total,
         shipping_address: shippingAddress,
         promo_code: promoCode,
-        razorpay_order_id: razorpayResult.order.id,
+        status: 'pending',
+        payment_status: 'unpaid',
       });
     } catch (dbError: any) {
       log.error('Database error creating order', dbError, { orderNumber, email });
-      // Continue even if DB fails - we can reconcile later via webhook
     }
 
     return NextResponse.json({
       success: true,
       orderNumber,
-      razorpayOrderId: razorpayResult.order.id,
-      razorpayKeyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-      amount: razorpayResult.order.amount,
-      currency: razorpayResult.order.currency,
+      amount: total,
+      currency: 'INR',
     });
   } catch (error: any) {
     log.error('Checkout error', error);
@@ -175,3 +176,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+

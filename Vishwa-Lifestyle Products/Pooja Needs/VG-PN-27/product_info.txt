@@ -1,0 +1,41 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Add a touch of regal charm to your home décor with this exquisite Royal Rajasthani Brass Embossed Chowki. Handcrafted by skilled artisans of Rajasthan, this decorative chowki features intricate floral embossing on a gleaming brass surface, resting elegantly on four claw-foot legs. Traditionally used in Indian households for placing idols during pujas or as a base for sacred items, this piece also makes for a stunning accent table or gift.
+HSN Code: 4421
+PRODUCT NAME: Meenakari Chowki(6*6)
+SKU: VG-PN-27
+SKU (Folder Name): VG-PN-27
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+Segments: Wood
+SUB-CATEGORY: Chowki
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 169
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 90*100 inches
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 800 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716732
+Sr No: 27

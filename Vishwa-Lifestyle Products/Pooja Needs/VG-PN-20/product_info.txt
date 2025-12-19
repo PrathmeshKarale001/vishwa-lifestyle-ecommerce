@@ -1,0 +1,42 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Enhance your spiritual rituals with this handcrafted Brass Oil Diya featuring a majestic Peacock design. Symbolizing grace and divinity, the diya is beautifully crafted with intricate detailing, making it perfect for traditional ceremonies, daily puja, or as a decorative centerpiece.
+HSN Code: 74181021
+PRODUCT NAME: Brass Peacock Design Oil Diya / Deepam
+SKU: VG-PN-20
+SKU (Folder Name): VG-PN-20
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+Segments: Oil
+SUB-CATEGORY: Diya
+Sub -Segments: Brass
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 599
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 90*100 inches
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 821 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716664
+Sr No: 20

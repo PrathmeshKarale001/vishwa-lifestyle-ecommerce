@@ -5,20 +5,20 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 // Check if we have valid credentials
-const hasValidCredentials = supabaseUrl && 
-  supabaseAnonKey && 
+const hasValidCredentials = supabaseUrl &&
+  supabaseAnonKey &&
   !supabaseUrl.includes('placeholder') &&
   supabaseUrl.startsWith('https://');
 
 // Create Supabase client with proper auth configuration
 export const supabase: SupabaseClient = hasValidCredentials
   ? createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: true, // Enable hash fragment processing for OAuth
-      },
-    })
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true, // Enable hash fragment processing for OAuth
+    },
+  })
   : (null as unknown as SupabaseClient);
 
 // Server-side client with service role key for admin operations
@@ -36,7 +36,7 @@ export function createServerClient() {
 
 export async function signUp(email: string, password: string, name: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -51,7 +51,7 @@ export async function signUp(email: string, password: string, name: string) {
 
 export async function signIn(email: string, password: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -63,9 +63,9 @@ export async function signIn(email: string, password: string) {
 
 export async function signInWithGoogle() {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const redirectUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
@@ -83,14 +83,14 @@ export async function signInWithGoogle() {
 
 export async function signOut() {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
 }
 
 export async function resetPassword(email: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password`,
   });
@@ -101,14 +101,14 @@ export async function resetPassword(email: string) {
 
 export async function getCurrentUser() {
   if (!supabase) return null;
-  
+
   const { data: { user } } = await supabase.auth.getUser();
   return user;
 }
 
 export async function getSession() {
   if (!supabase) return null;
-  
+
   const { data: { session } } = await supabase.auth.getSession();
   return session;
 }
@@ -119,7 +119,7 @@ export async function getSession() {
 
 export async function getProfile(userId: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('profiles')
     .select('*')
@@ -136,7 +136,7 @@ export async function updateProfile(userId: string, updates: {
   avatar_url?: string;
 }) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('profiles')
     .update(updates)
@@ -154,7 +154,7 @@ export async function updateProfile(userId: string, updates: {
 
 export async function getAddresses(userId: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('addresses')
     .select('*')
@@ -177,7 +177,7 @@ export async function addAddress(userId: string, address: {
   is_default?: boolean;
 }) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   // If this is the default address, unset other defaults
   if (address.is_default) {
     await supabase
@@ -208,7 +208,7 @@ export async function updateAddress(addressId: string, updates: Partial<{
   is_default: boolean;
 }>) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('addresses')
     .update(updates)
@@ -222,7 +222,7 @@ export async function updateAddress(addressId: string, updates: Partial<{
 
 export async function deleteAddress(addressId: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { error } = await supabase
     .from('addresses')
     .delete()
@@ -251,11 +251,13 @@ export interface OrderData {
   shipping_method?: string;
   promo_code?: string;
   razorpay_order_id?: string;
+  status?: string;
+  payment_status?: string;
 }
 
 export async function createOrder(order: OrderData) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('orders')
     .insert([order])
@@ -268,7 +270,7 @@ export async function createOrder(order: OrderData) {
 
 export async function getOrderByNumber(orderNumber: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('orders')
     .select('*')
@@ -279,9 +281,22 @@ export async function getOrderByNumber(orderNumber: string) {
   return data;
 }
 
+export async function getOrderById(orderId: string) {
+  if (!supabase) throw new Error('Supabase not configured');
+
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('id', orderId)
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
 export async function getOrdersByUser(userId: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('orders')
     .select('*')
@@ -292,14 +307,50 @@ export async function getOrdersByUser(userId: string) {
   return data;
 }
 
+export async function updateOrderPaymentStatus(
+  orderId: string,
+  paymentStatus: string,
+  details?: {
+    payment_id?: string;
+    payment_method?: string;
+    payment_gateway_response?: any;
+    failure_reason?: string;
+  }
+) {
+  if (!supabase) throw new Error('Supabase not configured');
+
+  const updates: any = { payment_status: paymentStatus };
+
+  if (details?.payment_id) updates.payment_id = details.payment_id;
+  if (details?.payment_method) updates.payment_method = details.payment_method;
+
+  if (paymentStatus === 'paid') {
+    updates.status = 'processing';
+  }
+
+  // Determine if searching by UUID id or human-readable order_number
+  const filterColumn = orderId.startsWith('VL') ? 'order_number' : 'id';
+
+  const { data, error } = await supabase
+    .from('orders')
+    .update(updates)
+    .eq(filterColumn, orderId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+
 export async function updateOrderStatus(
-  orderId: string, 
-  status: string, 
+  orderId: string,
+  status: string,
   paymentStatus?: string,
   paymentId?: string
 ) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const updates: any = { status };
   if (paymentStatus) updates.payment_status = paymentStatus;
   if (paymentId) updates.payment_id = paymentId;
@@ -326,7 +377,7 @@ export async function updateOrderByRazorpayId(
   }
 ) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('orders')
     .update(updates)
@@ -344,7 +395,7 @@ export async function updateOrderByRazorpayId(
 
 export async function getWishlistItems(userId: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('wishlists')
     .select('*')
@@ -363,7 +414,7 @@ export async function addToWishlist(userId: string, product: {
   product_slug?: string;
 }) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('wishlists')
     .insert({ ...product, user_id: userId })
@@ -376,7 +427,7 @@ export async function addToWishlist(userId: string, product: {
 
 export async function removeFromWishlist(userId: string, productId: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { error } = await supabase
     .from('wishlists')
     .delete()
@@ -392,7 +443,7 @@ export async function removeFromWishlist(userId: string, productId: string) {
 
 export async function getProductReviews(productId: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('reviews')
     .select('*')
@@ -412,7 +463,7 @@ export async function addReview(review: {
   content: string;
 }) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('reviews')
     .insert([review])
@@ -429,7 +480,7 @@ export async function addReview(review: {
 
 export async function subscribeToNewsletter(email: string, name?: string) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('newsletter_subscribers')
     .insert([{ email, name }])
@@ -452,7 +503,7 @@ export async function submitContactForm(submission: {
   message: string;
 }) {
   if (!supabase) throw new Error('Supabase not configured');
-  
+
   const { data, error } = await supabase
     .from('contact_submissions')
     .insert([submission])

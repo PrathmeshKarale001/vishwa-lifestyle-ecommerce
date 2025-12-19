@@ -1,0 +1,39 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Invite divine blessings and traditional charm into your space with this beautifully handcrafted Rajasthani Marble Painting of Lord Ganesha. Elegantly depicted in seated posture, Lord Ganesha—the remover of obstacles and god of wisdom—is intricately hand-painted on a smooth marble tile using the vibrant and detailed miniature art style native to Rajasthan.
+HSN CODE: 4421
+PRODUCT NAME: Blessings of Ganesha – Rajasthani Marble Painting
+SKU: VG-HCR-43
+SKU (Folder Name): VG-HCR-43
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+SUB-CATEGORY: Wall painting
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1699
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+Sr no: 43

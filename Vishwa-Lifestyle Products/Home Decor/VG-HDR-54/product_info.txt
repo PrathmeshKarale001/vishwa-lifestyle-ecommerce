@@ -1,0 +1,42 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: This vibrant Rajasthani handicraft tissue box is a stunning blend of tradition and utility. Hand-painted in bold shades of purple, red, green, yellow, and blue, it features intricate floral and geometric motifs reminiscent of Jaipur’s mosaic art and palace frescoes. The detailed border work and the charming latch closure add a rustic yet elegant touch.
+HSN Code: 4421
+PRODUCT NAME: Jaipur Mosaic Wooden Tissue Box
+SKU: VG-HDR-54
+SKU (Folder Name): VG-HDR-54
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Tableware
+SUB-CATEGORY: kitchen
+Sub -Segments: Wood
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1299
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715773
+Sr No: 54

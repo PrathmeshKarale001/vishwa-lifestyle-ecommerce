@@ -1,0 +1,42 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Illuminate your home with this elegant Brass Lotus Shaped Diya, crafted with a beautiful lotus petal design. The lotus symbolizes purity, prosperity, and spiritual awakening, making this diya a perfect addition to your puja rituals and festive décor.
+HSN Code: 74181021
+PRODUCT NAME: Brass Lotus Samai
+SKU: VG-PN-19
+SKU (Folder Name): VG-PN-19
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+Segments: Oil
+SUB-CATEGORY: Diya
+Sub -Segments: Brass
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 599
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 90*100 inches
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 820 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716657
+Sr No: 19

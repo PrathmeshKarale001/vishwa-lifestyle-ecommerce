@@ -56,10 +56,10 @@ export default function ProductPage() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
-  
+
   // Enable keyboard shortcuts
   useAppKeyboardShortcuts();
-  
+
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -80,7 +80,7 @@ export default function ProductPage() {
         }
         setProduct(data);
         setSelectedImage(0);
-        
+
         // Track recently viewed
         if (data) {
           addToRecentlyViewed({
@@ -91,7 +91,7 @@ export default function ProductPage() {
             price: data.price,
           });
         }
-        
+
         // Fetch product recommendations using smart algorithm
         try {
           const recommendations = await getProductRecommendations(data, 4);
@@ -181,12 +181,12 @@ export default function ProductPage() {
 
   const handleAddToCart = useCallback(() => {
     if (!product) return;
-    
+
     if (product.inventory !== undefined && product.inventory <= 0) {
       toast.error("This product is out of stock");
       return;
     }
-    
+
     const productImage = product.images?.[0] || product.mainImage || "";
     addItem({
       id: `${product._id}-${Date.now()}`,
@@ -203,7 +203,7 @@ export default function ProductPage() {
 
   const handleToggleWishlist = useCallback(() => {
     if (!product) return;
-    
+
     const productImage = product.images?.[0] || product.mainImage || "";
     toggleItem({
       id: `wishlist-${product._id}`,
@@ -218,7 +218,7 @@ export default function ProductPage() {
 
   const handleShare = async () => {
     const url = window.location.href;
-    
+
     if (navigator.share) {
       try {
         await navigator.share({
@@ -258,7 +258,7 @@ export default function ProductPage() {
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
     if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? "s" : ""} ago`;
     if (diffDays < 365) return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) > 1 ? "s" : ""} ago`;
@@ -301,18 +301,18 @@ export default function ProductPage() {
   }
 
   // Get product images, with fallback to placeholder
-  const productImages = product.images?.filter(Boolean) || 
-                       (product.mainImage ? [product.mainImage] : []) || 
-                       [];
-  
+  const productImages = product.images?.filter(Boolean) ||
+    (product.mainImage ? [product.mainImage] : []) ||
+    [];
+
   // Ensure we always have at least one image for display
-  const displayImages = productImages.length > 0 
-    ? productImages 
+  const displayImages = productImages.length > 0
+    ? productImages
     : ["https://images.unsplash.com/photo-1602825266970-721285fc6e43?q=80&w=1200&auto=format&fit=crop"];
   const isOutOfStock = product.inventory !== undefined && product.inventory <= 0;
   const isLowStock = product.inventory !== undefined && product.inventory > 0 && product.inventory <= 5;
-  const averageRating = reviews.length > 0 
-    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length 
+  const averageRating = reviews.length > 0
+    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
     : product.rating || 0;
 
   // Generate JSON-LD structured data
@@ -370,15 +370,23 @@ export default function ProductPage() {
 
             {/* Product Info */}
             <div className="w-full lg:w-1/2 lg:pl-8">
-              {/* Category */}
-              <span className="text-accent-gold text-xs tracking-[0.2em] uppercase font-medium mb-2 block">
-                {product.category}
-              </span>
+              {/* Category & SKU */}
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-accent-gold text-xs tracking-[0.2em] uppercase font-medium">
+                  {product.category}
+                </span>
+                {product.sku && (
+                  <span className="text-xs text-foreground-muted bg-gray-100 px-2 py-0.5 rounded">
+                    SKU: {product.sku}
+                  </span>
+                )}
+              </div>
 
               {/* Product Name */}
               <h1 className="text-4xl md:text-5xl font-serif mb-4 text-foreground">
                 {product.name}
               </h1>
+
 
               {/* Price & Rating */}
               <div className="flex items-center flex-wrap gap-4 mb-6">
@@ -451,11 +459,10 @@ export default function ProductPage() {
                   <button
                     onClick={handleAddToCart}
                     disabled={isOutOfStock}
-                    className={`flex-1 py-4 px-6 uppercase tracking-widest text-sm transition-colors duration-300 flex items-center justify-center gap-2 ${
-                      isOutOfStock
-                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        : "bg-foreground text-white hover:bg-accent-gold"
-                    }`}
+                    className={`flex-1 py-4 px-6 uppercase tracking-widest text-sm transition-colors duration-300 flex items-center justify-center gap-2 ${isOutOfStock
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-foreground text-white hover:bg-accent-gold"
+                      }`}
                   >
                     <ShoppingBag size={18} /> {isOutOfStock ? "Out of Stock" : "Add to Cart"}
                   </button>
@@ -463,9 +470,8 @@ export default function ProductPage() {
                 <div className="flex space-x-4 text-sm text-foreground-muted">
                   <button
                     onClick={handleToggleWishlist}
-                    className={`flex items-center gap-2 hover:text-foreground transition-colors ${
-                      isWishlisted ? "text-red-500" : ""
-                    }`}
+                    className={`flex items-center gap-2 hover:text-foreground transition-colors ${isWishlisted ? "text-red-500" : ""
+                      }`}
                     aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
                   >
                     <Heart size={16} fill={isWishlisted ? "currentColor" : "none"} />
@@ -533,7 +539,7 @@ export default function ProductPage() {
         <section className="py-20 bg-background-alt">
           <div className="container mx-auto px-6">
             <h2 className="text-3xl font-serif mb-12 text-center">Customer Reviews</h2>
-            
+
             {reviewsLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 {[1, 2, 3].map((i) => (
@@ -589,9 +595,9 @@ export default function ProductPage() {
             <h2 className="text-3xl font-serif mb-12 text-center">You May Also Like</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {relatedProducts.map((relatedProduct: Product) => {
-                const tag = relatedProduct.isBestSeller ? "Best Seller" : 
-                           relatedProduct.isNew ? "New" : undefined;
-                
+                const tag = relatedProduct.isBestSeller ? "Best Seller" :
+                  relatedProduct.isNew ? "New" : undefined;
+
                 return (
                   <ProductCard
                     key={relatedProduct._id}
@@ -600,7 +606,7 @@ export default function ProductPage() {
                     name={relatedProduct.name}
                     price={relatedProduct.price}
                     compareAtPrice={relatedProduct.compareAtPrice}
-                    image={relatedProduct.image || "/placeholder-product.jpg"}
+                    image={relatedProduct.image || "/placeholder-product.svg"}
                     category={getCategoryLabel(relatedProduct.category || "")}
                     tag={tag}
                     inventory={relatedProduct.inventory}

@@ -32,11 +32,11 @@ export default function CartDrawer() {
 
   const handleApplyPromo = async () => {
     if (!promoInput.trim()) return;
-    
+
     setIsApplyingPromo(true);
     const success = await applyPromoCode(promoInput);
     setIsApplyingPromo(false);
-    
+
     if (success) {
       toast.success(`Promo code "${promoInput.toUpperCase()}" applied!`);
       setPromoInput("");
@@ -123,13 +123,13 @@ export default function CartDrawer() {
                       className="flex gap-4"
                     >
                       {/* Product Image */}
-                      <Link 
+                      <Link
                         href={`/product/${item.slug}`}
                         onClick={closeCart}
                         className="relative w-24 h-24 bg-background-alt flex-shrink-0 overflow-hidden"
                       >
                         <Image
-                          src={item.image || "/placeholder-product.jpg"}
+                          src={item.image || "/placeholder-product.svg"}
                           alt={item.name}
                           fill
                           sizes="96px"
@@ -140,7 +140,7 @@ export default function CartDrawer() {
 
                       {/* Product Details */}
                       <div className="flex-1 flex flex-col">
-                        <Link 
+                        <Link
                           href={`/product/${item.slug}`}
                           onClick={closeCart}
                           className="font-serif text-sm hover:text-accent-gold transition-colors"
@@ -263,12 +263,12 @@ export default function CartDrawer() {
                   </div>
                 </dl>
 
-                {/* Free Shipping Notice */}
-                {subtotal < 999 && (
+                {/* Free Shipping Notice - Removed as shipping is now free for all */}
+                {/* {subtotal < 999 && (
                   <p className="text-xs text-center text-foreground-muted mb-4">
                     Add {formatPrice(999 - subtotal)} more for free shipping!
                   </p>
-                )}
+                )} */}
 
                 {/* Checkout Button */}
                 <Link

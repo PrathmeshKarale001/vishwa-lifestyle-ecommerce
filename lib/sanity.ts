@@ -28,7 +28,7 @@ export const queries = {
     compareAtPrice,
     description,
     "category": category->slug.current,
-    "image": image.asset->url,
+    "image": images[0].asset->url,
     inventory,
     tags,
     isNew,
@@ -40,12 +40,16 @@ export const queries = {
     _id,
     name,
     "slug": slug.current,
+    sku,
     price,
     compareAtPrice,
     description,
     "category": category->slug.current,
+    "categoryName": category->name,
+    subCategory,
+    brand,
     "images": images[].asset->url,
-    "mainImage": coalesce(image.asset->url, ""),
+    "mainImage": images[0].asset->url,
     features,
     ritualSignificance,
     inventory,
@@ -53,8 +57,12 @@ export const queries = {
     isNew,
     isBestSeller,
     rating,
-    reviewCount
+    reviewCount,
+    weight,
+    dimensions,
+    hsnCode
   }`,
+
 
   // Get products by category
   productsByCategory: `*[_type == "product" && category->slug.current == $category] | order(_createdAt desc) {
@@ -65,7 +73,7 @@ export const queries = {
     compareAtPrice,
     description,
     "category": category->slug.current,
-    "image": coalesce(image.asset->url, ""),
+    "image": images[0].asset->url,
     inventory,
     tags,
     isNew,
@@ -79,7 +87,7 @@ export const queries = {
     "slug": slug.current,
     price,
     compareAtPrice,
-    "image": coalesce(image.asset->url, ""),
+    "image": images[0].asset->url,
     "category": category->slug.current,
     inventory,
     tags,
@@ -89,14 +97,18 @@ export const queries = {
   } | order(isBestSeller desc, isNew desc, _createdAt desc)[0...8]`,
 
   // Search products
-  searchProducts: `*[_type == "product" && (name match $query || description match $query)] {
+  searchProducts: `*[_type == "product" && (name match $query || tags[] match $query || description match $query)]
+  | score(name match $query)
+  | order(_score desc)
+  {
     _id,
     name,
     "slug": slug.current,
     price,
     compareAtPrice,
-    "image": coalesce(image.asset->url, ""),
+    "image": images[0].asset->url,
     "category": category->slug.current
+
   }`,
 
   // Get categories
@@ -129,13 +141,79 @@ export const queries = {
     publishedAt,
     "author": author->name
   }`,
+  // Get filtered products with dynamic sorting
+  filteredProducts: `*[_type == "product" 
+    && ($category == "all" || category->slug.current == $category)
+    && ($search == "" || name match $search || description match $search)
+    && price >= $minPrice && price <= $maxPrice
+  ]`,
 };
 
 // Fetch functions
 export async function getProducts() {
   return await sanityClient.fetch(queries.allProducts);
 }
+export async function getFilteredProducts({
+  category = "all",
+  sort = "featured",
+  search = "",
+  minPrice = 0,
+  maxPrice = 100000,
+  page = 1,
+  limit = 12,
+}: {
+  category?: string;
+  sort?: string;
+  search?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  page?: number;
+  limit?: number;
+}) {
+  const start = (page - 1) * limit;
+  const end = start + limit;
 
+  const params = {
+    category,
+    search: search ? `*${search}*` : "",
+    minPrice,
+    maxPrice,
+    start,
+    end,
+  };
+
+  let orderClause = "| order(_createdAt desc)";
+  if (sort === "price-asc") orderClause = "| order(price asc)";
+  else if (sort === "price-desc") orderClause = "| order(price desc)";
+  else if (sort === "newest") orderClause = "| order(_createdAt desc)";
+  else if (sort === "bestselling") orderClause = "| order(isBestSeller desc)";
+
+  const projection = `{
+    _id,
+    name,
+    "slug": slug.current,
+    price,
+    compareAtPrice,
+    description,
+    "category": category->slug.current,
+    "image": images[0].asset->url,
+    inventory,
+    tags,
+    isNew,
+    isBestSeller
+  }`;
+
+
+  // We need two queries: one for data, one for count
+  const query = `{
+    "products": ${queries.filteredProducts} ${orderClause} [${start}...${end}] ${projection},
+    "total": count(${queries.filteredProducts})
+  }`;
+
+
+
+  return await sanityClient.fetch(query, params, { cache: 'no-store' });
+}
 export async function getProductBySlug(slug: string) {
   return await sanityClient.fetch(queries.productBySlug, { slug } as Record<string, unknown>);
 }
@@ -160,3 +238,6 @@ export async function getPostBySlug(slug: string) {
   return await sanityClient.fetch(queries.postBySlug, { slug } as Record<string, unknown>);
 }
 
+export async function getCategories() {
+  return await sanityClient.fetch(queries.allCategories);
+}

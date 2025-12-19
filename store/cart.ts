@@ -4,8 +4,8 @@ import type { CartItem, Cart } from '@/types';
 import { trackAddToCart, trackRemoveFromCart } from '@/lib/analytics';
 
 // Constants
-const SHIPPING_THRESHOLD = 999; // Free shipping above ₹999
-const SHIPPING_COST = 99;
+const SHIPPING_THRESHOLD = 0; // Free shipping for all
+const SHIPPING_COST = 0;
 const TAX_RATE = 0.18; // 18% GST
 
 interface CartState extends Cart {
@@ -16,7 +16,7 @@ interface CartState extends Cart {
   clearCart: () => void;
   applyPromoCode: (code: string) => Promise<boolean>;
   removePromoCode: () => void;
-  
+
   // UI State
   isCartOpen: boolean;
   openCart: () => void;
@@ -27,7 +27,7 @@ interface CartState extends Cart {
 // Calculate cart totals
 const calculateTotals = (items: CartItem[], discount: number = 0) => {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = subtotal >= SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const shipping = 0; // Always free shipping
   const taxableAmount = subtotal - discount;
   const tax = Math.round(taxableAmount * TAX_RATE);
   const total = subtotal - discount + shipping + tax;
@@ -57,10 +57,10 @@ export const useCartStore = create<CartState>()(
       addItem: (item) => {
         set((state) => {
           const existingItem = state.items.find((i) => i.productId === item.productId);
-          
+
           let newItems: CartItem[];
           const quantityToAdd = item.quantity || 1;
-          
+
           if (existingItem) {
             const newQuantity = Math.min(
               existingItem.quantity + quantityToAdd,
@@ -91,7 +91,7 @@ export const useCartStore = create<CartState>()(
         set((state) => {
           const removedItem = state.items.find((i) => i.productId === productId);
           const newItems = state.items.filter((i) => i.productId !== productId);
-          
+
           // Track analytics
           if (removedItem) {
             trackRemoveFromCart({
@@ -113,7 +113,7 @@ export const useCartStore = create<CartState>()(
           if (quantity <= 0) {
             const removedItem = state.items.find((i) => i.productId === productId);
             const newItems = state.items.filter((i) => i.productId !== productId);
-            
+
             // Track analytics
             if (removedItem) {
               trackRemoveFromCart({

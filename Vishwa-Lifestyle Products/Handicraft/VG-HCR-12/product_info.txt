@@ -1,0 +1,41 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Bring home the timeless charm of Rajasthan with this hand-painted marble wall clock, adorned with traditional Meenakari artwork. The central red floral motif, bordered by intricate green and golden detailing, showcases the finesse of skilled artisans. Accented with delicate stone embellishments, the clock beautifully combines functionality with heritage art.
+HSN CODE: SSS
+PRODUCT NAME: Handcrafted Rajasthani Marble Wall Clock – Floral Meenakari Design
+SKU: VG-HCR-12
+SKU (Folder Name): VG-HCR-12
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+Segments: Square
+SUB-CATEGORY: Wall Clock
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 3499
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716114
+Sr no: 12

@@ -1,0 +1,41 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Bring sacred elegance and cultural charm to your home with the Shubh Aangan – Rajasthani Hand-Painted Wooden Temple. Expertly handcrafted by local artisans, this vibrant mandir features intricate floral patterns, traditional archwork, and a warm red-and-gold palette that reflects the artistic soul of Rajasthan.
+HSN Code: 4421
+PRODUCT NAME: Shubh Aangan – Rajasthani Hand-Painted Wooden Temple
+SKU: VG-PN-25
+SKU (Folder Name): VG-PN-25
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+Segments: Wood
+SUB-CATEGORY: Temple
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 2499
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 90*100 inches
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 800 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716718
+Sr No: 25

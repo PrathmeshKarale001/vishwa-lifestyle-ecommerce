@@ -1,0 +1,43 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+Article: Na
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+HSN Code: 74181022
+PRODUCT NAME: Bedroom hammered copper lotus jar
+SKU: VG-HDR-67
+SKU (Folder Name): VG-HDR-67
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Tableware
+SUB-CATEGORY: kitchen
+Sub -Segments: Copper
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 2399
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 16*16
+NO. OF UNITS: 18
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 200 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715902
+Sr No: 67

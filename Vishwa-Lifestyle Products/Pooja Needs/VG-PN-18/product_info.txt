@@ -1,0 +1,42 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Enhance your spiritual rituals with this elegant Brass Traditional Puja Diya, designed with a deep bowl to hold oil or ghee for long-lasting illumination. The diya stands on a sturdy base, making it easy to place in your home temple, puja room, or meditation space.
+HSN Code: 74181021
+PRODUCT NAME: Udupi Samai
+SKU: VG-PN-18
+SKU (Folder Name): VG-PN-18
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+Segments: Oil
+SUB-CATEGORY: Diya
+Sub -Segments: Brass
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 799
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 90*100 inches
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 819 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716640
+Sr No: 18

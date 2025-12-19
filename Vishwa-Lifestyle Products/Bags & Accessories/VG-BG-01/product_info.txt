@@ -1,0 +1,38 @@
+SOURCE SHEET: Bags & Accessories 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Redefine sophistication with our Elegant Blossom Leather-Strap Laptop Bag. Featuring soft pastel floral patterns on a muted beige base, this bag blends timeless beauty with everyday functionality. The premium brown leather straps with gold-tone buckles provide durability and style, while the spacious interior ensures your laptop and essentials stay safe and organized. Perfect for work, meetings, or travel, it’s a graceful accessory for those who love understated luxury.
+HSN CODE: 4202
+PRODUCT NAME: Elegant Blossom Sling Bag
+SKU: VG-BG-01
+SKU (Folder Name): VG-BG-01
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Bag
+Segments: Sling Bag
+SUB-CATEGORY: Women's
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 899
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: Pcs
+PACKAGING: Plastic Bags / Craton
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -11
+SUPPLIER NAME: Vijaynika Jaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085714455
+Sr No: 1

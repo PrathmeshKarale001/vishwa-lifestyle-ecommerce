@@ -1,0 +1,41 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: This intricately crafted brass idol depicts Bal Gopal, the playful child form of Lord Krishna, crawling with a modak (sweet) in hand. This statue brings a sense of joyful innocence and devotion to any space. It's a perfect centerpiece for your puja room or a decorative piece that adds a touch of traditional artistry and spiritual charm to your home.
+HSN Code: 74181021
+PRODUCT NAME: The Divine Brass Bal Gopal Idol
+SKU: VG-PN-09
+SKU (Folder Name): VG-PN-09
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+Segments: Brass
+SUB-CATEGORY: Idol
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 799
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 90*100 inches
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 804 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716558
+Sr No: 9

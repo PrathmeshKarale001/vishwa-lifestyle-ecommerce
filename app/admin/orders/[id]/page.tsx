@@ -56,7 +56,6 @@ interface Order {
   total: number;
   payment_method: string;
   payment_id?: string;
-  razorpay_order_id?: string;
   tracking_number?: string;
   promo_code?: string;
 }
@@ -93,7 +92,7 @@ export default function AdminOrderDetailPage() {
 
     try {
       const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
+
       if (authError || !user) {
         toast.error("Please log in to access admin panel");
         router.push("/auth/login?redirect=" + encodeURIComponent(`/admin/orders/${orderId}`));
@@ -103,7 +102,7 @@ export default function AdminOrderDetailPage() {
       // Check if user is admin (database-based, with email fallback)
       const { isAdmin } = await import("@/lib/admin");
       const userIsAdmin = await isAdmin();
-      
+
       if (!userIsAdmin) {
         toast.error("Access denied. Admin privileges required.");
         router.push("/");
@@ -355,11 +354,10 @@ export default function AdminOrderDetailPage() {
                     key={status}
                     onClick={() => updateOrderStatus(status)}
                     disabled={updating || order.status === status}
-                    className={`px-4 py-2 text-sm border capitalize transition-colors ${
-                      order.status === status
-                        ? "bg-foreground text-white border-foreground"
-                        : "bg-white border-gray-200 hover:border-foreground"
-                    }`}
+                    className={`px-4 py-2 text-sm border capitalize transition-colors ${order.status === status
+                      ? "bg-foreground text-white border-foreground"
+                      : "bg-white border-gray-200 hover:border-foreground"
+                      }`}
                   >
                     {status}
                   </button>
@@ -549,7 +547,7 @@ export default function AdminOrderDetailPage() {
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <CreditCard size={18} className="text-foreground-muted" />
-                  <span className="capitalize">{order.payment_method || "Razorpay"}</span>
+                  <span className="capitalize">{order.payment_method || "Payment Gateway"}</span>
                 </div>
                 {order.payment_id && (
                   <div className="flex items-center gap-2">
@@ -563,14 +561,6 @@ export default function AdminOrderDetailPage() {
                     >
                       <Copy size={12} />
                     </button>
-                  </div>
-                )}
-                {order.razorpay_order_id && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-foreground-muted">Order ID:</span>
-                    <code className="bg-gray-100 px-2 py-0.5 text-xs">
-                      {order.razorpay_order_id}
-                    </code>
                   </div>
                 )}
               </div>

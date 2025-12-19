@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
 import toast from "react-hot-toast";
-import { signUp, signInWithGoogle } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { log } from "@/lib/logger";
 
 const registerSchema = z.object({
@@ -41,8 +41,22 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
+    const supabase = createClient();
     try {
-      await signUp(data.email, data.password, data.name);
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            name: data.name,
+            phone: data.phone,
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) throw error;
+
       toast.success("Account created! Please check your email to verify.");
       router.push("/auth/verify-email");
     } catch (error: any) {
@@ -58,8 +72,15 @@ export default function RegisterPage() {
   };
 
   const handleGoogleSignup = async () => {
+    const supabase = createClient();
     try {
-      await signInWithGoogle();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        }
+      });
+      if (error) throw error;
     } catch (error: any) {
       log.error("Google signup error", error);
       toast.error(error.message || "Google sign-up failed. Please try again.");
@@ -127,9 +148,8 @@ export default function RegisterPage() {
                 <input
                   type="text"
                   {...register("name")}
-                  className={`w-full border pl-12 pr-4 py-3 focus:outline-none focus:border-accent-gold ${
-                    errors.name ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border pl-12 pr-4 py-3 focus:outline-none focus:border-accent-gold ${errors.name ? "border-red-500" : "border-gray-200"
+                    }`}
                   placeholder="Your Name"
                 />
               </div>
@@ -145,9 +165,8 @@ export default function RegisterPage() {
                 <input
                   type="email"
                   {...register("email")}
-                  className={`w-full border pl-12 pr-4 py-3 focus:outline-none focus:border-accent-gold ${
-                    errors.email ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border pl-12 pr-4 py-3 focus:outline-none focus:border-accent-gold ${errors.email ? "border-red-500" : "border-gray-200"
+                    }`}
                   placeholder="your@email.com"
                 />
               </div>
@@ -176,9 +195,8 @@ export default function RegisterPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
-                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${
-                    errors.password ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${errors.password ? "border-red-500" : "border-gray-200"
+                    }`}
                   placeholder="Min. 8 characters"
                 />
                 <button
@@ -201,9 +219,8 @@ export default function RegisterPage() {
                 <input
                   type="password"
                   {...register("confirmPassword")}
-                  className={`w-full border pl-12 pr-4 py-3 focus:outline-none focus:border-accent-gold ${
-                    errors.confirmPassword ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border pl-12 pr-4 py-3 focus:outline-none focus:border-accent-gold ${errors.confirmPassword ? "border-red-500" : "border-gray-200"
+                    }`}
                   placeholder="••••••••"
                 />
               </div>

@@ -1,0 +1,32 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+HSN Code: 74181021
+PRODUCT NAME: Brass Kapoor Dani / Camphor Aarti Lamp
+SKU: VG-PN-22
+SKU (Folder Name): VG-PN-22
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+SUB-CATEGORY: Aarti Lamp
+Sub -Segments: Brass
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1299
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716688
+Sr No: 22

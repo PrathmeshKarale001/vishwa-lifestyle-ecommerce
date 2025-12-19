@@ -1,0 +1,40 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Bring home the vibrant charm of Rajasthan with this exquisite handcrafted wall hook. Featuring hand-painted ceramic tiles in striking green tones with intricate floral patterns, this wall hook is framed with durable wrought iron for strength and style. Designed with three hooks topped with glossy green knobs, it is perfect for hanging clothes, keys, or accessories while adding a colorful, traditional touch to your walls. A blend of utility and artistry, this handicraft makes for a unique décor accent and a thoughtful gift.
+HSN Code: 4421
+PRODUCT NAME: Rajasthani Handcrafted Green Floral Ceramic Tile Wall Hook
+SKU: VG-HDR-75
+SKU (Folder Name): VG-HDR-75
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Cermic
+SUB-CATEGORY: Bathroomware
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 199
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+Sr No: 75

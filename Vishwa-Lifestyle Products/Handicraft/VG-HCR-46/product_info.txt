@@ -1,0 +1,41 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Enhance the beauty and positivity of your home with this handcrafted brass urli bowl, a timeless piece of traditional Indian décor. Known for its cultural and spiritual significance, the urli is often used for floating flowers, diyas, or potpourri, making it a perfect centrepiece for living rooms, Pooja spaces, or entrances.
+HSN CODE: 74181021
+PRODUCT NAME: Traditional Brass Urli Bowl ( 8 inches )
+SKU: VG-HCR-46
+SKU (Folder Name): VG-HCR-46
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+Segments: Brass
+SUB-CATEGORY: Showpiece
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1699
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 16*16
+NO. OF UNITS: 18
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 200 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+Sr no: 46

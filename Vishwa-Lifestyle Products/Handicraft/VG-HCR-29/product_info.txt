@@ -1,0 +1,41 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Bring home the charm of royal Rajasthan with this exquisite hand-painted marble elephant, a masterpiece of traditional meenakari art. Crafted by skilled artisans, this decorative elephant features vibrant colors, intricate floral patterns, and gold accents that reflect the grandeur of Indian heritage.
+HSN CODE: 4420
+PRODUCT NAME: Hand-Painted Marble Elephant – Rajasthani Meenakari Artwork
+SKU: VG-HCR-29
+SKU (Folder Name): VG-HCR-29
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+Segments: Marble
+SUB-CATEGORY: heritage Craft
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 499
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VG-09
+SUPPLIER NAME: Murli Hand Craft Jaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716275
+Sr no: 29

@@ -1,0 +1,36 @@
+SOURCE SHEET: Bodycare
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Wellness
+DEPARTMENT (DOM / EXP): DOM
+HSN Code: 33049930
+PRODUCT NAME: Kanti Face & Body Care Lotion 200ml
+SKU: VG-BDC-04
+SKU (Folder Name): VG-BDC-04
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Body Care
+SUB -CATEGORY: Lotion
+
+PRICING & TAX
+-------------
+GST %: 0.18
+MRP: 149
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 5.2*5.2*10
+PACKAGING: Plastic Bottle with Outer Carton
+SHELF LIFE (DAYS): 18 Months
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VG-00
+SUPPLIER NAME: Vishwa Holistic Solution Pvt Ldt
+
+OTHER DETAILS
+-------------
+Sr No: 4

@@ -1,0 +1,44 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+Article: Na
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Bring auspiciousness and tradition to your rituals with this beautifully crafted Hammered Brass Kalash. Traditionally used in Hindu puja ceremonies, weddings, and festive occasions, the Kalash symbolizes prosperity, purity, and divine blessings.
+HSN Code: 74181021
+PRODUCT NAME: Hammered Brass Kalash ( Brass Lota with Cup)
+SKU: VG-HDR-63
+SKU (Folder Name): VG-HDR-63
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Tableware
+SUB-CATEGORY: kitchen
+Sub -Segments: Brass
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 999
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 16*16
+NO. OF UNITS: 18
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 200 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715865
+Sr No: 63

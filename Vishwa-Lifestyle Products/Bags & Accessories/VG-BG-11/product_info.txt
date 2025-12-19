@@ -1,0 +1,37 @@
+SOURCE SHEET: Bags & Accessories 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Graceful and timeless, this bag showcases blooming white floral motifs against a deep indigo backdrop. The vertical botanical design adds elegance and a touch of nature’s serenity. Lightweight yet durable, it embodies both functionality and artistry—ideal for everyday use or travel, while carrying the warmth of handcrafted tradition.
+HSN CODE: 4202
+PRODUCT NAME: Animal printed sling bag
+SKU: VG-BG-11
+SKU (Folder Name): VG-BG-11
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Bag
+Segments: Laptop Sleeve
+SUB-CATEGORY: Women's
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 399
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: Pcs
+PACKAGING: Plastic Bags / Craton
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -12
+SUPPLIER NAME: Padmavati Bags
+
+OTHER DETAILS
+-------------
+Sr No: 11

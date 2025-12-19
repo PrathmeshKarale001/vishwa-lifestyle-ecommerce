@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import toast from "react-hot-toast";
-import { signIn, signInWithGoogle } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { log } from "@/lib/logger";
 
 const loginSchema = z.object({
@@ -34,8 +34,15 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
+    const supabase = createClient();
     try {
-      await signIn(data.email, data.password);
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (error) throw error;
+
       toast.success("Welcome back!");
       router.push("/account");
       router.refresh();
@@ -49,8 +56,15 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = async () => {
+    const supabase = createClient();
     try {
-      await signInWithGoogle();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        }
+      });
+      if (error) throw error;
     } catch (error: any) {
       log.error("Google login error", error);
       toast.error(error.message || "Google sign-in failed. Please try again.");
@@ -118,9 +132,8 @@ export default function LoginPage() {
                 <input
                   type="email"
                   {...register("email")}
-                  className={`w-full border pl-12 pr-4 py-3 focus:outline-none focus:border-accent-gold ${
-                    errors.email ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border pl-12 pr-4 py-3 focus:outline-none focus:border-accent-gold ${errors.email ? "border-red-500" : "border-gray-200"
+                    }`}
                   placeholder="your@email.com"
                 />
               </div>
@@ -136,9 +149,8 @@ export default function LoginPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
-                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${
-                    errors.password ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${errors.password ? "border-red-500" : "border-gray-200"
+                    }`}
                   placeholder="••••••••"
                 />
                 <button

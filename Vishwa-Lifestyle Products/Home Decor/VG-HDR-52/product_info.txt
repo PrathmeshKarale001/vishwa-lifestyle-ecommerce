@@ -1,0 +1,43 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+Article: Na
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Handcrafted from pure white marble, this mortar and pestle (locally known as Hamam Dasta) is a timeless Rajasthani kitchen essential. Known for its durability and smooth finish, it is perfect for grinding spices, herbs, and medicines the traditional way, ensuring authentic taste and natural flavours. The natural coolness of marble keeps ingredients fresh while grinding, making it a must-have tool for Ayurvedic preparations, culinary use, and home remedies. With its elegant look, it also doubles as a rustic kitchen décor piece.
+HSN Code: 4421
+PRODUCT NAME: Rajasthani White Marble Mortar & Pestle (Hamam Dasta)
+SKU: VG-HDR-52
+SKU (Folder Name): VG-HDR-52
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+SUB-CATEGORY: kitchen
+Sub -Segments: Marble
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 399
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 16*16
+NO. OF UNITS: 18
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 200 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715759
+Sr No: 52

@@ -1,11 +1,7 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProductCard from "./ProductCard";
 import { getFeaturedProducts } from "@/lib/sanity";
-import { ProductCardSkeleton } from "./Skeleton";
 
 interface Product {
   _id: string;
@@ -21,26 +17,16 @@ interface Product {
   tags?: string[];
 }
 
-export default function ShopGrid() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+export default async function ShopGrid() {
+  let products: Product[] = [];
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await getFeaturedProducts();
-        // Take first 4 products
-        setProducts(data.slice(0, 4));
-      } catch (error) {
-        console.error("Error fetching featured products:", error);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  try {
+    const data = await getFeaturedProducts();
+    // Take first 4 products
+    products = data.slice(0, 4);
+  } catch (error) {
+    console.error("Error fetching featured products:", error);
+  }
 
   const getCategoryLabel = (cat: string | null | undefined) => {
     if (!cat) return "";
@@ -73,22 +59,16 @@ export default function ShopGrid() {
           </Link>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <ProductCardSkeleton key={i} />
-            ))}
-          </div>
-        ) : products.length > 0 ? (
+        {products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {products.map((product) => {
-              const tag = product.isBestSeller 
-                ? "Best Seller" 
-                : product.isNew 
-                ? "New" 
-                : product.tags?.[0] 
-                ? product.tags[0].charAt(0).toUpperCase() + product.tags[0].slice(1)
-                : undefined;
+              const tag = product.isBestSeller
+                ? "Best Seller"
+                : product.isNew
+                  ? "New"
+                  : product.tags?.[0]
+                    ? product.tags[0].charAt(0).toUpperCase() + product.tags[0].slice(1)
+                    : undefined;
 
               return (
                 <ProductCard
@@ -98,7 +78,7 @@ export default function ShopGrid() {
                   name={product.name}
                   price={product.price}
                   compareAtPrice={product.compareAtPrice}
-                  image={product.image || "/placeholder-product.jpg"}
+                  image={product.image || "/placeholder-product.svg"}
                   tag={tag}
                   category={getCategoryLabel(product.category)}
                   inventory={product.inventory}

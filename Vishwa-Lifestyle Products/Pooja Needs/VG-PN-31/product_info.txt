@@ -1,0 +1,41 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Elevate your spiritual rituals with this traditional brass pooja thali set, thoughtfully designed for daily worship and festive ceremonies. The set includes a beautifully crafted brass thali along with multiple diyas (lamps), symbolizing purity and divine light.
+HSN Code: 74181021
+PRODUCT NAME: Brass Pooja Thali Set with Diyas
+SKU: VG-PN-31
+SKU (Folder Name): VG-PN-31
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+Segments: Brass
+SUB-CATEGORY: Aarti Thali
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1799
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 90*100 inches
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 828 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716770
+Sr No: 31

@@ -1,0 +1,39 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Celebrate the divine essence of love and devotion with this stunning Eternal Love – Radha Krishna Marble Painting, handcrafted in the heart of Rajasthan. This artwork captures the tender embrace of Lord Krishna and Radha, symbolizing eternal love, harmony, and spiritual union. The finely detailed expressions, traditional attire, and the presence of a peacock create a serene and romantic ambiance.
+HSN CODE: 4421
+PRODUCT NAME: Eternal Love – Radha Krishna Marble Painting (Framed)
+SKU: VG-HCR-44
+SKU (Folder Name): VG-HCR-44
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+SUB-CATEGORY: Wall painting
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1699
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+Sr no: 44

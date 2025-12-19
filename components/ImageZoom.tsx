@@ -31,11 +31,11 @@ export default function ImageZoom({
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!imageRef.current) return;
-    
+
     const rect = imageRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    
+
     setZoomPosition({ x, y });
   }, []);
 
@@ -99,9 +99,8 @@ export default function ImageZoom({
 
           {/* Zoomed Image (visible on hover, desktop only) */}
           <div
-            className={`absolute inset-0 hidden lg:block transition-opacity duration-200 ${
-              isZoomed ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 hidden lg:block transition-opacity duration-200 ${isZoomed ? "opacity-100" : "opacity-0"
+              }`}
             style={{
               backgroundImage: `url(${currentImage})`,
               backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
@@ -121,26 +120,21 @@ export default function ImageZoom({
           <div className="grid grid-cols-4 gap-2" role="group" aria-label="Product image thumbnails">
             {displayImages.map((img, idx) => (
               <button
-                key={idx}
+                key={`${img}-${idx}`}
                 onClick={() => onIndexChange(idx)}
-                className={`aspect-square bg-background-alt overflow-hidden border-2 transition-colors ${
-                  selectedIndex === idx ? "border-accent-gold" : "border-transparent hover:border-gray-300"
-                }`}
+                className={`aspect-square bg-background-alt overflow-hidden border-2 transition-colors relative ${selectedIndex === idx ? "border-accent-gold" : "border-transparent hover:border-gray-300"
+                  }`}
                 aria-label={`View image ${idx + 1}`}
                 aria-current={selectedIndex === idx ? "true" : undefined}
               >
-                <div className="relative w-full h-full">
-                  <Image
-                    src={img}
-                    alt={`${alt} ${idx + 1}`}
-                    fill
-                    sizes="100px"
-                    className="object-cover"
-                    loading="lazy"
-                    placeholder="blur"
-                    blurDataURL={getBlurPlaceholder(img)}
-                  />
-                </div>
+                <Image
+                  src={img}
+                  alt={`${alt} ${idx + 1}`}
+                  fill
+                  sizes="(max-width: 768px) 25vw, 10vw"
+                  className="object-cover"
+                  loading="lazy"
+                />
               </button>
             ))}
           </div>
@@ -235,9 +229,8 @@ export default function ImageZoom({
                       e.stopPropagation();
                       onIndexChange(idx);
                     }}
-                    className={`w-16 h-16 overflow-hidden border-2 transition-colors ${
-                      selectedIndex === idx ? "border-white" : "border-transparent opacity-50 hover:opacity-100"
-                    }`}
+                    className={`w-16 h-16 overflow-hidden border-2 transition-colors ${selectedIndex === idx ? "border-white" : "border-transparent opacity-50 hover:opacity-100"
+                      }`}
                     aria-label={`View image ${idx + 1}`}
                   >
                     <div className="relative w-full h-full">

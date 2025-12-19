@@ -1,0 +1,41 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Celebrate love, harmony, and togetherness with this beautifully hand-carved wooden love birds sculpture from Rajasthan. Crafted by skilled artisans, the piece depicts two intricately detailed birds facing each other, symbolizing unity and affection. The fine carving work highlights the traditional artistry of Rajasthan, where every cut and curve is done by hand, making each piece unique. This charming creation is perfect for home décor, gifting, or as a symbol of love and companionship.
+HSN CODE: 7616
+PRODUCT NAME: Handcrafted Wooden Love Birds – Rajasthani Decorative Art
+SKU: VG-HCR-23
+SKU (Folder Name): VG-HCR-23
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+Segments: Wood
+SUB-CATEGORY: heritage Craft
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 799
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VG-09
+SUPPLIER NAME: Murli Hand Craft Jaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716220
+Sr no: 23

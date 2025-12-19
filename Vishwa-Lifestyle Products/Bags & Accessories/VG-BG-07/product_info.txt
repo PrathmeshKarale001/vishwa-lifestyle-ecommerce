@@ -1,0 +1,38 @@
+SOURCE SHEET: Bags & Accessories 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: The Blush Boho Fringe Tote is a statement piece for free spirits and style lovers. Crafted with soft cotton fabric in a soothing blush pink and ivory palette, it features intricate woven patterns, playful fringes, and textured detailing that give it a chic bohemian vibe. Spacious and sturdy, this tote is perfect for casual outings, shopping trips, or beach days, while adding a touch of artisanal elegance to your everyday look.
+HSN CODE: 4202
+PRODUCT NAME: Blush Boho Fringe Backpack
+SKU: VG-BG-07
+SKU (Folder Name): VG-BG-07
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Bag
+Segments: Bag pack
+SUB-CATEGORY: Women's
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 899
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: Pcs
+PACKAGING: Plastic Bags / Craton
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -11
+SUPPLIER NAME: Vijaynika Jaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085714516
+Sr No: 7

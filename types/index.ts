@@ -28,12 +28,12 @@ export interface ProductImage {
   height?: number;
 }
 
-export type ProductCategory = 
-  | 'agnihotra' 
-  | 'ritual' 
-  | 'lifestyle' 
-  | 'apparel' 
-  | 'home-decor' 
+export type ProductCategory =
+  | 'agnihotra'
+  | 'ritual'
+  | 'lifestyle'
+  | 'apparel'
+  | 'home-decor'
   | 'combos';
 
 // ==========================================
@@ -126,7 +126,7 @@ export interface OrderItem {
   image: string;
 }
 
-export type OrderStatus = 
+export type OrderStatus =
   | 'pending'
   | 'confirmed'
   | 'processing'
@@ -135,7 +135,7 @@ export type OrderStatus =
   | 'cancelled'
   | 'refunded';
 
-export type PaymentStatus = 
+export type PaymentStatus =
   | 'pending'
   | 'paid'
   | 'failed'
@@ -164,7 +164,7 @@ export interface ShippingMethod {
   estimatedDays: string;
 }
 
-export type CheckoutStep = 
+export type CheckoutStep =
   | 'cart'
   | 'information'
   | 'shipping'
@@ -235,19 +235,23 @@ export interface NewsletterFormData {
 }
 
 // ==========================================
-// Razorpay Types
+// CCAvenue Types
 // ==========================================
-export interface RazorpayOrder {
-  id: string;
+export interface CCAvenuePaymentDetails {
+  merchant_id: string;
+  order_id: string;
   amount: number;
   currency: string;
-  receipt: string;
-  status: string;
-}
-
-export interface RazorpayPaymentResponse {
-  razorpay_order_id: string;
-  razorpay_payment_id: string;
-  razorpay_signature: string;
+  redirect_url: string;
+  cancel_url: string;
+  language: string;
+  billing_name?: string;
+  billing_address?: string;
+  billing_city?: string;
+  billing_state?: string;
+  billing_zip?: string;
+  billing_country?: string;
+  billing_tel?: string;
+  billing_email?: string;
 }
 

@@ -55,7 +55,7 @@ export default function SearchAutocomplete({
         const products = await searchProducts(query);
         setResults(products.slice(0, 6)); // Limit to 6 results
         setSelectedIndex(-1);
-        
+
         // Track search
         trackSearch(query, products.length);
       } catch (error) {
@@ -92,6 +92,8 @@ export default function SearchAutocomplete({
     }
   };
 
+  const popularSearches = ["Agnihotra Kit", "Ghee", "Incense", "Copper Pyramid"];
+
   if (!isOpen) return null;
 
   return (
@@ -100,154 +102,131 @@ export default function SearchAutocomplete({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/50 z-[60] flex items-start justify-center pt-24"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-start justify-center pt-20 sm:pt-32"
         onClick={onClose}
       >
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="w-full max-w-2xl mx-4 bg-white rounded-lg shadow-2xl"
+          initial={{ opacity: 0, scale: 0.95, y: -20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: -20 }}
+          transition={{ type: "spring", duration: 0.5 }}
+          className="w-full max-w-2xl mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-serif">Search Products</h2>
-              <button
-                onClick={onClose}
-                className="text-foreground-muted hover:text-foreground transition-colors"
-                aria-label="Close search"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            <div className="relative">
-              <div className="relative">
-                <Search
-                  size={20}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted"
-                />
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Search products..."
-                  className="w-full pl-12 pr-12 py-4 text-lg border-b-2 border-gray-200 focus:outline-none focus:border-accent-gold transition-colors"
-                  autoFocus
-                />
-                {loading && (
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                    <Loader2 size={20} className="animate-spin text-foreground-muted" />
-                  </div>
-                )}
-                {!loading && query && (
-                  <button
-                    onClick={() => setQuery("")}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground-muted hover:text-foreground"
-                    aria-label="Clear search"
-                  >
-                    <X size={20} />
-                  </button>
-                )}
-              </div>
-
-              {/* Search Results */}
-              {query.length >= 2 && (
-                <div
-                  ref={resultsRef}
-                  className="mt-4 max-h-96 overflow-y-auto"
-                  role="listbox"
+          {/* Header / Input Area */}
+          <div className="p-4 sm:p-6 border-b border-gray-100 bg-white relative z-10">
+            <div className="flex items-center gap-4">
+              <Search className="text-accent-gold w-6 h-6" />
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Search for products..."
+                className="flex-1 text-lg sm:text-xl font-medium placeholder:text-gray-300 focus:outline-none bg-transparent"
+                autoFocus
+              />
+              {loading ? (
+                <Loader2 className="animate-spin text-gray-400 w-5 h-5" />
+              ) : (
+                <button
+                  onClick={onClose}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
-                  {loading ? (
-                    <div className="py-8 text-center text-foreground-muted">
-                      <Loader2 size={24} className="animate-spin mx-auto mb-2" />
-                      <p>Searching...</p>
-                    </div>
-                  ) : results.length > 0 ? (
-                    <ul className="space-y-2">
-                      {results.map((product, index) => (
-                        <li key={product._id}>
-                          <Link
-                            href={`/product/${product.slug}`}
-                            onClick={onClose}
-                            className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${
-                              selectedIndex === index
-                                ? "bg-accent-gold/10 border-2 border-accent-gold"
-                                : "bg-gray-50 hover:bg-gray-100 border-2 border-transparent"
-                            }`}
-                          >
-                            {product.image && (
-                              <div className="relative w-16 h-16 rounded overflow-hidden flex-shrink-0">
-                                <Image
-                                  src={product.image}
-                                  alt={product.name}
-                                  fill
-                                  sizes="64px"
-                                  className="object-cover"
-                                />
-                              </div>
-                            )}
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-medium text-foreground truncate">
-                                {product.name}
-                              </h3>
-                              {product.category && (
-                                <p className="text-sm text-foreground-muted">
-                                  {product.category}
-                                </p>
-                              )}
-                            </div>
-                            <div className="text-right flex-shrink-0">
-                              <p className="font-medium">
-                                ₹{product.price.toLocaleString("en-IN")}
-                              </p>
-                            </div>
-                          </Link>
-                        </li>
-                      ))}
-                      {results.length >= 6 && (
-                        <li>
-                          <Link
-                            href={`/shop?search=${encodeURIComponent(query)}`}
-                            onClick={onClose}
-                            className="block text-center py-3 text-accent-gold hover:underline font-medium"
-                          >
-                            View all results for "{query}"
-                          </Link>
-                        </li>
-                      )}
-                    </ul>
-                  ) : (
-                    <div className="py-8 text-center text-foreground-muted">
-                      <p>No products found for "{query}"</p>
-                      <Link
-                        href="/shop"
-                        onClick={onClose}
-                        className="text-accent-gold hover:underline mt-2 inline-block"
-                      >
-                        Browse all products
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Search Tips */}
-              {query.length < 2 && (
-                <div className="mt-6 text-sm text-foreground-muted">
-                  <p className="mb-2">Search tips:</p>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>Type at least 2 characters to search</li>
-                    <li>Use arrow keys to navigate results</li>
-                    <li>Press Enter to select</li>
-                    <li>Press Esc to close</li>
-                  </ul>
-                </div>
+                  <X className="text-gray-500 w-5 h-5" />
+                </button>
               )}
             </div>
+          </div>
+
+          {/* Results Area */}
+          <div className="bg-gray-50/50 min-h-[300px] max-h-[60vh] overflow-y-auto p-4 sm:p-6">
+            {query.length < 2 ? (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+                    Popular Searches
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {popularSearches.map((term) => (
+                      <button
+                        key={term}
+                        onClick={() => setQuery(term)}
+                        className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm hover:border-accent-gold hover:text-accent-gold transition-colors"
+                      >
+                        {term}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : results.length > 0 ? (
+              <ul className="space-y-2">
+                {results.map((product, index) => (
+                  <li key={product._id}>
+                    <Link
+                      href={`/product/${product.slug}`}
+                      onClick={onClose}
+                      className={`flex items-center gap-4 p-3 rounded-xl transition-all duration-200 ${selectedIndex === index
+                        ? "bg-white shadow-md ring-1 ring-accent-gold"
+                        : "hover:bg-white hover:shadow-sm"
+                        }`}
+                    >
+                      <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                        {product.image ? (
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            fill
+                            sizes="64px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-300">
+                            <Search size={20} />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium text-gray-900 truncate">
+                          {product.name}
+                        </h3>
+                        <p className="text-sm text-accent-gold">
+                          {product.category || "Product"}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="font-medium text-gray-900">
+                          ₹{(product.price ?? 0).toLocaleString("en-IN")}
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+                {results.length >= 6 && (
+                  <li className="pt-2">
+                    <Link
+                      href={`/shop?search=${encodeURIComponent(query)}`}
+                      onClick={onClose}
+                      className="block w-full py-3 text-center bg-accent-gold/10 text-accent-gold font-medium rounded-lg hover:bg-accent-gold/20 transition-colors"
+                    >
+                      View all results for "{query}"
+                    </Link>
+                  </li>
+                )}
+              </ul>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full py-12 text-center">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                  <Search className="text-gray-400 w-8 h-8" />
+                </div>
+                <p className="text-gray-900 font-medium mb-1">No products found</p>
+                <p className="text-gray-500 text-sm">
+                  We couldn't find anything matching "{query}"
+                </p>
+              </div>
+            )}
           </div>
         </motion.div>
       </motion.div>

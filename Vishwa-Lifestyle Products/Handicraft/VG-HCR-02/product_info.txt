@@ -1,0 +1,41 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: This exquisite Rajasthani handicraft features a hand-carved tortoise made from natural soapstone, designed with the traditional jali (lattice) work technique. The hollow shell with intricate open carvings encloses a smaller tortoise inside, representing longevity, stability, and prosperity.
+HSN CODE: 4421
+PRODUCT NAME: Hand-Carved Jali Work Stone Tortoise
+SKU: VG-HCR-02
+SKU (Folder Name): VG-HCR-02
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+Segments: Soapstone
+SUB-CATEGORY: heritage Craft
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 599
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716367
+Sr no: 2

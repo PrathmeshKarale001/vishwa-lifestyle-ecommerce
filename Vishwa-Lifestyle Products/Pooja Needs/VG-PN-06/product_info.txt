@@ -1,0 +1,41 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Invoke divine blessings and positive energy with this finely crafted Brass Swami Samarth Idol. Depicted in a serene meditative posture on a pyramid-shaped base, this idol radiates spiritual strength, protection, and peace. Swami Samarth, revered as a divine incarnation and spiritual guide, is believed to bless devotees with wisdom, courage, and prosperity. Handcrafted from premium quality brass, this idol is perfect for puja rooms, meditation spaces, home décor, or as a thoughtful spiritual gift.
+HSN Code: 74181021
+PRODUCT NAME: Brass Shree Swami Samarth Idol ( Small )
+SKU: VG-PN-06
+SKU (Folder Name): VG-PN-06
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+Segments: SSS
+SUB-CATEGORY: Idol
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 899
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 90*100 inches
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 807 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716527
+Sr No: 6

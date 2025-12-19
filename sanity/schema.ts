@@ -23,19 +23,19 @@ const product: SchemaTypeDefinition = {
       validation: (Rule) => Rule.required(),
     },
     {
-      name: 'image',
-      title: 'Main Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
+      name: 'sku',
+      title: 'SKU',
+      type: 'string',
+      description: 'Stock Keeping Unit - unique product identifier',
     },
     {
       name: 'images',
-      title: 'Gallery Images',
+      title: 'Product Images',
       type: 'array',
+      description: 'First image will be used as the main/hero image',
       of: [{ type: 'image', options: { hotspot: true } }],
     },
+
     {
       name: 'price',
       title: 'Price',
@@ -70,6 +70,122 @@ const product: SchemaTypeDefinition = {
       title: 'Category',
       type: 'reference',
       to: [{ type: 'category' }],
+    },
+    {
+      name: 'subCategory',
+      title: 'Sub-Category',
+      type: 'string',
+    },
+    {
+      name: 'segments',
+      title: 'Segments',
+      type: 'string',
+    },
+    {
+      name: 'subSegments',
+      title: 'Sub-Segments',
+      type: 'string',
+    },
+    {
+      name: 'productType',
+      title: 'Product Type',
+      type: 'string',
+      description: 'FG (Finished Goods), RM (Raw Material), PKG (Packaging)',
+      options: {
+        list: [
+          { title: 'Finished Goods', value: 'FG' },
+          { title: 'Raw Material', value: 'RM' },
+          { title: 'Packaging', value: 'PKG' },
+        ],
+      },
+    },
+    {
+      name: 'department',
+      title: 'Department',
+      type: 'string',
+      description: 'DOM (Domestic), EXP (Export)',
+      options: {
+        list: [
+          { title: 'Domestic', value: 'DOM' },
+          { title: 'Export', value: 'EXP' },
+        ],
+      },
+    },
+    {
+      name: 'brand',
+      title: 'Brand',
+      type: 'string',
+    },
+    {
+      name: 'gstPercent',
+      title: 'GST %',
+      type: 'number',
+    },
+    {
+      name: 'hsCode',
+      title: 'HS Code',
+      type: 'string',
+    },
+    {
+      name: 'hsnCode',
+      title: 'HSN Code',
+      type: 'string',
+    },
+    {
+      name: 'gs1Barcode',
+      title: 'GS1 Barcode',
+      type: 'string',
+    },
+    {
+      name: 'gtin',
+      title: 'GTIN',
+      type: 'string',
+    },
+    {
+      name: 'shelfLife',
+      title: 'Shelf Life',
+      type: 'string',
+    },
+    {
+      name: 'size',
+      title: 'Size',
+      type: 'string',
+    },
+    {
+      name: 'unitType',
+      title: 'Unit Type',
+      type: 'string',
+      description: 'Unit, KG, Litres, Pieces, etc.',
+    },
+    {
+      name: 'packaging',
+      title: 'Packaging',
+      type: 'string',
+    },
+    {
+      name: 'weight',
+      title: 'Weight',
+      type: 'string',
+    },
+    {
+      name: 'dimensions',
+      title: 'Dimensions (LxBxH)',
+      type: 'string',
+    },
+    {
+      name: 'supplierCode',
+      title: 'Supplier Code',
+      type: 'string',
+    },
+    {
+      name: 'supplierName',
+      title: 'Supplier Name',
+      type: 'string',
+    },
+    {
+      name: 'supplierContact',
+      title: 'Supplier Contact',
+      type: 'string',
     },
     {
       name: 'inventory',
@@ -115,16 +231,18 @@ const product: SchemaTypeDefinition = {
       title: 'name',
       media: 'image',
       price: 'price',
+      sku: 'sku',
     },
-    prepare({ title, media, price }) {
+    prepare({ title, media, price, sku }) {
       return {
         title,
-        subtitle: `₹${price}`,
+        subtitle: `${sku ? sku + ' | ' : ''}₹${price}`,
         media,
       };
     },
   },
 };
+
 
 // Category Schema
 const category: SchemaTypeDefinition = {

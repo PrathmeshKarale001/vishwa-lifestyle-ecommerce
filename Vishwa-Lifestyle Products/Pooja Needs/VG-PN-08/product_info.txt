@@ -1,0 +1,41 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Enhance the spiritual aura of your home with this exquisitely crafted Brass Kamdhenu Cow with Calf idol. In Hindu tradition, Kamdhenu is regarded as the divine cow, symbolizing prosperity, abundance, and motherly love. This handcrafted idol depicts the sacred cow with her calf, representing nurturing energy and blessings for the household.
+HSN Code: 74181021
+PRODUCT NAME: Brass Kamdhenu Cow with Calf Idol ( 3inches)
+SKU: VG-PN-08
+SKU (Folder Name): VG-PN-08
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+Segments: Brass
+SUB-CATEGORY: Idol
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1799
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 90*100 inches
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 809 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716541
+Sr No: 8

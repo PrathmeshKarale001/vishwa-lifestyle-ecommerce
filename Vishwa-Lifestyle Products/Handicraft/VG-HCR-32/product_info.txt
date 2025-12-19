@@ -1,0 +1,41 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Celebrate the rich traditions of Rajasthan with this hand-painted Kamdhenu cow pair, symbolizing prosperity, purity, and divine blessings. Crafted from premium marble and adorned with vibrant Rajasthani folk motifs, these decorative cows beautifully capture the essence of rural artistry and spiritual symbolism. The intricate floral designs in red, blue, gold, and black detailing showcase the skilled craftsmanship of local artisans, making each piece a work of art.
+HSN CODE: 4420
+PRODUCT NAME: Hand-Painted Rajasthani Kamdhenu Cow Pair
+SKU: VG-HCR-32
+SKU (Folder Name): VG-HCR-32
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+Segments: Marble
+SUB-CATEGORY: heritage Craft
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 599
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VG-09
+SUPPLIER NAME: Murli Hand Craft Jaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716282
+Sr no: 32

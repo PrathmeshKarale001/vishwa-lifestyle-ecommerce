@@ -1,0 +1,44 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+Article: Na
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Add a touch of earthy elegance to your space with our Rustic Charm Hand block Cushion Cover. Featuring intricate hand block-printed floral motifs in rich rust, maroon, and green tones, this 16x16 inch cover reflects timeless craftsmanship. The deep maroon border frames the design beautifully, making it a perfect accent for both traditional and modern interiors.
+HSN Code: 9404
+PRODUCT NAME: Floral Harmony Dohar
+SKU: VG-HDR-27
+SKU (Folder Name): VG-HDR-27
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Double Dohar
+SUB-CATEGORY: Bedroom
+Sub -Segments: Block Printed
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1699
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 16*16
+NO. OF UNITS: 18
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 200 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-02
+SUPPLIER NAME: J K Jaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715520
+Sr No: 27

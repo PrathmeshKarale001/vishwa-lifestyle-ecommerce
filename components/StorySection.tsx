@@ -17,12 +17,12 @@ export default function StorySection() {
                         className="w-full lg:w-1/2"
                     >
                         <div className="relative aspect-[4/3] overflow-hidden">
-                            {/* Using a div with background image for now to avoid Next.js Image config issues with external domains if not configured, 
-                  but standard img tag is safer for this demo. */}
-                            <img
+                            <Image
                                 src="/products/philosophy/1.jpg"
                                 alt="Vedic Living"
-                                className="w-full h-full object-cover object-bottom hover:scale-105 transition-transform duration-1000"
+                                fill
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                className="object-cover object-bottom hover:scale-105 transition-transform duration-1000"
                             />
                         </div>
                     </motion.div>

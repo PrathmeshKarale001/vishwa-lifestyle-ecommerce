@@ -92,27 +92,27 @@ export default function ProductCard({
   return (
     <motion.article
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
       className="group relative"
     >
       <Link href={`/product/${slug}`} aria-label={`View ${name}`}>
-        <div className="relative aspect-[3/4] overflow-hidden bg-background-alt mb-4">
+        <div className="relative aspect-[3/4] overflow-hidden bg-background-alt mb-4 group-hover:shadow-lg transition-shadow duration-500">
           {/* Tag */}
           {tag && (
-            <span className="absolute top-3 left-3 bg-white/90 backdrop-blur text-[10px] uppercase tracking-widest px-2 py-1 z-10">
+            <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-[10px] uppercase tracking-widest px-3 py-1.5 z-10 shadow-sm">
               {tag}
             </span>
           )}
 
           {/* Stock Status Badge */}
           {isOutOfStock && (
-            <span className="absolute top-3 left-3 bg-red-500 text-white text-[10px] uppercase tracking-widest px-2 py-1 z-10">
+            <span className="absolute top-3 left-3 bg-red-600 text-white text-[10px] uppercase tracking-widest px-3 py-1.5 z-10 shadow-sm">
               Out of Stock
             </span>
           )}
           {isLowStock && !isOutOfStock && (
-            <span className="absolute bottom-3 left-3 bg-orange-500 text-white text-[10px] uppercase tracking-widest px-2 py-1 z-10">
+            <span className="absolute bottom-3 left-3 bg-orange-500 text-white text-[10px] uppercase tracking-widest px-3 py-1.5 z-10 shadow-sm">
               Only {inventory} left
             </span>
           )}
@@ -120,51 +120,49 @@ export default function ProductCard({
           {/* Wishlist Button */}
           <button
             onClick={handleToggleWishlist}
-            className={`absolute top-3 right-3 z-10 p-2 bg-white/90 backdrop-blur rounded-full transition-all duration-300 ${
-              isWishlisted
-                ? "text-red-500"
-                : "text-foreground-muted hover:text-red-500"
-            }`}
+            className={`absolute top-3 right-3 z-20 p-2.5 bg-white/90 backdrop-blur-md rounded-full shadow-sm transition-all duration-300 hover:scale-110 active:scale-95 ${isWishlisted
+              ? "text-red-500"
+              : "text-foreground-muted hover:text-red-500"
+              }`}
             aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
           >
-            <Heart size={16} fill={isWishlisted ? "currentColor" : "none"} />
+            <Heart size={16} fill={isWishlisted ? "currentColor" : "none"} strokeWidth={1.5} />
           </button>
 
           {/* Product Image */}
-          <div className="relative w-full h-full">
+          <div className="relative w-full h-full overflow-hidden">
             <Image
-              src={image && image.trim() ? image : "/placeholder-product.jpg"}
+              src={image && image.trim() ? image : "/placeholder-product.svg"}
               alt={name}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-              className={`object-cover transition-transform duration-700 group-hover:scale-105 ${
-                isOutOfStock ? "opacity-50" : ""
-              }`}
+              className={`object-cover transition-transform duration-1000 ease-out group-hover:scale-110 ${isOutOfStock ? "opacity-50 grayscale" : ""
+                }`}
               loading="lazy"
               placeholder="blur"
-              blurDataURL={image && image.trim() ? getBlurPlaceholder(image) : getBlurPlaceholder("/placeholder-product.jpg")}
+              blurDataURL={image && image.trim() ? getBlurPlaceholder(image) : getBlurPlaceholder("/placeholder-product.svg")}
               onError={(e) => {
                 // Fallback to placeholder if image fails to load
                 const target = e.target as HTMLImageElement;
-                if (target.src !== "/placeholder-product.jpg") {
-                  target.src = "/placeholder-product.jpg";
+                if (target.src !== "/placeholder-product.svg") {
+                  target.src = "/placeholder-product.svg";
                 }
               }}
             />
           </div>
 
-          {/* Hover Overlay */}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
+          {/* Hover Overlay - subtle dark gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
           {/* Quick Actions */}
-          <div className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2 p-2">
+          <div className="absolute bottom-4 left-4 right-4 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out flex gap-3">
             <button
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 setIsQuickViewOpen(true);
               }}
-              className="flex-1 bg-white text-black py-2 text-xs uppercase tracking-widest hover:bg-gray-100 transition-colors"
+              className="flex-1 bg-white text-black py-2.5 text-xs uppercase tracking-widest hover:bg-black hover:text-white transition-colors duration-300 shadow-lg"
               aria-label={`Quick view ${name}`}
             >
               Quick View
@@ -172,11 +170,10 @@ export default function ProductCard({
             <button
               onClick={handleAddToCart}
               disabled={isOutOfStock}
-              className={`flex-1 py-2 text-xs uppercase tracking-widest flex items-center justify-center gap-1 ${
-                isOutOfStock
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-foreground text-white hover:bg-accent-gold"
-              }`}
+              className={`flex-1 py-2.5 text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${isOutOfStock
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-black text-white hover:bg-accent-gold"
+                }`}
               aria-label={isOutOfStock ? "Out of stock" : `Add ${name} to cart`}
             >
               <ShoppingBag size={14} /> {isOutOfStock ? "Out" : "Add"}

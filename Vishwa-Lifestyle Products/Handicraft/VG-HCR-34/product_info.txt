@@ -1,0 +1,41 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Add elegance and charm to your space with this hand-painted wooden swan pair, a true reflection of Rajasthani artistry. Crafted from fine wood and adorned with vibrant hand-painted floral motifs, these swans symbolize grace, love, and togetherness.
+HSN CODE: 4420
+PRODUCT NAME: Hand-Painted Wooden Swan Pair – Rajasthani Decorative Art
+SKU: VG-HCR-34
+SKU (Folder Name): VG-HCR-34
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+Segments: Paper
+SUB-CATEGORY: heritage Craft
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 399
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VG-09
+SUPPLIER NAME: Murli Hand Craft Jaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716015
+Sr no: 34

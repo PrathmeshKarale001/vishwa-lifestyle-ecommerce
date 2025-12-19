@@ -1,0 +1,42 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Serve your beverages in style with this exquisite Rajasthani marble inlay tea coaster set. Made from pure white marble, each coaster is delicately adorned with traditional floral inlay work in vibrant blue, red, and green tones. The elegant holder keeps the coasters neatly organized, making it both functional and decorative. A perfect blend of utility and heritage, this coaster set adds a royal touch to your tea-time experience and makes a thoughtful gift for any occasion.
+HSN Code: 4421
+PRODUCT NAME: Rajasthani Handcrafted Marble Inlay Tea Coaster Set
+SKU: VG-HDR-58
+SKU (Folder Name): VG-HDR-58
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Tableware
+SUB-CATEGORY: kitchen
+Sub -Segments: Marble
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1299
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715810
+Sr No: 58

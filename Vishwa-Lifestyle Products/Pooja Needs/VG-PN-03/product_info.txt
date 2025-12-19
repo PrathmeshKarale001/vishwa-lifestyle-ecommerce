@@ -1,0 +1,41 @@
+SOURCE SHEET: Pooja Needs 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishw Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: This intricately crafted brass idol brings a sense of serenity and spiritual presence to any space. The detailed work and elegant form make it a beautiful centerpiece for your puja room or altar. Place this divine figure on a shelf or table to add a touch of traditional artistry and sacred devotion to your home.
+HSN Code: 74181021
+PRODUCT NAME: The divine brass Tulja Bhavani Idol
+SKU: VG-PN-03
+SKU (Folder Name): VG-PN-03
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Pooja Needs
+Segments: Brass
+SUB-CATEGORY: Idol
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 899
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 90*100 inches
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 802 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716497
+Sr No: 3

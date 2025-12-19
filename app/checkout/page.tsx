@@ -17,7 +17,6 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { useCartStore } from "@/store/cart";
-import { useRazorpay } from "@/hooks/useRazorpay";
 import toast from "react-hot-toast";
 import { log } from "@/lib/logger";
 
@@ -48,27 +47,23 @@ const shippingMethods = [
     id: "standard",
     name: "Standard Shipping",
     description: "5-7 business days",
-    price: 99,
+    price: 0,
   },
   {
     id: "express",
     name: "Express Shipping",
     description: "2-3 business days",
-    price: 199,
-  },
-  {
-    id: "free",
-    name: "Free Shipping",
-    description: "7-10 business days (Orders above ₹999)",
     price: 0,
-    minOrder: 999,
   },
 ];
+
+// Free shipping threshold
+const FREE_SHIPPING_THRESHOLD = 1000;
+
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, subtotal, discount, tax, total, clearCart, promoCode } = useCartStore();
-  const { isLoaded: isRazorpayLoaded, initiatePayment } = useRazorpay();
   const [currentStep, setCurrentStep] = useState(0);
   const [shippingMethod, setShippingMethod] = useState("standard");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -102,9 +97,10 @@ export default function CheckoutPage() {
   };
 
   const selectedShipping = shippingMethods.find((m) => m.id === shippingMethod);
-  const shippingCost =
-    subtotal >= 999 && shippingMethod === "free" ? 0 : selectedShipping?.price || 99;
+  // Free shipping for orders over ₹1000
+  const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : (selectedShipping?.price ?? 99);
   const finalTotal = subtotal - discount + shippingCost + tax;
+
 
   const onShippingSubmit = (data: ShippingFormData) => {
     setShippingData(data);
@@ -121,7 +117,7 @@ export default function CheckoutPage() {
     setIsProcessing(true);
 
     try {
-      // Step 1: Create order on server
+      // Step 1: Initialize transaction on server
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -157,62 +153,72 @@ export default function CheckoutPage() {
       const data = await response.json();
 
       if (!data.success) {
-        throw new Error(data.error || "Failed to create order");
+        throw new Error(data.error || "Failed to initiate payment");
       }
+
 
       setOrderNumber(data.orderNumber);
 
-      // Step 2: Open Razorpay payment modal
-      initiatePayment({
-        orderId: data.orderNumber,
-        razorpayOrderId: data.razorpayOrderId,
-        razorpayKeyId: data.razorpayKeyId,
-        amount: data.amount,
-        currency: data.currency,
-        customerName: `${shippingData.firstName} ${shippingData.lastName}`,
-        customerEmail: shippingData.email,
-        customerPhone: shippingData.phone,
-        onSuccess: async (paymentResponse) => {
-          // Step 3: Verify payment on server
-          try {
-            const verifyResponse = await fetch("/api/verify-payment", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                razorpay_order_id: paymentResponse.razorpay_order_id,
-                razorpay_payment_id: paymentResponse.razorpay_payment_id,
-                razorpay_signature: paymentResponse.razorpay_signature,
-                orderNumber: data.orderNumber,
-              }),
-            });
-
-            const verifyData = await verifyResponse.json();
-
-            if (verifyData.success) {
-              clearCart();
-              router.push(`/checkout/success?order=${data.orderNumber}`);
-            } else {
-              throw new Error(verifyData.error);
-            }
-          } catch (verifyError) {
-            // Payment was made but verification failed
-            // The webhook will handle this
-            clearCart();
-            router.push(`/checkout/success?order=${data.orderNumber}`);
-          }
-        },
-        onFailure: (error) => {
-          log.error("Payment failed", error);
-          toast.error("Payment could not be processed. Please check your payment details and try again.");
-          setIsProcessing(false);
-        },
-        onDismiss: () => {
-          setIsProcessing(false);
-        },
+      // Step 2: Get Encrypted Payload for Tecogis
+      const paymentResponse = await fetch("/api/payment/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId: data.orderNumber,
+          amount: finalTotal,
+          firstName: shippingData.firstName,
+          lastName: shippingData.lastName,
+          address: shippingData.address,
+          city: shippingData.city,
+          state: shippingData.state,
+          pincode: shippingData.postalCode,
+          country: "India",
+          email: shippingData.email,
+          phone: shippingData.phone
+        }),
       });
+
+      const paymentData = await paymentResponse.json();
+
+      if (!paymentData.success) {
+        throw new Error(paymentData.error || "Failed to initiate payment gateway");
+      }
+
+      // Step 3: Auto-submit form to Tecogis
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = paymentData.actionUrl;
+      form.name = 'mygatewayform'; // As per user example
+
+      // PaymentData (encrypted payload)
+      const paymentDataInput = document.createElement('input');
+      paymentDataInput.type = 'hidden';
+      paymentDataInput.name = 'PaymentData';
+      paymentDataInput.value = paymentData.encryptedData;
+      form.appendChild(paymentDataInput);
+
+      // nonce
+      const nonceInput = document.createElement('input');
+      nonceInput.type = 'hidden';
+      nonceInput.name = 'nonce';
+      nonceInput.value = paymentData.nonce;
+      form.appendChild(nonceInput);
+
+      // key
+      const keyInput = document.createElement('input');
+      keyInput.type = 'hidden';
+      keyInput.name = 'key';
+      keyInput.value = paymentData.key;
+      form.appendChild(keyInput);
+
+      document.body.appendChild(form);
+      form.submit();
+
+      // Note: User will be redirected, so we don't need to clear processing state immediately
+      // It will be cleared if they hit back button or returns to this page
     } catch (error: any) {
       log.error("Checkout error", error);
-      toast.error(error.message || "Unable to process checkout. Please try again or contact support.");
+      toast.error(error.message || "Unable to process payment. Please try again.");
       setIsProcessing(false);
     }
   };
@@ -240,18 +246,16 @@ export default function CheckoutPage() {
             {steps.map((step, idx) => (
               <div key={step.id} className="flex items-center">
                 <div
-                  className={`flex items-center gap-2 ${
-                    idx <= currentStep ? "text-foreground" : "text-foreground-muted"
-                  }`}
+                  className={`flex items-center gap-2 ${idx <= currentStep ? "text-foreground" : "text-foreground-muted"
+                    }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
-                      idx < currentStep
-                        ? "bg-accent-gold text-white"
-                        : idx === currentStep
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${idx < currentStep
+                      ? "bg-accent-gold text-white"
+                      : idx === currentStep
                         ? "bg-foreground text-white"
                         : "bg-gray-200"
-                    }`}
+                      }`}
                   >
                     {idx < currentStep ? (
                       <CheckCircle size={16} />
@@ -263,9 +267,8 @@ export default function CheckoutPage() {
                 </div>
                 {idx < steps.length - 1 && (
                   <div
-                    className={`w-12 md:w-24 h-0.5 mx-2 ${
-                      idx < currentStep ? "bg-accent-gold" : "bg-gray-200"
-                    }`}
+                    className={`w-12 md:w-24 h-0.5 mx-2 ${idx < currentStep ? "bg-accent-gold" : "bg-gray-200"
+                      }`}
                   />
                 )}
               </div>
@@ -293,9 +296,8 @@ export default function CheckoutPage() {
                       <input
                         type="email"
                         {...register("email")}
-                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                          errors.email ? "border-red-500" : "border-gray-200"
-                        }`}
+                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.email ? "border-red-500" : "border-gray-200"
+                          }`}
                         placeholder="your@email.com"
                       />
                       {errors.email && (
@@ -309,9 +311,8 @@ export default function CheckoutPage() {
                       <input
                         type="tel"
                         {...register("phone")}
-                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                          errors.phone ? "border-red-500" : "border-gray-200"
-                        }`}
+                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.phone ? "border-red-500" : "border-gray-200"
+                          }`}
                         placeholder="+91 98765 43210"
                       />
                       {errors.phone && (
@@ -328,9 +329,8 @@ export default function CheckoutPage() {
                         <input
                           type="text"
                           {...register("firstName")}
-                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                            errors.firstName ? "border-red-500" : "border-gray-200"
-                          }`}
+                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.firstName ? "border-red-500" : "border-gray-200"
+                            }`}
                         />
                         {errors.firstName && (
                           <p className="text-red-500 text-xs mt-1">
@@ -343,9 +343,8 @@ export default function CheckoutPage() {
                         <input
                           type="text"
                           {...register("lastName")}
-                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                            errors.lastName ? "border-red-500" : "border-gray-200"
-                          }`}
+                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.lastName ? "border-red-500" : "border-gray-200"
+                            }`}
                         />
                         {errors.lastName && (
                           <p className="text-red-500 text-xs mt-1">
@@ -361,9 +360,8 @@ export default function CheckoutPage() {
                       <input
                         type="text"
                         {...register("address")}
-                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                          errors.address ? "border-red-500" : "border-gray-200"
-                        }`}
+                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.address ? "border-red-500" : "border-gray-200"
+                          }`}
                         placeholder="House no., Building, Street"
                       />
                       {errors.address && (
@@ -390,9 +388,8 @@ export default function CheckoutPage() {
                         <input
                           type="text"
                           {...register("city")}
-                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                            errors.city ? "border-red-500" : "border-gray-200"
-                          }`}
+                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.city ? "border-red-500" : "border-gray-200"
+                            }`}
                         />
                       </div>
                       <div>
@@ -400,9 +397,8 @@ export default function CheckoutPage() {
                         <input
                           type="text"
                           {...register("state")}
-                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                            errors.state ? "border-red-500" : "border-gray-200"
-                          }`}
+                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.state ? "border-red-500" : "border-gray-200"
+                            }`}
                         />
                       </div>
                       <div>
@@ -410,9 +406,8 @@ export default function CheckoutPage() {
                         <input
                           type="text"
                           {...register("postalCode")}
-                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                            errors.postalCode ? "border-red-500" : "border-gray-200"
-                          }`}
+                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.postalCode ? "border-red-500" : "border-gray-200"
+                            }`}
                         />
                       </div>
                     </div>
@@ -479,15 +474,14 @@ export default function CheckoutPage() {
                   {/* Shipping Options */}
                   <div className="space-y-4">
                     {shippingMethods.map((method) => {
-                      const isDisabled = Boolean(method.minOrder && subtotal < method.minOrder);
+                      const isDisabled = false; // Always enabled for now as all are free
                       return (
                         <label
                           key={method.id}
-                          className={`flex items-center justify-between p-4 border cursor-pointer transition-colors ${
-                            shippingMethod === method.id
-                              ? "border-accent-gold bg-accent-gold/5"
-                              : "border-gray-200 hover:border-gray-300"
-                          } ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                          className={`flex items-center justify-between p-4 border cursor-pointer transition-colors ${shippingMethod === method.id
+                            ? "border-accent-gold bg-accent-gold/5"
+                            : "border-gray-200 hover:border-gray-300"
+                            } ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
                         >
                           <div className="flex items-center gap-3">
                             <input
@@ -574,7 +568,7 @@ export default function CheckoutPage() {
                   <div className="bg-background-alt p-6 mb-6">
                     <div className="flex items-center gap-3 mb-4">
                       <Lock size={16} className="text-accent-gold" />
-                      <span className="text-sm font-medium">Secure Payment via Razorpay</span>
+                      <span className="text-sm font-medium">Secure Online Payment</span>
                     </div>
                     <p className="text-sm text-foreground-muted mb-4">
                       All transactions are secure and encrypted. Your payment information is

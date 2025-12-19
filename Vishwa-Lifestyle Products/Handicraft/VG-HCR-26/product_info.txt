@@ -1,0 +1,41 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Add a touch of elegance and tradition to your space with this exquisite hand-carved wooden peacock from Rajasthan. Known as the national bird of India, the peacock symbolizes grace, prosperity, and beauty. Meticulously crafted by skilled artisans, the sculpture features a peacock with its majestic feathers beautifully fanned out in intricate detail. The delicate jali (lattice) work and fine hand-carving showcase the timeless artistry of Rajasthan, making it not just a decorative piece but a true work of art.
+HSN CODE: 7616
+PRODUCT NAME: Handcrafted Wooden Peacock – Rajasthani Decorative Sculpture - Small
+SKU: VG-HCR-26
+SKU (Folder Name): VG-HCR-26
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+Segments: Wood
+SUB-CATEGORY: heritage Craft
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 599
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VG-09
+SUPPLIER NAME: Murli Hand Craft Jaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716244
+Sr no: 26

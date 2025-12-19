@@ -1,0 +1,44 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+Article: Na
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Add a splash of colour and tradition to your home with this beautiful hand-painted wooden tray set of three, inspired by the vibrant patchwork art of Rajasthan. Each tray is adorned with bright hues and intricate motifs such as paisleys, florals, and geometric patterns, all painted by skilled artisans.
+HSN Code: 4421
+PRODUCT NAME: Rajasthani Hand-Painted Patchwork Wooden Tray Set (Set of 3)
+SKU: VG-HDR-46
+SKU (Folder Name): VG-HDR-46
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Dinnerware
+SUB-CATEGORY: kitchen
+Sub -Segments: Wood
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1999
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 16*16
+NO. OF UNITS: 18
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 200 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715704
+Sr No: 46

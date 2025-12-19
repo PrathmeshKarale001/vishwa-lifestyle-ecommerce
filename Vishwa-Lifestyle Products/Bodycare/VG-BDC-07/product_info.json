@@ -1,0 +1,31 @@
+{
+  "source_sheet": "Bodycare",
+  "fields": {
+    "Sr No": "7",
+    "SKU": "VG-BDC-07",
+    "IMAGE": "",
+    "PRODUCT NAME": "Kanti Face Pack 80g",
+    "CATEGORY": "Body Care",
+    "SUB -CATEGORY": "Face Pack",
+    "TYPE OF PRODUCT (FG / RM / PKG)": "FG",
+    "DEPARTMENT (DOM / EXP)": "DOM",
+    "BRAND": "Vishwa Wellness",
+    "MRP": "129",
+    "DESCRIPTION": "",
+    "GST %": "0.18",
+    "HS Code": "",
+    "HSN Code": "330410",
+    "GS1 BARCODE": "",
+    "SHELF LIFE (DAYS)": "18 Months",
+    "Size": "",
+    "Type of Unit (Unit, KG, Litres)": "",
+    "PACKAGING": "Plastic Bottle with Outer Carton",
+    "WEIGHT IN KG": "",
+    "DIMENSION IN CM (LXBXH)": "5.2*5.2*10",
+    "Supplier Code": "VG-00",
+    "SUPPLIER NAME": "Vishwa Holistic Solution Pvt Ldt",
+    "GTIN": "",
+    "Barcode": "",
+    "SKU (Folder Name)": "VG-BDC-07"
+  }
+}

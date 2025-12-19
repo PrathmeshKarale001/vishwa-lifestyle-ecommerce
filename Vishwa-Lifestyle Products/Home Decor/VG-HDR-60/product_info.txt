@@ -1,0 +1,42 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: This elegant Rajasthani handicraft tea coaster set is made from fine white marble and beautifully hand-painted with traditional floral motifs in red, green, and gold. The round holder, adorned with golden accents, keeps the coasters neatly stacked while adding a royal touch to your table décor.
+HSN Code: 4421
+PRODUCT NAME: Hand-Painted Marble Floral Tea Coaster Set
+SKU: VG-HDR-60
+SKU (Folder Name): VG-HDR-60
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Tableware
+SUB-CATEGORY: kitchen
+Sub -Segments: Marble
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1499
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715834
+Sr No: 60

@@ -1,0 +1,41 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: This exquisite hand-painted marble decorative plate showcases the timeless beauty of Rajasthani artistry. Featuring a vibrant peacock motif, the national bird of India and a symbol of grace and prosperity, it is surrounded by intricate floral designs in traditional meenakari-style patterns. Handcrafted by skilled artisans, this plate is made from premium quality marble and adorned with fine detailing in rich colors and golden highlights. It comes with a wooden stand, making it a perfect showpiece for living rooms, offices, or gifting on special occasions.
+HSN CODE: 4421
+PRODUCT NAME: Rajasthani Marble Decorative Plate with Royal Elephant Painting
+SKU: VG-HCR-03
+SKU (Folder Name): VG-HCR-03
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+Segments: Creamic
+SUB-CATEGORY: Desing Plate
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1699
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716039
+Sr no: 3

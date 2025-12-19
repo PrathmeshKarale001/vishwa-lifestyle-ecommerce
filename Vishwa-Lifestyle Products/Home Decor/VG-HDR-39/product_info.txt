@@ -1,0 +1,44 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+Article: Na
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: This beautifully handcrafted Brass Pooja Bowl is perfect for your daily rituals, offerings, and festive occasions. Made from high-quality brass, it features a smooth, polished finish that adds a traditional and elegant touch to your puja room or home décor. Ideal for holding kumkum, haldi, akshata, flowers, or prasadam during rituals, this bowl combines durability with timeless charm. A must-have accessory for pooja ceremonies, gifting, or spiritual practices.
+HSN Code: 74181021
+PRODUCT NAME: Brass vati
+SKU: VG-HDR-39
+SKU (Folder Name): VG-HDR-39
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Dinnerware
+SUB-CATEGORY: kitchen
+Sub -Segments: Brass
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 310
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 16*16
+NO. OF UNITS: 18
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 200 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715636
+Sr No: 39

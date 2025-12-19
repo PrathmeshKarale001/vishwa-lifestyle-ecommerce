@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyPaymentSignature } from '@/lib/razorpay';
+// import { verifyPaymentSignature } from '@/lib/razorpay';
 import { updateOrderByRazorpayId, supabase } from '@/lib/supabase';
 import { sendOrderConfirmationEmail, sendOrderNotificationToAdmin } from '@/lib/email';
 import crypto from 'crypto';
@@ -9,6 +9,8 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
+    /*
+    // RAZORPAY WEBHOOK DISABLED
     const body = await request.text();
     const signature = request.headers.get('x-razorpay-signature');
 
@@ -186,8 +188,9 @@ export async function POST(request: NextRequest) {
       default:
         log.warn('Unhandled webhook event', { eventType });
     }
+    */
 
-    return NextResponse.json({ received: true });
+    return NextResponse.json({ received: true, status: "disabled_migration" });
   } catch (error) {
     log.error('Webhook processing error', error);
     return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 });
@@ -196,5 +199,5 @@ export async function POST(request: NextRequest) {
 
 // Razorpay webhooks use POST only
 export async function GET() {
-  return NextResponse.json({ message: 'Razorpay webhook endpoint' });
+  return NextResponse.json({ message: 'Razorpay webhook endpoint (disabled)' });
 }

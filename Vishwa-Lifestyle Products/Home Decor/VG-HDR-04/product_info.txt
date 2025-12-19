@@ -1,0 +1,44 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+Article: Set of 5
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Bring subtle elegance to your home with our Graceful Bloom Hand block Cushion Cover. Featuring delicate hand block-printed pink blossoms at the centre, framed by a soothing grey floral border, this 16x16 inch cushion cover is a perfect blend of simplicity and sophistication. Made with soft cotton fabric, it adds a timeless charm to your sofa, lounge, or bedroom.
+HSN Code: 6304
+PRODUCT NAME: Graceful Bloom Hand block Cushion Cover
+SKU: VG-HDR-04
+SKU (Folder Name): VG-HDR-04
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Cushion Covers
+SUB-CATEGORY: Living Room
+Sub -Segments: Cotton Hand-Block Printed
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 240
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 16*16
+NO. OF UNITS: 18
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 200 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-02
+SUPPLIER NAME: J K Jaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715292
+Sr No: 4

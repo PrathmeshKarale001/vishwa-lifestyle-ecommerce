@@ -1,0 +1,44 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+Article: Na
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Bring purity and tradition to your rituals with this beautifully handcrafted Brass Pooja Bowl. Designed with a floral pattern inside and a smooth golden finish, this bowl is perfect for holding water, milk, flowers, kumkum, rice, or other sacred offerings during puja and festive ceremonies. Crafted from high-quality brass, it ensures durability, shine, and a timeless appeal, making it a valuable addition to your Pooja room or as a thoughtful spiritual gift.
+HSN Code: 74181021
+PRODUCT NAME: Brass Phoolari ( Dia - 6.5 inches )
+SKU: VG-HDR-62
+SKU (Folder Name): VG-HDR-62
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Tableware
+SUB-CATEGORY: kitchen
+Sub -Segments: Brass
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 799
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 16*16
+NO. OF UNITS: 18
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 200 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC -04
+SUPPLIER NAME: ABD Solapur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715858
+Sr No: 62

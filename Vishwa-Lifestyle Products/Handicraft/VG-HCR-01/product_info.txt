@@ -1,0 +1,41 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: This finely crafted Rajasthani handicraft is a hand-carved elephant made from natural soapstone, showcasing the region’s renowned jali (lattice) work. The hollow body with delicate openwork designs reveals a smaller elephant figure carved inside, symbolizing strength, wisdom, and continuity of life.
+HSN CODE: 4421
+PRODUCT NAME: Intricate Jali Work Stone Elephant
+SKU: VG-HCR-01
+SKU (Folder Name): VG-HCR-01
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+Segments: Soapstone
+SUB-CATEGORY: heritage Craft
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 599
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716022
+Sr no: 1

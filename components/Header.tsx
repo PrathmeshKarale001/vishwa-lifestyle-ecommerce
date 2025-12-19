@@ -34,15 +34,15 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out border-b ${isSolidHeader
-          ? "bg-white py-3 sm:py-4 md:py-5 text-black border-gray-100"
-          : "bg-transparent py-6 sm:py-7 md:py-8 text-white border-transparent"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out border-b ${isSolidHeader
+          ? "bg-white/80 backdrop-blur-md py-3 sm:py-4 text-black border-gray-100 shadow-sm"
+          : "bg-transparent py-6 sm:py-8 text-white border-transparent"
           }`}
       >
         <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between relative">
           {/* Mobile Menu Button */}
           <button
-            className={`lg:hidden transition-colors z-10 ${isSolidHeader ? "text-black" : "text-white"}`}
+            className={`lg:hidden transition-colors z-10 hover:text-accent-gold ${isSolidHeader ? "text-black" : "text-white"}`}
             onClick={() => setIsMobileMenuOpen(true)}
             aria-label="Open menu"
           >
@@ -54,31 +54,35 @@ export default function Header() {
             className={`hidden lg:flex items-center space-x-8 text-sm tracking-[0.15em] uppercase font-medium transition-colors duration-300 ${isSolidHeader ? "text-black" : "text-white"
               }`}
           >
-            <Link href="/shop" className="hover:text-accent-gold transition-colors">
-              Shop
+            <Link href="/shop" className="hover:text-accent-gold transition-colors relative group">
+              <span>Shop</span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link href="/story" className="hover:text-accent-gold transition-colors">
-              Our Story
+            <Link href="/story" className="hover:text-accent-gold transition-colors relative group">
+              <span>Our Story</span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link href="/philosophy" className="hover:text-accent-gold transition-colors">
-              Philosophy
+            <Link href="/philosophy" className="hover:text-accent-gold transition-colors relative group">
+              <span>Philosophy</span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link href="/contact" className="hover:text-accent-gold transition-colors">
-              Contact
+            <Link href="/contact" className="hover:text-accent-gold transition-colors relative group">
+              <span>Contact</span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
             </Link>
           </nav>
 
           {/* Logo - Center */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-0">
-            <Link href="/" className="flex items-center justify-center">
+            <Link href="/" className="flex items-center justify-center group">
               <Image
                 src="/vishwalogo-v2.png"
                 alt="Vishwa Lifestyle"
                 width={120}
                 height={40}
-                className={`transition-all duration-500 ${isSolidHeader
-                  ? "h-9 sm:h-11 w-auto"
-                  : "h-11 sm:h-14 w-auto"
+                className={`transition-all duration-500 ease-out transform ${isSolidHeader
+                  ? "h-8 sm:h-10 w-auto"
+                  : "h-10 sm:h-12 w-auto group-hover:scale-105"
                   }`}
                 priority
               />
@@ -87,11 +91,11 @@ export default function Header() {
 
           {/* Actions - Right */}
           <div
-            className={`flex items-center space-x-3 sm:space-x-4 md:space-x-6 transition-colors duration-300 z-10 ${isSolidHeader ? "text-black" : "text-white"
+            className={`flex items-center space-x-3 sm:space-x-5 transition-colors duration-300 z-10 ${isSolidHeader ? "text-black" : "text-white"
               }`}
           >
-            <button className="hover:text-accent-gold transition-colors hidden lg:flex items-center">
-              <span className="text-xs tracking-widest mr-2">IN (₹)</span>
+            <button className="hover:text-accent-gold transition-colors hidden lg:flex items-center text-xs tracking-widest font-medium">
+              INR
             </button>
 
             <button
@@ -99,7 +103,7 @@ export default function Header() {
               className="hover:text-accent-gold transition-colors"
               aria-label="Search"
             >
-              <Search size={18} strokeWidth={1.5} className="sm:w-5 sm:h-5" />
+              <Search size={20} strokeWidth={1.5} />
             </button>
 
             <Link
@@ -107,7 +111,7 @@ export default function Header() {
               className="hover:text-accent-gold transition-colors relative hidden md:block"
               aria-label="Wishlist"
             >
-              <Heart size={18} strokeWidth={1.5} className="sm:w-5 sm:h-5" />
+              <Heart size={20} strokeWidth={1.5} />
               {wishlistCount > 0 && (
                 <span className="absolute -top-1 -right-1 text-[10px] bg-accent-gold text-white w-4 h-4 flex items-center justify-center rounded-full">
                   {wishlistCount}
@@ -116,7 +120,7 @@ export default function Header() {
             </Link>
 
             <Link href="/account" className="hover:text-accent-gold transition-colors" aria-label="Account">
-              <User size={18} strokeWidth={1.5} className="sm:w-5 sm:h-5" />
+              <User size={20} strokeWidth={1.5} />
             </Link>
 
             <button
@@ -124,7 +128,7 @@ export default function Header() {
               className="hover:text-accent-gold transition-colors relative"
               aria-label="Cart"
             >
-              <ShoppingBag size={18} strokeWidth={1.5} className="sm:w-5 sm:h-5" />
+              <ShoppingBag size={20} strokeWidth={1.5} />
               {itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 text-[10px] bg-accent-gold text-white w-4 h-4 flex items-center justify-center rounded-full">
                   {itemCount}

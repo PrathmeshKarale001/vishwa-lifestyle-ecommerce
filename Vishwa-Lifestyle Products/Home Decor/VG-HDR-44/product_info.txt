@@ -1,0 +1,44 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+Article: Na
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Brighten up your dining or décor space with Rangriti – a handcrafted Rajasthani wooden tray that brings together tradition, art, and functionality. Decorated in a vivid patchwork-style design using traditional Rajasthani folk motifs and Bandhani-inspired patterns, this tray is a true celebration of Rajasthan’s rich cultural heritage.
+HSN Code: 4421
+PRODUCT NAME: Rangriti – Hand-Painted Rajasthani Wooden Serving Tray
+SKU: VG-HDR-44
+SKU (Folder Name): VG-HDR-44
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Dinnerware
+SUB-CATEGORY: kitchen
+Sub -Segments: Wood
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 799
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 16*16
+NO. OF UNITS: 18
+PACKAGING: Plastic Bags
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Pieces
+WEIGHT IN KG: 200 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715681
+Sr No: 44

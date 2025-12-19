@@ -3,9 +3,11 @@
 import { ReactNode, Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
-import { GoogleAnalytics } from "./Analytics";
-import CookieConsent from "./CookieConsent";
+import dynamic from "next/dynamic";
 import { ErrorBoundary } from "./ErrorBoundary";
+
+const CookieConsent = dynamic(() => import("./CookieConsent"), { ssr: false });
+const GoogleAnalytics = dynamic(() => import("./Analytics").then(mod => mod.GoogleAnalytics), { ssr: false });
 
 interface ProvidersProps {
   children: ReactNode;

@@ -1,0 +1,7 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="800" fill="#F8F8F8"/>
+  <rect x="200" y="300" width="200" height="200" rx="4" stroke="#E2E2E2" stroke-width="2"/>
+  <path d="M260 300V280C260 257.909 277.909 240 300 240V240C322.091 240 340 257.909 340 280V300" stroke="#E2E2E2" stroke-width="2"/>
+  <text x="300" y="540" text-anchor="middle" fill="#A0A0A0" font-family="serif" font-size="16" letter-spacing="0.1em">VISHWA LIFESTYLE</text>
+  <text x="300" y="570" text-anchor="middle" fill="#CCCCCC" font-family="sans-serif" font-size="12" letter-spacing="0.05em">IMAGE COMING SOON</text>
+</svg>

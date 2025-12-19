@@ -1,0 +1,42 @@
+SOURCE SHEET: Home Decor
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Add a royal touch to your tea-time with this exquisite Rajasthani marble tea coaster set. Crafted from premium white marble, the holder and coasters are beautifully hand-painted with traditional motifs, featuring a majestic elephant adorned in vibrant colours and highlighted with golden accents.
+HSN Code: 4421
+PRODUCT NAME: Hand-Painted Marble Elephant Tea Coaster Set with Holder – Rajasthani Art
+SKU: VG-HDR-61
+SKU (Folder Name): VG-HDR-61
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Home Decor
+Segments: Tableware
+SUB-CATEGORY: kitchen
+Sub -Segments: Marble
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 1499
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VC-03
+SUPPLIER NAME: Rajasthan Art & Craft , Udaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085715841
+Sr No: 61

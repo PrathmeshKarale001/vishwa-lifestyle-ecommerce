@@ -1,0 +1,41 @@
+SOURCE SHEET: Handicraftt 
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Lifestyle
+DEPARTMENT (DOM / EXP): DOM
+DESCRIPTION: Bring home a piece of Rajasthan’s artistic legacy with this hand-carved wooden elephant. Intricately designed by skilled artisans, this figurine showcases traditional motifs and fine detailing that reflect the grandeur of Indian craftsmanship. The elephant, a symbol of strength, wisdom, and prosperity, makes this carving not only a beautiful decorative piece but also a meaningful gift. Whether placed in your living room, office, or pooja space, it adds an ethnic charm and a touch of royalty to your décor.
+HSN CODE: 7616
+PRODUCT NAME: Handcrafted Wooden Elephant – Rajasthani Carved Art
+SKU: VG-HCR-21
+SKU (Folder Name): VG-HCR-21
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Handicraft
+Segments: Wood
+SUB-CATEGORY: heritage Craft
+
+PRICING & TAX
+-------------
+GST %: 0.05
+MRP: 799
+
+PACKAGING & LOGISTICS
+---------------------
+NO. OF UNITS: pcs
+PACKAGING: Craton
+SHELF LIFE (DAYS): NA
+Type of Unit (Unit, KG, Litres): Kg
+WEIGHT IN KG: 100 grams
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VG-09
+SUPPLIER NAME: Murli Hand Craft Jaipur
+
+OTHER DETAILS
+-------------
+GTIN: 8906085716206
+Sr no: 21

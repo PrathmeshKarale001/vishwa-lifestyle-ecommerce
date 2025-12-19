@@ -1,0 +1,36 @@
+SOURCE SHEET: Bodycare
+
+PRODUCT IDENTIFICATION
+----------------------
+BRAND: Vishwa Wellness
+DEPARTMENT (DOM / EXP): DOM
+HSN Code: 330410
+PRODUCT NAME: Kanti Face Pack 80g
+SKU: VG-BDC-07
+SKU (Folder Name): VG-BDC-07
+TYPE OF PRODUCT (FG / RM / PKG): FG
+
+CATEGORIZATION
+--------------
+CATEGORY: Body Care
+SUB -CATEGORY: Face Pack
+
+PRICING & TAX
+-------------
+GST %: 0.18
+MRP: 129
+
+PACKAGING & LOGISTICS
+---------------------
+DIMENSION IN CM (LXBXH): 5.2*5.2*10
+PACKAGING: Plastic Bottle with Outer Carton
+SHELF LIFE (DAYS): 18 Months
+
+SUPPLIER INFORMATION
+--------------------
+Supplier Code: VG-00
+SUPPLIER NAME: Vishwa Holistic Solution Pvt Ldt
+
+OTHER DETAILS
+-------------
+Sr No: 7

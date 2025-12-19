@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/utils/animations";
+import Image from "next/image";
 
 const categories = [
     {
@@ -71,10 +72,15 @@ export default function LifestylePreview() {
                                     }`}
                             >
                                 <Link href={cat.link} className="block w-full h-full">
-                                    <div
-                                        className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110"
-                                        style={{ backgroundImage: `url(${cat.image})` }}
-                                    />
+                                    <div className="absolute inset-0 transition-transform duration-1000 group-hover:scale-110">
+                                        <Image
+                                            src={cat.image}
+                                            alt={cat.imgAlt}
+                                            fill
+                                            sizes={isFirstItem ? "(max-width: 768px) 100vw, 33vw" : "(max-width: 768px) 50vw, 16vw"}
+                                            className="object-cover object-center"
+                                        />
+                                    </div>
                                     <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300" />
 
                                     <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-8 text-white">

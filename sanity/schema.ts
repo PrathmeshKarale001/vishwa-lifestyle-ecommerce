@@ -35,7 +35,6 @@ const product: SchemaTypeDefinition = {
       description: 'First image will be used as the main/hero image',
       of: [{ type: 'image', options: { hotspot: true } }],
     },
-
     {
       name: 'price',
       title: 'Price',
@@ -54,6 +53,42 @@ const product: SchemaTypeDefinition = {
       type: 'text',
     },
     {
+      name: 'size',
+      title: 'Size (Apparel & Footwear)',
+      type: 'string',
+    },
+    {
+      name: 'dimensions',
+      title: 'Dimensions (Products)',
+      type: 'string',
+    },
+    {
+      name: 'category',
+      title: 'Category',
+      type: 'reference',
+      to: [{ type: 'category' }],
+    },
+    {
+      name: 'subCategory',
+      title: 'Sub-Category',
+      type: 'string',
+      options: {
+        list: [
+          'Men', 'Women', 'Oil', 'Lotion', 'Shampoo', 'Body Wash', 'Face Pack',
+          'Heritage Craft', 'Design Plate', 'Wall Clock', 'Wall Painting', 'Showpiece',
+          'Jewellery Box', 'Bracelet', 'Living Room', 'Bedroom', 'Kitchen', 'Bathroomware',
+          'Idol', 'Diya', 'Aarti Lamp', 'Lota', 'Temple', 'Chowki', 'Aarti Thali',
+          'Panch Aarti', 'Samai', 'Grains', 'Pulses', 'Edible Oils', 'Sweeteners & Salts',
+          'Flours', 'Spices', 'Pre-Mixes', 'Ready to Eat', 'Honey', 'Chavanprasha', 'Gulkand'
+        ]
+      }
+    },
+    {
+      name: 'segments',
+      title: 'Segments (Optional)',
+      type: 'string',
+    },
+    {
       name: 'features',
       title: 'Features',
       type: 'array',
@@ -64,23 +99,6 @@ const product: SchemaTypeDefinition = {
       title: 'Ritual Significance',
       type: 'text',
       description: 'Spiritual or ritual importance of the product',
-    },
-    {
-      name: 'category',
-      title: 'Category',
-      type: 'reference',
-      to: [{ type: 'category' }],
-      description: 'Select category. Note: Lifestyle, Apparel, and Combos have been consolidated into "Other" (formerly Ritual Essentials).',
-    },
-    {
-      name: 'subCategory',
-      title: 'Sub-Category',
-      type: 'string',
-    },
-    {
-      name: 'segments',
-      title: 'Segments',
-      type: 'string',
     },
     {
       name: 'subSegments',
@@ -148,11 +166,6 @@ const product: SchemaTypeDefinition = {
       type: 'string',
     },
     {
-      name: 'size',
-      title: 'Size',
-      type: 'string',
-    },
-    {
       name: 'unitType',
       title: 'Unit Type',
       type: 'string',
@@ -166,11 +179,6 @@ const product: SchemaTypeDefinition = {
     {
       name: 'weight',
       title: 'Weight',
-      type: 'string',
-    },
-    {
-      name: 'dimensions',
-      title: 'Dimensions (LxBxH)',
       type: 'string',
     },
     {

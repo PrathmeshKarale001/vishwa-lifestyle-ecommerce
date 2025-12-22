@@ -38,7 +38,7 @@ export default function ProductGrid({
     if (products.length === 0) {
         return (
             <EmptyState
-                icon={Search}
+                icon="search"
                 title={searchQuery ? `No products found for "${searchQuery}"` : "No products found"}
                 description={
                     searchQuery

@@ -3,74 +3,95 @@ export const SHOP_CATEGORIES = [
         title: "Agnihotra & Essentials",
         slug: "agnihotra-essentials",
         items: [
-            { name: "Agnihotra Starter Kits", slug: "starter-kits" },
-            { name: "Agnihotra Essentials", slug: "essentials" },
-            { name: "Agnihotra Accessories", slug: "accessories" },
-            { name: "Combos", slug: "combos" }
+            { name: "Starter Kits", slug: "Starter Kits" },
+            { name: "Essentials", slug: "Essentials" },
+            { name: "Accessories", slug: "Accessories" },
+            { name: "Combos", slug: "Combos" }
         ]
     },
     {
         title: "Apparel",
         slug: "apparel",
         items: [
-            { name: "Men", slug: "men" },
-            { name: "Women", slug: "women" },
-            { name: "Accessories", slug: "accessories" },
-            { name: "Footwear", slug: "footwear" }
+            { name: "Men", slug: "Men" },
+            { name: "Women", slug: "Women" },
+            { name: "Footwear", slug: "Footwear" }
         ]
     },
     {
         title: "Pooja Essentials",
         slug: "pooja-essentials",
         items: [
-            { name: "Brass Artefacts", slug: "brass-artefacts" },
-            { name: "Crystal Idols & Tools", slug: "crystal-idols" },
-            { name: "Wooden Idols", slug: "wooden-idols" },
-            { name: "Malas", slug: "malas" },
-            { name: "Ritual Vessels & Yantras", slug: "ritual-vessels" }
+            { name: "Idol", slug: "Idol" },
+            { name: "Diya", slug: "Diya" },
+            { name: "Aarti Lamp", slug: "Aarti Lamp" },
+            { name: "Lota", slug: "Lota" },
+            { name: "Temple", slug: "Temple" },
+            { name: "Chowki", slug: "Chowki" },
+            { name: "Aarti Thali", slug: "Aarti Thali" },
+            { name: "Panch Aarti", slug: "Panch Aarti" },
+            { name: "Samai", slug: "Samai" }
         ]
     },
     {
         title: "Home Essentials",
         slug: "home-essentials",
         items: [
-            { name: "Bedsheets", slug: "bedsheets" },
-            { name: "Dohars", slug: "dohars" },
-            { name: "Cushion Covers", slug: "cushion-covers" },
-            { name: "Towels and Napkins", slug: "towels" },
-            { name: "Kitchenware", slug: "kitchenware" },
-            { name: "Bathware", slug: "bathware" }
+            { name: "Living Room", slug: "Living Room" },
+            { name: "Bedroom", slug: "Bedroom" },
+            { name: "Kitchen", slug: "Kitchen" },
+            { name: "Bathroomware", slug: "Bathroomware" }
         ]
     },
     {
         title: "Aromas",
         slug: "aromas",
         items: [
-            { name: "Incense Sticks", slug: "incense" },
-            { name: "Dhoop & Cones", slug: "dhoop" },
-            { name: "Havan Cups", slug: "havan-cups" },
-            { name: "Candles", slug: "candles" }
+            { name: "Incense", slug: "Incense" },
+            { name: "Dhoop", slug: "Dhoop" },
+            { name: "Havan Cups", slug: "Havan Cups" },
+            { name: "Candles", slug: "Candles" }
         ]
     },
     {
         title: "Crafts",
         slug: "crafts",
         items: [
-            { name: "Stone Craft", slug: "stone-craft" },
-            { name: "Marble Art", slug: "marble-art" },
-            { name: "Wooden Handicrafts", slug: "wooden-handicrafts" },
-            { name: "Meenakari Metal Craft", slug: "meenakari-metal-craft" },
-            { name: "Metal Decor", slug: "metal-decor" },
-            { name: "Clocks & Wall Plates", slug: "clocks-wall-plates" }
+            { name: "Heritage Craft", slug: "Heritage Craft" },
+            { name: "Design Plate", slug: "Design Plate" },
+            { name: "Wall Clock", slug: "Wall Clock" },
+            { name: "Wall Painting", slug: "Wall Painting" },
+            { name: "Showpiece", slug: "Showpiece" },
+            { name: "Jewellery Box", slug: "Jewellery Box" },
+            { name: "Bracelet", slug: "Bracelet" }
         ]
     },
     {
         title: "Vishwa Wellness",
         slug: "vishwa-wellness",
         items: [
-            { name: "Ash Supplement", slug: "ash-supplement" },
-            { name: "Ash Personal Care", slug: "ash-personal-care" },
-            { name: "Ash Food supplements", slug: "ash-food-supplements" }
+            { name: "Oil", slug: "Oil" },
+            { name: "Lotion", slug: "Lotion" },
+            { name: "Shampoo", slug: "Shampoo" },
+            { name: "Body Wash", slug: "Body Wash" },
+            { name: "Face Pack", slug: "Face Pack" },
+            { name: "Honey", slug: "Honey" },
+            { name: "Chavanprasha", slug: "Chavanprasha" },
+            { name: "Gulkand", slug: "Gulkand" }
+        ]
+    },
+    {
+        title: "Food",
+        slug: "food",
+        items: [
+            { name: "Grains", slug: "Grains" },
+            { name: "Pulses", slug: "Pulses" },
+            { name: "Edible Oils", slug: "Edible Oils" },
+            { name: "Sweeteners & Salts", slug: "Sweeteners & Salts" },
+            { name: "Flours", slug: "Flours" },
+            { name: "Spices", slug: "Spices" },
+            { name: "Pre-Mixes", slug: "Pre-Mixes" },
+            { name: "Ready to Eat", slug: "Ready to Eat" }
         ]
     },
     {

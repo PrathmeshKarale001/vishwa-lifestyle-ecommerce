@@ -143,11 +143,8 @@ export const queries = {
   }`,
   // Get filtered products with dynamic sorting
   filteredProducts: `*[_type == "product" 
-    && ($category == "all" || (
-        ($category == "ritual" && category->slug.current in ["ritual", "lifestyle", "apparel", "combos"]) ||
-        ($category != "ritual" && category->slug.current == $category)
-       ))
-    && ($sub == "" || subCategory == $sub)
+    && ($category == "all" || lower(category->slug.current) == lower($category))
+    && ($sub == "" || subCategory match $sub)
     && ($search == "" || name match $search || description match $search)
     && price >= $minPrice && price <= $maxPrice
   ]`,
@@ -190,11 +187,11 @@ export async function getFilteredProducts({
   const end = start + limit;
 
   const params = {
-    category,
-    sub,
-    search: search ? `*${search}*` : "",
-    minPrice,
-    maxPrice,
+    category: category || "all",
+    sub: sub || "",
+    search: search?.trim() ? `*${search.trim()}*` : "",
+    minPrice: minPrice || 0,
+    maxPrice: maxPrice || 1000000,
     start,
     end,
   };
@@ -227,9 +224,11 @@ export async function getFilteredProducts({
   "total": count(${queries.filteredProducts})
 } `;
 
+  console.log("Fetching products with params:", JSON.stringify(params, null, 2));
+  const result = await sanityClient.fetch(query, params, { cache: 'no-store' });
+  console.log(`Fetched ${result?.products?.length || 0} products. Total matching: ${result?.total || 0}`);
 
-
-  return await sanityClient.fetch(query, params, { cache: 'no-store' });
+  return result;
 }
 export async function getProductBySlug(slug: string) {
   return await sanityClient.fetch(queries.productBySlug, { slug } as Record<string, unknown>);

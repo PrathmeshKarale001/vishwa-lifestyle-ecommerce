@@ -22,10 +22,11 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
     const searchParams = useSearchParams();
     const activeCategory = searchParams.get("category") || "all";
     const activeSubCategory = searchParams.get("sub");
+    const activeSort = searchParams.get("sort") || "featured";
 
     // State for expanded categories in sidebar
     const [expandedCategories, setExpandedCategories] = useState<string[]>(
-        SHOP_CATEGORIES.map(c => c.slug) // Default all expanded or maybe just the active one?
+        activeCategory !== "all" ? [activeCategory] : []
     );
 
     const toggleCategory = (slug: string) => {
@@ -34,7 +35,15 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
         );
     };
 
-    const buildUrl = (category: string, sub?: string) => {
+    const sortOptions = [
+        { label: "Featured", value: "featured" },
+        { label: "Newest", value: "newest" },
+        { label: "Price: Low to High", value: "price-asc" },
+        { label: "Price: High to Low", value: "price-desc" },
+        { label: "Best Selling", value: "bestselling" },
+    ];
+
+    const buildUrl = (category: string, sub?: string, sort?: string) => {
         const params = new URLSearchParams(searchParams.toString());
         if (category === "all") {
             params.delete("category");
@@ -47,6 +56,12 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                 params.delete("sub");
             }
         }
+
+        if (sort) {
+            if (sort === "featured") params.delete("sort");
+            else params.set("sort", sort);
+        }
+
         params.delete("page");
         return `/shop?${params.toString()}`;
     };
@@ -80,6 +95,31 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
 
             <aside className="hidden lg:block w-64 shrink-0">
                 <div className="sticky top-32 space-y-6">
+                    {/* Sort Section */}
+                    <div className="bg-white border border-gray-100 rounded-lg p-5 shadow-sm">
+                        <h3 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4 pb-3 border-b border-gray-100">
+                            Sort By
+                        </h3>
+                        <div className="space-y-2">
+                            {sortOptions.map((option) => (
+                                <Link
+                                    key={option.value}
+                                    href={buildUrl(activeCategory, activeSubCategory || undefined, option.value)}
+                                    className={`flex items-center gap-2 text-sm transition-colors ${activeSort === option.value
+                                        ? "text-accent-gold font-medium"
+                                        : "text-foreground-muted hover:text-foreground"
+                                        }`}
+                                >
+                                    <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${activeSort === option.value ? "border-accent-gold" : "border-gray-300"
+                                        }`}>
+                                        {activeSort === option.value && <div className="w-1.5 h-1.5 rounded-full bg-accent-gold" />}
+                                    </div>
+                                    {option.label}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+
                     {/* Categories Section */}
                     <div className="bg-white border border-gray-100 rounded-lg p-5 shadow-sm">
                         <h3 className="text-sm font-semibold uppercase tracking-widest text-foreground mb-4 pb-3 border-b border-gray-100">
@@ -108,20 +148,23 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                                 return (
                                     <div key={category.slug} className="space-y-1">
                                         <div
-                                            className={`flex items-center justify-between py-2.5 px-3 rounded-md text-sm transition-all cursor-pointer ${isActive && !activeSubCategory
+                                            onClick={() => toggleCategory(category.slug)}
+                                            className={`flex items-center justify-between py-2.5 px-3 rounded-md text-sm transition-all cursor-pointer group/item ${isActive && !activeSubCategory
                                                 ? "bg-accent-gold/10 text-accent-gold font-medium"
                                                 : "text-foreground-muted hover:bg-gray-50 hover:text-foreground"
                                                 }`}
                                         >
-                                            <Link href={buildUrl(category.slug)} className="flex-1">
+                                            <Link
+                                                href={buildUrl(category.slug)}
+                                                className="flex-1"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
                                                 {category.title}
                                             </Link>
-                                            <button
-                                                onClick={(e) => { e.preventDefault(); toggleCategory(category.slug); }}
-                                                className="p-1 hover:bg-black/5 rounded"
-                                            >
-                                                <ChevronDown size={14} className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
-                                            </button>
+                                            <ChevronDown
+                                                size={14}
+                                                className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''} text-gray-400 group-hover/item:text-foreground`}
+                                            />
                                         </div>
 
                                         <AnimatePresence>
@@ -130,6 +173,7 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                                                     initial={{ height: 0, opacity: 0 }}
                                                     animate={{ height: "auto", opacity: 1 }}
                                                     exit={{ height: 0, opacity: 0 }}
+                                                    transition={{ duration: 0.2 }}
                                                     className="overflow-hidden"
                                                 >
                                                     <div className="pl-4 border-l-2 border-gray-100 ml-3 space-y-1 py-1">

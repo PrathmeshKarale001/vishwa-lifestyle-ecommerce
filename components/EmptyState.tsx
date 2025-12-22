@@ -1,10 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { LucideIcon } from "lucide-react";
+import { Search, Package, ShoppingBag, Info, AlertTriangle, LucideIcon } from "lucide-react";
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  search: Search,
+  package: Package,
+  shopping: ShoppingBag,
+  info: Info,
+  alert: AlertTriangle,
+};
 
 interface EmptyStateProps {
-  icon: LucideIcon;
+  icon: string;
   title: string;
   description: string;
   action?: {
@@ -18,12 +26,13 @@ interface EmptyStateProps {
 }
 
 export default function EmptyState({
-  icon: Icon,
+  icon,
   title,
   description,
   action,
   secondaryAction,
 }: EmptyStateProps) {
+  const Icon = ICON_MAP[icon] || Info;
   return (
     <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
       <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-6">

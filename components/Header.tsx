@@ -75,7 +75,7 @@ export default function Header() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute top-full left-0 w-[800px] -ml-4 bg-white shadow-xl rounded-lg p-8 grid grid-cols-3 gap-8 text-left z-50 border border-gray-100"
+                    className="absolute top-full left-0 w-[1000px] -ml-4 bg-white shadow-xl rounded-lg p-8 grid grid-cols-4 gap-8 text-left z-50 border border-gray-100"
                     onMouseEnter={() => setIsShopHovered(true)}
                     onMouseLeave={() => setIsShopHovered(false)}
                   >

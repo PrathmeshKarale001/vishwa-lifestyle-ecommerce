@@ -1,10 +1,28 @@
 import Razorpay from 'razorpay';
 import { log } from './logger';
 
-const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID || '',
-    key_secret: process.env.RAZORPAY_KEY_SECRET || '',
-});
+let razorpayInstance: Razorpay | null = null;
+
+function getRazorpay() {
+    if (typeof window !== 'undefined') {
+        throw new Error('Razorpay server-side SDK cannot be used on the client side.');
+    }
+
+    if (!razorpayInstance) {
+        const key_id = process.env.RAZORPAY_KEY_ID;
+        const key_secret = process.env.RAZORPAY_KEY_SECRET;
+
+        if (!key_id || !key_secret) {
+            throw new Error('RAZORPAY_KEY_ID or RAZORPAY_KEY_SECRET is missing from environment variables.');
+        }
+
+        razorpayInstance = new Razorpay({
+            key_id,
+            key_secret,
+        });
+    }
+    return razorpayInstance;
+}
 
 interface RazorpayOrderOptions {
     amount: number;
@@ -15,7 +33,8 @@ interface RazorpayOrderOptions {
 
 export async function createRazorpayOrder(options: RazorpayOrderOptions) {
     try {
-        const order = await razorpay.orders.create({
+        const client = getRazorpay();
+        const order = await client.orders.create({
             amount: Math.round(options.amount * 100), // Amount in paise
             currency: options.currency || 'INR',
             receipt: options.receipt,
@@ -36,8 +55,13 @@ export function verifyPaymentSignature(
     paymentId: string,
     signature: string
 ) {
+    const secret = process.env.RAZORPAY_KEY_SECRET;
+    if (!secret) {
+        log.error('RAZORPAY_KEY_SECRET is missing during signature verification');
+        return false;
+    }
     const crypto = require('crypto');
-    const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || '');
+    const hmac = crypto.createHmac('sha256', secret);
 
     hmac.update(`${orderId}|${paymentId}`);
     const generatedSignature = hmac.digest('hex');

@@ -4,18 +4,23 @@ import StorySection from "@/components/StorySection";
 import ShopGrid from "@/components/ShopGrid";
 import PhilosophySection from "@/components/PhilosophySection";
 import BenefitStrip from "@/components/BenefitStrip";
-import Footer from "@/components/Footer";
 
-export default function Home() {
+
+import { getHeroProduct } from "@/lib/sanity";
+
+export default async function Home() {
+  const heroProduct = await getHeroProduct();
+  const heroProductImage = heroProduct?.image;
+
   return (
     <main className="min-h-screen bg-white">
-      <Hero />
+      <Hero heroProductImage={heroProductImage} />
       <LifestylePreview />
       <StorySection />
       <ShopGrid />
       <PhilosophySection />
       <BenefitStrip />
-      <Footer />
+
     </main>
   );
 }

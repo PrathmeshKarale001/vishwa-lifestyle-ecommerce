@@ -119,9 +119,8 @@ export async function POST(request: NextRequest) {
     // Generate order number
     const orderNumber = generateOrderNumber();
 
-    /* 
-    // RAZORPAY DISABLED - MIGRATION TO CCAVENUE IN PROGRESS
     // Create Razorpay order
+    const { createRazorpayOrder } = await import('@/lib/razorpay');
     const razorpayResult = await createRazorpayOrder({
       amount: total,
       receipt: orderNumber,
@@ -138,7 +137,8 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-    */
+
+    const razorpayOrderId = razorpayResult.order.id;
 
     // Create order in database (pending status)
     try {
@@ -155,6 +155,7 @@ export async function POST(request: NextRequest) {
         total,
         shipping_address: shippingAddress,
         promo_code: promoCode,
+        razorpay_order_id: razorpayOrderId,
         status: 'pending',
         payment_status: 'unpaid',
       });
@@ -167,6 +168,7 @@ export async function POST(request: NextRequest) {
       orderNumber,
       amount: total,
       currency: 'INR',
+      razorpayOrderId,
     });
   } catch (error: any) {
     log.error('Checkout error', error);

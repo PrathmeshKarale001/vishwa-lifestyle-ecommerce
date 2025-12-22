@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Leaf, Droplet, Flame, Sun } from "lucide-react";
-import Footer from "@/components/Footer";
+
 
 const ingredients = [
     {
@@ -240,7 +240,7 @@ export default function IngredientsPage() {
                 </div>
             </section>
 
-            <Footer />
+
         </main>
     );
 }

@@ -16,7 +16,7 @@ import {
   Download,
   Printer,
 } from "lucide-react";
-import Footer from "@/components/Footer";
+
 import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
 import { log } from "@/lib/logger";
@@ -68,7 +68,7 @@ export default function OrderDetailPage() {
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         router.push("/auth/login");
         return;
@@ -339,13 +339,12 @@ export default function OrderDetailPage() {
                       Payment Status
                     </p>
                     <p
-                      className={`text-sm font-medium ${
-                        order.payment_status === "paid"
+                      className={`text-sm font-medium ${order.payment_status === "paid"
                           ? "text-green-600"
                           : order.payment_status === "pending"
-                          ? "text-yellow-600"
-                          : "text-red-600"
-                      }`}
+                            ? "text-yellow-600"
+                            : "text-red-600"
+                        }`}
                     >
                       {order.payment_status.charAt(0).toUpperCase() +
                         order.payment_status.slice(1)}
@@ -372,7 +371,7 @@ export default function OrderDetailPage() {
         </motion.div>
       </div>
 
-      <Footer />
+
     </main>
   );
 }

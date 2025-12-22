@@ -58,6 +58,10 @@ export const metadata: Metadata = {
 // Generate organization schema
 const organizationSchema = generateOrganizationSchema();
 
+import Footer from "@/components/Footer";
+
+// ... existing imports
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -82,6 +86,7 @@ export default function RootLayout({
           <div id="main-content">
             {children}
           </div>
+          <Footer />
         </Providers>
       </body>
     </html>

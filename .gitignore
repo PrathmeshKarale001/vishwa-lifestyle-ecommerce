@@ -37,8 +37,21 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# agent
+.agent/
+.gemini/
+brain/
+walkthrough.md
+task.md
+implementation_plan.md
+
 # vercel
 .vercel
+
+# Project specific
+rzp-key*
+Vishwa\ Lifestyle\ Wireframe.html
+*.csv
 
 # typescript
 *.tsbuildinfo

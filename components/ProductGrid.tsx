@@ -62,10 +62,10 @@ export default function ProductGrid({
 
     const getCategoryLabel = (cat: string) => {
         const labels: Record<string, string> = {
-            ritual: "Ritual Essentials",
-            lifestyle: "Lifestyle & Sacred Home",
-            apparel: "Vishwa Apparel",
-            combos: "Combos & Gifts",
+            ritual: "Other",
+            lifestyle: "Other",
+            apparel: "Other",
+            combos: "Other",
         };
         return labels[cat] || cat;
     };
@@ -89,7 +89,7 @@ export default function ProductGrid({
 
     return (
         <div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8 gap-y-8 sm:gap-y-10 md:gap-y-12 mb-12">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8 gap-y-6 sm:gap-y-10 md:gap-y-12 mb-12">
                 {products.map((product) => {
                     const tag = product.isBestSeller
                         ? "Best Seller"

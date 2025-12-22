@@ -143,11 +143,25 @@ export const queries = {
   }`,
   // Get filtered products with dynamic sorting
   filteredProducts: `*[_type == "product" 
-    && ($category == "all" || category->slug.current == $category)
+    && ($category == "all" || (
+        ($category == "ritual" && category->slug.current in ["ritual", "lifestyle", "apparel", "combos"]) ||
+        ($category != "ritual" && category->slug.current == $category)
+       ))
+    && ($sub == "" || subCategory == $sub)
     && ($search == "" || name match $search || description match $search)
     && price >= $minPrice && price <= $maxPrice
   ]`,
+
+  // Get a product with horizontal image for Hero
+  heroProduct: `*[_type == "product" && defined(images) && defined(images[0].asset)] {
+    "image": images[0].asset->url,
+    "aspectRatio": images[0].asset->metadata.dimensions.width / images[0].asset->metadata.dimensions.height
+  } | order(aspectRatio desc)[0]`
 };
+
+export async function getHeroProduct() {
+  return await sanityClient.fetch(queries.heroProduct);
+}
 
 // Fetch functions
 export async function getProducts() {
@@ -155,6 +169,7 @@ export async function getProducts() {
 }
 export async function getFilteredProducts({
   category = "all",
+  sub = "",
   sort = "featured",
   search = "",
   minPrice = 0,
@@ -163,6 +178,7 @@ export async function getFilteredProducts({
   limit = 12,
 }: {
   category?: string;
+  sub?: string;
   sort?: string;
   search?: string;
   minPrice?: number;
@@ -175,6 +191,7 @@ export async function getFilteredProducts({
 
   const params = {
     category,
+    sub,
     search: search ? `*${search}*` : "",
     minPrice,
     maxPrice,
@@ -189,26 +206,26 @@ export async function getFilteredProducts({
   else if (sort === "bestselling") orderClause = "| order(isBestSeller desc)";
 
   const projection = `{
-    _id,
+  _id,
     name,
     "slug": slug.current,
-    price,
-    compareAtPrice,
-    description,
-    "category": category->slug.current,
-    "image": images[0].asset->url,
-    inventory,
-    tags,
-    isNew,
-    isBestSeller
-  }`;
+      price,
+      compareAtPrice,
+      description,
+      "category": category -> slug.current,
+        "image": images[0].asset -> url,
+          inventory,
+          tags,
+          isNew,
+          isBestSeller
+} `;
 
 
   // We need two queries: one for data, one for count
   const query = `{
-    "products": ${queries.filteredProducts} ${orderClause} [${start}...${end}] ${projection},
-    "total": count(${queries.filteredProducts})
-  }`;
+  "products": ${queries.filteredProducts} ${orderClause} [${start}...${end}] ${projection},
+  "total": count(${queries.filteredProducts})
+} `;
 
 
 
@@ -227,7 +244,7 @@ export async function getFeaturedProducts() {
 }
 
 export async function searchProducts(searchQuery: string) {
-  return await sanityClient.fetch(queries.searchProducts, { query: `*${searchQuery}*` } as Record<string, unknown>);
+  return await sanityClient.fetch(queries.searchProducts, { query: `* ${searchQuery}* ` } as Record<string, unknown>);
 }
 
 export async function getPosts() {
@@ -239,5 +256,12 @@ export async function getPostBySlug(slug: string) {
 }
 
 export async function getCategories() {
-  return await sanityClient.fetch(queries.allCategories);
+  const categories = await sanityClient.fetch(queries.allCategories);
+  return categories.map((c: any) => {
+    // Optional: Handle any dynamic renaming if still needed, otherwise just return c
+    if (c.slug === 'ritual') {
+      return { ...c, name: 'Other' };
+    }
+    return c;
+  });
 }

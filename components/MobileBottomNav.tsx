@@ -36,13 +36,12 @@ export default function MobileBottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`relative flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-                isActive ? "text-accent-gold" : "text-foreground-muted"
-              }`}
+              className={`relative flex flex-col items-center justify-center flex-1 h-full transition-colors ${isActive ? "text-accent-gold" : "text-foreground-muted"
+                }`}
             >
               <div className="relative">
                 <Icon size={22} />
-                {item.badge && item.badge > 0 && (
+                {item.badge !== undefined && item.badge > 0 && (
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}

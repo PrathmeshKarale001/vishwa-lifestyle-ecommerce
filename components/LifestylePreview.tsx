@@ -10,7 +10,7 @@ const categories = [
         id: 1,
         title: "Vishwa Kurta",
         image: "/products/home-productgrid/Kurta.png",
-        link: "/shop/apparel",
+        link: "/shop?category=ritual",
         gridArea: "col-span-1 row-span-2",
         imgAlt: "Vishwa Kurta",
     },
@@ -18,7 +18,7 @@ const categories = [
         id: 2,
         title: "Sacred Candles",
         image: "/products/home-productgrid/Candle.jpeg",
-        link: "/shop/candles",
+        link: "/shop?category=candles",
         gridArea: "col-span-1 row-span-1",
         imgAlt: "Sacred Candles",
     },
@@ -26,7 +26,7 @@ const categories = [
         id: 3,
         title: "Artifacts & Decor",
         image: "/products/home-productgrid/artifacts.jpeg",
-        link: "/shop/decor",
+        link: "/shop?category=decor",
         gridArea: "col-span-1 row-span-1",
         imgAlt: "Artifacts & Decor",
     },
@@ -34,17 +34,17 @@ const categories = [
         id: 4,
         title: "Bags",
         image: "/products/home-productgrid/Bags.jpeg",
-        link: "/shop/mats",
+        link: "/shop?category=mats",
         gridArea: "col-span-1 row-span-1",
         imgAlt: "Bags",
     },
     {
         id: 5,
-        title: "Juti",
+        title: "Other",
         image: "/products/home-productgrid/juti.png",
-        link: "/shop/rituals",
+        link: "/shop?category=ritual",
         gridArea: "col-span-1 row-span-1",
-        imgAlt: "Juti",
+        imgAlt: "Other Essentials",
     },
 ];
 
@@ -57,7 +57,7 @@ export default function LifestylePreview() {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
                     variants={staggerContainer}
-                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid-rows-auto md:grid-rows-2 gap-3 sm:gap-4 h-auto md:h-[80vh]"
+                    className="grid grid-cols-2 md:grid-cols-3 grid-rows-auto md:grid-rows-2 gap-3 sm:gap-4 h-auto md:h-[80vh]"
                 >
                     {categories.map((cat, index) => {
                         // First item spans full width on mobile, 2 rows on desktop
@@ -67,8 +67,8 @@ export default function LifestylePreview() {
                                 key={cat.id}
                                 variants={fadeInUp}
                                 className={`relative group overflow-hidden ${isFirstItem
-                                    ? "sm:col-span-2 md:col-span-1 md:row-span-2 h-64 sm:h-80 md:h-full"
-                                    : "h-48 sm:h-64 md:h-auto"
+                                    ? "md:col-span-1 md:row-span-2 aspect-square md:aspect-auto md:h-full"
+                                    : "aspect-square md:aspect-auto md:h-auto"
                                     }`}
                             >
                                 <Link href={cat.link} className="block w-full h-full">

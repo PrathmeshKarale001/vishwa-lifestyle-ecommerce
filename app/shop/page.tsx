@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
 import Image from "next/image";
-import Footer from "@/components/Footer";
+
 import ShopFilters from "@/components/ShopFilters";
 import ProductGrid from "@/components/ProductGrid";
 import SearchBar from "@/components/SearchBar";
@@ -17,6 +17,7 @@ export const metadata: Metadata = generateSeoMetadata({
 interface ShopPageProps {
   searchParams: Promise<{
     category?: string;
+    sub?: string;
     sort?: string;
     search?: string;
     minPrice?: string;
@@ -27,7 +28,7 @@ interface ShopPageProps {
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const resolvedParams = await searchParams;
-  const { category, sort, search, minPrice, maxPrice, page } = resolvedParams;
+  const { category, sub, sort, search, minPrice, maxPrice, page } = resolvedParams;
 
   const currentPage = Number(page) || 1;
   const limit = 12;
@@ -36,6 +37,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const [{ products, total }, categories] = await Promise.all([
     getFilteredProducts({
       category,
+      sub,
       sort,
       search,
       minPrice: minPrice ? Number(minPrice) : 0,
@@ -84,7 +86,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
 
       {/* Main Content: Sidebar + Product Grid */}
       <section className="py-8 sm:py-12 md:py-16 container mx-auto px-4 sm:px-6" aria-label="Products">
-        <div className="flex gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Category Sidebar (Desktop only) */}
           <Suspense fallback={<div className="hidden lg:block w-64 shrink-0 animate-pulse bg-gray-100 rounded-lg h-96" />}>
             <CategorySidebar categories={categories} />
@@ -108,7 +110,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         </div>
       </section>
 
-      <Footer />
+
     </main>
   );
 }

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import Footer from "@/components/Footer";
+
 import AccountContent from "@/components/AccountContent";
 import { headers } from "next/headers";
 
@@ -56,7 +56,7 @@ export default async function AccountPage() {
           />
         </div>
       </div>
-      <Footer />
+
     </main>
   );
 }

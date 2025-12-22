@@ -31,10 +31,10 @@ export default async function ShopGrid() {
   const getCategoryLabel = (cat: string | null | undefined) => {
     if (!cat) return "";
     const labels: Record<string, string> = {
-      ritual: "Ritual Essentials",
-      lifestyle: "Lifestyle & Sacred Home",
-      apparel: "Vishwa Apparel",
-      combos: "Combos & Gifts",
+      ritual: "Other",
+      lifestyle: "Other",
+      apparel: "Other",
+      combos: "Other",
     };
     return labels[cat] || cat;
   };
@@ -45,7 +45,7 @@ export default async function ShopGrid() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 sm:mb-12 gap-4">
           <div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif text-foreground mb-2">
-              Featured Ritual Essentials
+              Featured Other Essentials
             </h2>
             <p className="text-sm sm:text-base text-foreground-muted font-light">
               Bring Harmony Home.
@@ -60,7 +60,7 @@ export default async function ShopGrid() {
         </div>
 
         {products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
             {products.map((product) => {
               const tag = product.isBestSeller
                 ? "Best Seller"

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Instagram, Facebook, Twitter } from "lucide-react";
 import { fadeInUp } from "@/utils/animations";
+import { SHOP_CATEGORIES } from "@/lib/shop-categories";
 
 export default function Footer() {
     return (
@@ -48,10 +49,8 @@ export default function Footer() {
                     <div>
                         <h3 className="text-xs sm:text-sm uppercase tracking-widest font-medium mb-4 sm:mb-6">Shop</h3>
                         <ul className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-foreground-muted">
-                            <li><Link href="/shop/rituals" className="hover:text-accent-gold transition-colors">Rituals</Link></li>
-                            <li><Link href="/shop/lifestyle" className="hover:text-accent-gold transition-colors">Lifestyle</Link></li>
-                            <li><Link href="/shop/apparel" className="hover:text-accent-gold transition-colors">Apparel</Link></li>
-                            <li><Link href="/shop/gifts" className="hover:text-accent-gold transition-colors">Gifts</Link></li>
+                            <li><Link href="/shop?category=ritual" className="hover:text-accent-gold transition-colors">Other</Link></li>
+                            <li><Link href="/shop" className="hover:text-accent-gold transition-colors">All Products</Link></li>
                         </ul>
                     </div>
 

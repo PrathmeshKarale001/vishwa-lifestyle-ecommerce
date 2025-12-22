@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Mail, Phone, MapPin, Send, Clock } from "lucide-react";
-import Footer from "@/components/Footer";
+
 import toast from "react-hot-toast";
 import { log } from "@/lib/logger";
 import { useCsrfToken, CsrfInput } from "@/hooks/useCsrfToken";
@@ -148,13 +148,12 @@ export default function ContactPage() {
                       <input
                         type="text"
                         {...register("name")}
-                        className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${
-                          errors.name 
-                            ? "border-red-500 bg-red-50" 
+                        className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${errors.name
+                            ? "border-red-500 bg-red-50"
                             : touchedFields.name && !errors.name
-                            ? "border-green-500 bg-green-50"
-                            : "border-gray-200"
-                        }`}
+                              ? "border-green-500 bg-green-50"
+                              : "border-gray-200"
+                          }`}
                         placeholder="Your name"
                       />
                       {touchedFields.name && !errors.name && (
@@ -181,13 +180,12 @@ export default function ContactPage() {
                       <input
                         type="email"
                         {...register("email")}
-                        className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${
-                          errors.email 
-                            ? "border-red-500 bg-red-50" 
+                        className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${errors.email
+                            ? "border-red-500 bg-red-50"
                             : touchedFields.email && !errors.email
-                            ? "border-green-500 bg-green-50"
-                            : "border-gray-200"
-                        }`}
+                              ? "border-green-500 bg-green-50"
+                              : "border-gray-200"
+                          }`}
                         placeholder="your@email.com"
                       />
                       {touchedFields.email && !errors.email && (
@@ -226,13 +224,12 @@ export default function ContactPage() {
                     <input
                       type="text"
                       {...register("subject")}
-                      className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${
-                        errors.subject 
-                          ? "border-red-500 bg-red-50" 
+                      className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${errors.subject
+                          ? "border-red-500 bg-red-50"
                           : touchedFields.subject && !errors.subject
-                          ? "border-green-500 bg-green-50"
-                          : "border-gray-200"
-                      }`}
+                            ? "border-green-500 bg-green-50"
+                            : "border-gray-200"
+                        }`}
                       placeholder="How can we help?"
                     />
                     {touchedFields.subject && !errors.subject && (
@@ -260,13 +257,12 @@ export default function ContactPage() {
                     <textarea
                       {...register("message")}
                       rows={5}
-                      className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold resize-none transition-colors ${
-                        errors.message 
-                          ? "border-red-500 bg-red-50" 
+                      className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold resize-none transition-colors ${errors.message
+                          ? "border-red-500 bg-red-50"
                           : touchedFields.message && !errors.message
-                          ? "border-green-500 bg-green-50"
-                          : "border-gray-200"
-                      }`}
+                            ? "border-green-500 bg-green-50"
+                            : "border-gray-200"
+                        }`}
                       placeholder="Tell us more..."
                     />
                     {touchedFields.message && !errors.message && (
@@ -352,7 +348,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <Footer />
+
     </main>
   );
 }

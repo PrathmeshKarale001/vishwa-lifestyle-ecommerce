@@ -154,15 +154,15 @@ export default function ProductCard({
           {/* Hover Overlay - subtle dark gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-          {/* Quick Actions */}
-          <div className="absolute bottom-4 left-4 right-4 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out flex gap-3">
+          {/* Quick Actions - Desktop: Hover, Mobile: Always visible but styled better */}
+          <div className="absolute bottom-4 left-4 right-4 translate-y-10 lg:translate-y-10 opacity-0 lg:opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out flex gap-2 lg:gap-3 lg:flex hidden lg:flex">
             <button
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 setIsQuickViewOpen(true);
               }}
-              className="flex-1 bg-white text-black py-2.5 text-xs uppercase tracking-widest hover:bg-black hover:text-white transition-colors duration-300 shadow-lg"
+              className="flex-1 bg-white text-black py-2.5 text-[10px] sm:text-xs uppercase tracking-widest hover:bg-black hover:text-white transition-colors duration-300 shadow-lg"
               aria-label={`Quick view ${name}`}
             >
               Quick View
@@ -170,7 +170,7 @@ export default function ProductCard({
             <button
               onClick={handleAddToCart}
               disabled={isOutOfStock}
-              className={`flex-1 py-2.5 text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${isOutOfStock
+              className={`flex-1 py-2.5 text-[10px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${isOutOfStock
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                 : "bg-black text-white hover:bg-accent-gold"
                 }`}
@@ -179,27 +179,43 @@ export default function ProductCard({
               <ShoppingBag size={14} /> {isOutOfStock ? "Out" : "Add"}
             </button>
           </div>
+
+          {/* Mobile Only Quick Add Button */}
+          <div className="lg:hidden absolute bottom-2 right-2 z-20">
+            <button
+              onClick={handleAddToCart}
+              disabled={isOutOfStock}
+              className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all active:scale-90 ${isOutOfStock
+                ? "bg-gray-200 text-gray-400"
+                : "bg-black text-white"
+                }`}
+              aria-label={`Add ${name} to cart`}
+            >
+              <ShoppingBag size={16} />
+            </button>
+          </div>
         </div>
 
         {/* Product Info */}
-        <div className="text-center">
-          <h3 className="font-serif text-lg mb-1 group-hover:text-accent-gold transition-colors">
+        <div className="text-center px-1">
+          <h3 className="font-serif text-sm sm:text-lg mb-0.5 sm:mb-1 group-hover:text-accent-gold transition-colors line-clamp-1">
             {name}
           </h3>
           {category && (
-            <p className="text-xs text-foreground-muted uppercase tracking-widest mb-2">
+            <p className="text-[10px] sm:text-xs text-foreground-muted uppercase tracking-[0.1em] sm:tracking-widest mb-1 sm:mb-2">
               {category}
             </p>
           )}
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-sm font-medium">{formatPrice(price)}</span>
+          <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+            <span className="text-sm sm:text-base font-medium">{formatPrice(price)}</span>
             {compareAtPrice && compareAtPrice > price && (
-              <span className="text-sm text-foreground-muted line-through">
+              <span className="text-[10px] sm:text-sm text-foreground-muted line-through opacity-70">
                 {formatPrice(compareAtPrice)}
               </span>
             )}
           </div>
         </div>
+
       </Link>
 
       {/* Quick View Modal */}

@@ -9,8 +9,6 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    /*
-    // RAZORPAY WEBHOOK DISABLED
     const body = await request.text();
     const signature = request.headers.get('x-razorpay-signature');
 
@@ -188,7 +186,6 @@ export async function POST(request: NextRequest) {
       default:
         log.warn('Unhandled webhook event', { eventType });
     }
-    */
 
     return NextResponse.json({ received: true, status: "disabled_migration" });
   } catch (error) {

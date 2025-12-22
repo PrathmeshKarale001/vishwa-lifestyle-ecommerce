@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Script from "next/script";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -159,60 +160,61 @@ export default function CheckoutPage() {
 
       setOrderNumber(data.orderNumber);
 
-      // Step 2: Get Encrypted Payload for Tecogis
-      const paymentResponse = await fetch("/api/payment/initiate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          orderId: data.orderNumber,
-          amount: finalTotal,
-          firstName: shippingData.firstName,
-          lastName: shippingData.lastName,
-          address: shippingData.address,
-          city: shippingData.city,
-          state: shippingData.state,
-          pincode: shippingData.postalCode,
-          country: "India",
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: Math.round(finalTotal * 100),
+        currency: "INR",
+        name: "Vishwa Lifestyle",
+        description: `Order #${data.orderNumber}`,
+        image: "/logo.png",
+        order_id: data.razorpayOrderId,
+        handler: async function (response: any) {
+          try {
+            const verifyResponse = await fetch("/api/verify-payment", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                orderNumber: data.orderNumber,
+              }),
+            });
+
+            const verifyData = await verifyResponse.json();
+
+            if (verifyData.success) {
+              clearCart();
+              router.push(`/checkout/success?orderNumber=${data.orderNumber}`);
+            } else {
+              throw new Error(verifyData.error || "Payment verification failed");
+            }
+          } catch (error: any) {
+            log.error("Payment verification error", error);
+            toast.error(error.message || "Payment verification failed");
+            setIsProcessing(false);
+          }
+        },
+        prefill: {
+          name: `${shippingData.firstName} ${shippingData.lastName}`,
           email: shippingData.email,
-          phone: shippingData.phone
-        }),
-      });
+          contact: shippingData.phone,
+        },
+        theme: {
+          color: "#D4AF37",
+        },
+      };
 
-      const paymentData = await paymentResponse.json();
-
-      if (!paymentData.success) {
-        throw new Error(paymentData.error || "Failed to initiate payment gateway");
+      if (!(window as any).Razorpay) {
+        throw new Error("Razorpay SDK not loaded. Please verify your internet connection.");
       }
 
-      // Step 3: Auto-submit form to Tecogis
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = paymentData.actionUrl;
-      form.name = 'mygatewayform'; // As per user example
-
-      // PaymentData (encrypted payload)
-      const paymentDataInput = document.createElement('input');
-      paymentDataInput.type = 'hidden';
-      paymentDataInput.name = 'PaymentData';
-      paymentDataInput.value = paymentData.encryptedData;
-      form.appendChild(paymentDataInput);
-
-      // nonce
-      const nonceInput = document.createElement('input');
-      nonceInput.type = 'hidden';
-      nonceInput.name = 'nonce';
-      nonceInput.value = paymentData.nonce;
-      form.appendChild(nonceInput);
-
-      // key
-      const keyInput = document.createElement('input');
-      keyInput.type = 'hidden';
-      keyInput.name = 'key';
-      keyInput.value = paymentData.key;
-      form.appendChild(keyInput);
-
-      document.body.appendChild(form);
-      form.submit();
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        toast.error(response.error.description);
+        setIsProcessing(false);
+      });
+      rzp.open();
 
       // Note: User will be redirected, so we don't need to clear processing state immediately
       // It will be cleared if they hit back button or returns to this page
@@ -229,6 +231,11 @@ export default function CheckoutPage() {
 
   return (
     <main className="min-h-screen bg-white pt-24 pb-16">
+      <Script
+        id="razorpay-checkout-js"
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        strategy="lazyOnload"
+      />
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12">

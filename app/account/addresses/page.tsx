@@ -18,7 +18,7 @@ import {
   XCircle,
   AlertCircle,
 } from "lucide-react";
-import Footer from "@/components/Footer";
+
 import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
 import { log } from "@/lib/logger";
@@ -94,7 +94,7 @@ export default function AddressesPage() {
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         router.push("/auth/login");
         return;
@@ -136,7 +136,7 @@ export default function AddressesPage() {
     setIsSaving(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         router.push("/auth/login");
         return;
@@ -304,13 +304,12 @@ export default function AddressesPage() {
                         <input
                           type="text"
                           {...register("name")}
-                          className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${
-                            errors.name 
-                              ? "border-red-500 bg-red-50" 
+                          className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${errors.name
+                              ? "border-red-500 bg-red-50"
                               : touchedFields.name && !errors.name
-                              ? "border-green-500 bg-green-50"
-                              : "border-gray-200"
-                          }`}
+                                ? "border-green-500 bg-green-50"
+                                : "border-gray-200"
+                            }`}
                           placeholder="John Doe"
                         />
                         {touchedFields.name && !errors.name && (
@@ -337,9 +336,8 @@ export default function AddressesPage() {
                       <input
                         type="tel"
                         {...register("phone")}
-                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                          errors.phone ? "border-red-500" : "border-gray-200"
-                        }`}
+                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.phone ? "border-red-500" : "border-gray-200"
+                          }`}
                         placeholder="+91 98765 43210"
                       />
                       {errors.phone && (
@@ -353,9 +351,8 @@ export default function AddressesPage() {
                     <input
                       type="text"
                       {...register("line1")}
-                      className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                        errors.line1 ? "border-red-500" : "border-gray-200"
-                      }`}
+                      className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.line1 ? "border-red-500" : "border-gray-200"
+                        }`}
                       placeholder="House/Flat No., Building Name"
                     />
                     {errors.line1 && (
@@ -379,9 +376,8 @@ export default function AddressesPage() {
                       <input
                         type="text"
                         {...register("city")}
-                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                          errors.city ? "border-red-500" : "border-gray-200"
-                        }`}
+                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.city ? "border-red-500" : "border-gray-200"
+                          }`}
                         placeholder="Mumbai"
                       />
                       {errors.city && (
@@ -394,9 +390,8 @@ export default function AddressesPage() {
                       <input
                         type="text"
                         {...register("state")}
-                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                          errors.state ? "border-red-500" : "border-gray-200"
-                        }`}
+                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.state ? "border-red-500" : "border-gray-200"
+                          }`}
                         placeholder="Maharashtra"
                       />
                       {errors.state && (
@@ -409,9 +404,8 @@ export default function AddressesPage() {
                       <input
                         type="text"
                         {...register("postal_code")}
-                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                          errors.postal_code ? "border-red-500" : "border-gray-200"
-                        }`}
+                        className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.postal_code ? "border-red-500" : "border-gray-200"
+                          }`}
                         placeholder="400001"
                         maxLength={6}
                       />
@@ -558,7 +552,7 @@ export default function AddressesPage() {
         </motion.div>
       </div>
 
-      <Footer />
+
     </main>
   );
 }

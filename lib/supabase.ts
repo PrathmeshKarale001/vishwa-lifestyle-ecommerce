@@ -344,7 +344,7 @@ export async function updateOrderPaymentStatus(
 
 
 export async function updateOrderStatus(
-  orderId: string,
+  orderIdOrNumber: string,
   status: string,
   paymentStatus?: string,
   paymentId?: string
@@ -355,10 +355,13 @@ export async function updateOrderStatus(
   if (paymentStatus) updates.payment_status = paymentStatus;
   if (paymentId) updates.payment_id = paymentId;
 
+  // Determine if searching by UUID id or human-readable order_number
+  const filterColumn = orderIdOrNumber.startsWith('VL') ? 'order_number' : 'id';
+
   const { data, error } = await supabase
     .from('orders')
     .update(updates)
-    .eq('id', orderId)
+    .eq(filterColumn, orderIdOrNumber)
     .select()
     .single();
 

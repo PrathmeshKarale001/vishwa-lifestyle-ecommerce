@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Lock, Eye, EyeOff, Loader2 } from "lucide-react";
-import Footer from "@/components/Footer";
+
 import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
 import { log } from "@/lib/logger";
@@ -96,9 +96,8 @@ export default function ChangePasswordPage() {
                 <input
                   type={showCurrent ? "text" : "password"}
                   {...register("currentPassword")}
-                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${
-                    errors.currentPassword ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${errors.currentPassword ? "border-red-500" : "border-gray-200"
+                    }`}
                   placeholder="Enter current password"
                 />
                 <button
@@ -127,9 +126,8 @@ export default function ChangePasswordPage() {
                 <input
                   type={showNew ? "text" : "password"}
                   {...register("newPassword")}
-                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${
-                    errors.newPassword ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${errors.newPassword ? "border-red-500" : "border-gray-200"
+                    }`}
                   placeholder="Enter new password"
                 />
                 <button
@@ -156,9 +154,8 @@ export default function ChangePasswordPage() {
                 <input
                   type={showConfirm ? "text" : "password"}
                   {...register("confirmPassword")}
-                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${
-                    errors.confirmPassword ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${errors.confirmPassword ? "border-red-500" : "border-gray-200"
+                    }`}
                   placeholder="Confirm new password"
                 />
                 <button
@@ -203,7 +200,7 @@ export default function ChangePasswordPage() {
         </motion.div>
       </div>
 
-      <Footer />
+
     </main>
   );
 }

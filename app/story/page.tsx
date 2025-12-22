@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Heart, Users, Sprout, Home } from "lucide-react";
-import Footer from "@/components/Footer";
+
 
 const timeline = [
     {
@@ -293,7 +293,7 @@ export default function StoryPage() {
                 </div>
             </section>
 
-            <Footer />
+
         </main>
     );
 }

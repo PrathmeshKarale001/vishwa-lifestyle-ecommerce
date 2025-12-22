@@ -2,14 +2,86 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { CheckCircle, Package, Mail, ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { CheckCircle, Package, Mail, ArrowRight, X, Download, Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState, useRef, Suspense } from "react";
+import { supabase } from "@/lib/supabase";
+import Invoice from "@/components/Invoice";
+import toast from "react-hot-toast";
+import { log } from "@/lib/logger";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
-export default function CheckoutSuccessPage() {
-  const [orderNumber] = useState(() => `VL${Date.now().toString().slice(-8)}`);
+function CheckoutSuccessContent() {
+  const searchParams = useSearchParams();
+  const orderNumber = searchParams.get("orderNumber") || `VL${Date.now().toString().slice(-8)}`;
+
+  const [order, setOrder] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [showInvoice, setShowInvoice] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const invoiceRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    async function fetchOrder() {
+      if (!searchParams.get("orderNumber")) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('order_number', orderNumber)
+          .single();
+
+        if (error) throw error;
+        if (data) setOrder(data);
+      } catch (error) {
+        log.error("Failed to fetch order for invoice", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchOrder();
+  }, [orderNumber, searchParams]);
+
+  const handleDownloadPdf = async () => {
+    if (!invoiceRef.current) return;
+
+    try {
+      setDownloading(true);
+      const element = invoiceRef.current;
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false
+      } as any);
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save(`Vishwa-Invoice-${orderNumber}.pdf`);
+      toast.success("Invoice downloaded successfully");
+    } catch (error) {
+      log.error("PDF generation failed", error);
+      toast.error("Failed to generate PDF");
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
-    <main className="min-h-screen bg-white pt-24 pb-16">
+    <>
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -113,12 +185,15 @@ export default function CheckoutSuccessPage() {
             >
               View Order History
             </Link>
-            <button
-              onClick={() => window.print()}
-              className="border border-accent-gold text-accent-gold px-8 py-4 uppercase tracking-widest text-sm hover:bg-accent-gold hover:text-white transition-colors"
-            >
-              Download Invoice
-            </button>
+
+            {order && (
+              <button
+                onClick={() => setShowInvoice(true)}
+                className="border border-accent-gold text-accent-gold px-8 py-4 uppercase tracking-widest text-sm hover:bg-accent-gold hover:text-white transition-colors"
+              >
+                View Invoice
+              </button>
+            )}
 
           </div>
 
@@ -131,6 +206,48 @@ export default function CheckoutSuccessPage() {
           </p>
         </motion.div>
       </div>
+
+      {/* Invoice Modal */}
+      {showInvoice && order && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowInvoice(false)}></div>
+          <div className="relative bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto m-4 rounded-lg shadow-2xl">
+            <div className="sticky top-0 bg-white border-b border-gray-100 p-4 flex justify-between items-center z-10">
+              <h2 className="text-lg font-serif font-bold">Tax Invoice</h2>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleDownloadPdf}
+                  disabled={downloading}
+                  className="bg-accent-gold text-white px-4 py-2 text-sm flex items-center gap-2 hover:bg-accent-gold/90 transition-colors disabled:opacity-50"
+                >
+                  {downloading ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />}
+                  {downloading ? "Generating..." : "Download PDF"}
+                </button>
+                <button onClick={() => setShowInvoice(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+            <div className="p-4 bg-gray-50">
+              <Invoice order={order} ref={invoiceRef} />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default function CheckoutSuccessPage() {
+  return (
+    <main className="min-h-screen bg-white pt-24 pb-16">
+      <Suspense fallback={
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <Loader2 className="w-8 h-8 animate-spin text-accent-gold" />
+        </div>
+      }>
+        <CheckoutSuccessContent />
+      </Suspense>
     </main>
   );
 }

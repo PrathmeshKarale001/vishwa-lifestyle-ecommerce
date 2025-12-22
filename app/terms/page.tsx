@@ -1,4 +1,4 @@
-import Footer from "@/components/Footer";
+
 
 export const metadata = {
   title: "Terms of Service",
@@ -17,8 +17,8 @@ export default function TermsPage() {
             <section className="mb-12">
               <h2 className="text-2xl font-serif mb-4">1. Acceptance of Terms</h2>
               <p className="text-foreground-muted">
-                By accessing and using Vishwa Lifestyle ("the Website"), you agree to be bound by 
-                these Terms of Service. If you do not agree to these terms, please do not use our 
+                By accessing and using Vishwa Lifestyle ("the Website"), you agree to be bound by
+                these Terms of Service. If you do not agree to these terms, please do not use our
                 services.
               </p>
             </section>
@@ -77,8 +77,8 @@ export default function TermsPage() {
             <section className="mb-12">
               <h2 className="text-2xl font-serif mb-4">7. Intellectual Property</h2>
               <p className="text-foreground-muted">
-                All content on this website, including text, images, logos, and designs, is the 
-                property of Vishwa Lifestyle and protected by copyright laws. You may not reproduce, 
+                All content on this website, including text, images, logos, and designs, is the
+                property of Vishwa Lifestyle and protected by copyright laws. You may not reproduce,
                 distribute, or create derivative works without our written permission.
               </p>
             </section>
@@ -86,8 +86,8 @@ export default function TermsPage() {
             <section className="mb-12">
               <h2 className="text-2xl font-serif mb-4">8. Limitation of Liability</h2>
               <p className="text-foreground-muted">
-                Vishwa Lifestyle shall not be liable for any indirect, incidental, special, or 
-                consequential damages arising from your use of our products or services. Our 
+                Vishwa Lifestyle shall not be liable for any indirect, incidental, special, or
+                consequential damages arising from your use of our products or services. Our
                 liability is limited to the purchase price of the products.
               </p>
             </section>
@@ -95,7 +95,7 @@ export default function TermsPage() {
             <section className="mb-12">
               <h2 className="text-2xl font-serif mb-4">9. Governing Law</h2>
               <p className="text-foreground-muted">
-                These Terms shall be governed by the laws of India. Any disputes shall be resolved 
+                These Terms shall be governed by the laws of India. Any disputes shall be resolved
                 in the courts of Uttarakhand, India.
               </p>
             </section>
@@ -111,7 +111,7 @@ export default function TermsPage() {
         </div>
       </div>
 
-      <Footer />
+
     </main>
   );
 }

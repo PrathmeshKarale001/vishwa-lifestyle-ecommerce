@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Heart, ShoppingBag, Trash2 } from "lucide-react";
 import { useWishlistStore } from "@/store/wishlist";
 import { useCartStore } from "@/store/cart";
-import Footer from "@/components/Footer";
+
 import toast from "react-hot-toast";
 
 export default function WishlistPage() {
@@ -144,7 +144,7 @@ export default function WishlistPage() {
         </motion.div>
       </div>
 
-      <Footer />
+
     </main>
   );
 }

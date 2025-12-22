@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Search } from "lucide-react";
-import Footer from "@/components/Footer";
+
 import Link from "next/link";
 import { generateFAQSchema } from "@/lib/seo";
 
@@ -189,11 +189,10 @@ export default function FAQPage() {
                       setOpenFaq(null);
                     }}
                     aria-selected={activeCategory === idx}
-                    className={`px-4 py-2 text-sm transition-colors ${
-                      activeCategory === idx
+                    className={`px-4 py-2 text-sm transition-colors ${activeCategory === idx
                         ? "bg-foreground text-white"
                         : "bg-background-alt hover:bg-gray-200"
-                    }`}
+                      }`}
                   >
                     {category.name}
                   </button>
@@ -207,7 +206,7 @@ export default function FAQPage() {
                     category.faqs.map((faq, idx) => {
                       const faqId = `${category.name}-${idx}`;
                       const isOpen = openFaq === faqId;
-                      
+
                       return (
                         <motion.div
                           key={faqId}
@@ -225,9 +224,8 @@ export default function FAQPage() {
                               <span className="font-medium pr-8">{faq.q}</span>
                               <ChevronDown
                                 size={20}
-                                className={`flex-shrink-0 transition-transform ${
-                                  isOpen ? "rotate-180" : ""
-                                }`}
+                                className={`flex-shrink-0 transition-transform ${isOpen ? "rotate-180" : ""
+                                  }`}
                                 aria-hidden="true"
                               />
                             </button>
@@ -286,7 +284,7 @@ export default function FAQPage() {
           </div>
         </section>
 
-        <Footer />
+
       </main>
     </>
   );

@@ -1,4 +1,4 @@
-import Footer from "@/components/Footer";
+
 
 export const metadata = {
   title: "Privacy Policy",
@@ -106,7 +106,7 @@ export default function PrivacyPage() {
         </div>
       </div>
 
-      <Footer />
+
     </main>
   );
 }

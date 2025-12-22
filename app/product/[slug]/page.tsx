@@ -9,7 +9,7 @@ import { Star, Minus, Plus, ShoppingBag, Heart, Share2, Truck, Shield, RotateCcw
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
 import toast from "react-hot-toast";
-import Footer from "@/components/Footer";
+
 import ProductCard from "@/components/ProductCard";
 import ImageZoom from "@/components/ImageZoom";
 import { ProductCardSkeleton } from "@/components/Skeleton";
@@ -245,10 +245,10 @@ export default function ProductPage() {
   const getCategoryLabel = (cat: string | null | undefined) => {
     if (!cat) return "";
     const labels: Record<string, string> = {
-      ritual: "Ritual Essentials",
-      lifestyle: "Lifestyle & Sacred Home",
-      apparel: "Vishwa Apparel",
-      combos: "Combos & Gifts",
+      ritual: "Other",
+      lifestyle: "Other",
+      apparel: "Other",
+      combos: "Other",
     };
     return labels[cat] || cat;
   };
@@ -291,7 +291,7 @@ export default function ProductPage() {
             </div>
           </div>
         </section>
-        <Footer />
+
       </main>
     );
   }
@@ -432,41 +432,41 @@ export default function ProductPage() {
                 {product.description}
               </p>
 
-              {/* Quantity & Add to Cart */}
               <div className="flex flex-col space-y-4 mb-8">
-                <div className="flex items-center space-x-6">
+                <div className="flex items-center gap-3 sm:gap-6">
                   <div className="flex items-center border border-gray-200" role="group" aria-label="Quantity selector">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="p-3 hover:bg-gray-50 transition-colors"
+                      className="p-2 sm:p-3 hover:bg-gray-50 transition-colors"
                       aria-label="Decrease quantity"
                       disabled={isOutOfStock}
                     >
-                      <Minus size={16} />
+                      <Minus size={14} className="sm:w-4 sm:h-4" />
                     </button>
-                    <span className="w-12 text-center text-sm" aria-label={`Quantity: ${quantity}`}>
+                    <span className="w-8 sm:w-12 text-center text-xs sm:text-sm" aria-label={`Quantity: ${quantity}`}>
                       {quantity}
                     </span>
                     <button
                       onClick={() => setQuantity(Math.min(product.inventory || 10, quantity + 1))}
-                      className="p-3 hover:bg-gray-50 transition-colors"
+                      className="p-2 sm:p-3 hover:bg-gray-50 transition-colors"
                       aria-label="Increase quantity"
                       disabled={isOutOfStock || quantity >= (product.inventory || 10)}
                     >
-                      <Plus size={16} />
+                      <Plus size={14} className="sm:w-4 sm:h-4" />
                     </button>
                   </div>
                   <button
                     onClick={handleAddToCart}
                     disabled={isOutOfStock}
-                    className={`flex-1 py-4 px-6 uppercase tracking-widest text-sm transition-colors duration-300 flex items-center justify-center gap-2 ${isOutOfStock
+                    className={`flex-1 py-3 sm:py-4 px-4 sm:px-6 uppercase tracking-[0.1em] sm:tracking-widest text-[10px] sm:text-sm transition-colors duration-300 flex items-center justify-center gap-2 ${isOutOfStock
                       ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                       : "bg-foreground text-white hover:bg-accent-gold"
                       }`}
                   >
-                    <ShoppingBag size={18} /> {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+                    <ShoppingBag size={16} className="sm:w-5 sm:h-5" /> {isOutOfStock ? "Out of Stock" : "Add to Cart"}
                   </button>
                 </div>
+
                 <div className="flex space-x-4 text-sm text-foreground-muted">
                   <button
                     onClick={handleToggleWishlist}
@@ -593,7 +593,7 @@ export default function ProductPage() {
         {relatedProducts.length > 0 && (
           <section className="py-20 container mx-auto px-6">
             <h2 className="text-3xl font-serif mb-12 text-center">You May Also Like</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
               {relatedProducts.map((relatedProduct: Product) => {
                 const tag = relatedProduct.isBestSeller ? "Best Seller" :
                   relatedProduct.isNew ? "New" : undefined;
@@ -617,7 +617,7 @@ export default function ProductPage() {
           </section>
         )}
 
-        <Footer />
+
       </main>
     </>
   );

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import Footer from "@/components/Footer";
+
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SettingsContent from "@/components/SettingsContent";
 
@@ -40,7 +40,7 @@ export default async function SettingsPage() {
           <SettingsContent initialSettings={initialSettings} />
         </div>
       </div>
-      <Footer />
+
     </main>
   );
 }

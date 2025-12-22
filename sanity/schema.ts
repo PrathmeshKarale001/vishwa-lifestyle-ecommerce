@@ -70,6 +70,7 @@ const product: SchemaTypeDefinition = {
       title: 'Category',
       type: 'reference',
       to: [{ type: 'category' }],
+      description: 'Select category. Note: Lifestyle, Apparel, and Combos have been consolidated into "Other" (formerly Ritual Essentials).',
     },
     {
       name: 'subCategory',
@@ -254,6 +255,7 @@ const category: SchemaTypeDefinition = {
       name: 'name',
       title: 'Name',
       type: 'string',
+      description: 'Category name (e.g., "Other"). "Ritual Essentials" has been renamed to "Other".',
       validation: (Rule) => Rule.required(),
     },
     {

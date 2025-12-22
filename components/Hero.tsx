@@ -32,15 +32,22 @@ const slides = [
     },
 ];
 
-export default function Hero() {
+export default function Hero({ heroProductImage }: { heroProductImage?: string }) {
     const [currentSlide, setCurrentSlide] = useState(0);
+
+    const activeSlides = slides.map(slide => {
+        if (slide.id === 2 && heroProductImage) {
+            return { ...slide, image: heroProductImage };
+        }
+        return slide;
+    });
 
     useEffect(() => {
         const timer = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % slides.length);
+            setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
         }, 8000); // Increased duration for Ken Burns effect
         return () => clearInterval(timer);
-    }, []);
+    }, [activeSlides.length]);
 
     return (
         <section className="relative h-screen w-full overflow-hidden bg-black">
@@ -60,8 +67,8 @@ export default function Hero() {
                         transition={{ duration: 10, ease: "linear" }} // Ken Burns Effect
                     >
                         <Image
-                            src={slides[currentSlide].image}
-                            alt={slides[currentSlide].title}
+                            src={activeSlides[currentSlide].image}
+                            alt={activeSlides[currentSlide].title}
                             fill
                             priority={currentSlide === 0}
                             sizes="100vw"
@@ -99,7 +106,7 @@ export default function Hero() {
                                 }}
                             >
                                 <span className="block text-xs sm:text-sm md:text-base tracking-[0.3em] uppercase mb-4 opacity-90 font-light">
-                                    {slides[currentSlide].subtitle}
+                                    {activeSlides[currentSlide].subtitle}
                                 </span>
                             </motion.div>
 
@@ -111,7 +118,7 @@ export default function Hero() {
                                 }}
                             >
                                 <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif mb-8 tracking-wide leading-tight text-shadow-lg">
-                                    {slides[currentSlide].title}
+                                    {activeSlides[currentSlide].title}
                                 </h2>
                             </motion.div>
 
@@ -123,11 +130,11 @@ export default function Hero() {
                                 }}
                             >
                                 <Link
-                                    href={slides[currentSlide].link}
+                                    href={activeSlides[currentSlide].link}
                                     className="group relative inline-flex items-center justify-center px-8 py-3 overflow-hidden font-medium tracking-[0.2em] text-white transition duration-300 ease-out border border-white rounded-none hover:text-black focus-visible:text-black focus-visible:outline-none uppercase text-sm"
                                 >
                                     <span className="absolute inset-0 w-full h-full bg-white -translate-x-full group-hover:translate-x-0 group-focus-visible:translate-x-0 ease-out duration-300 transition-transform"></span>
-                                    <span className="relative">{slides[currentSlide].cta}</span>
+                                    <span className="relative">{activeSlides[currentSlide].cta}</span>
                                 </Link>
                             </motion.div>
                         </motion.div>
@@ -137,7 +144,7 @@ export default function Hero() {
 
             {/* Slide Indicators */}
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex space-x-3 z-20">
-                {slides.map((_, index) => (
+                {activeSlides.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => setCurrentSlide(index)}

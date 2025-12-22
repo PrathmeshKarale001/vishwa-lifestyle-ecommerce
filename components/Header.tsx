@@ -4,17 +4,19 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Search, User, ShoppingBag, Menu, X, Heart } from "lucide-react";
+import { Search, User, ShoppingBag, Menu, X, Heart, ChevronDown } from "lucide-react";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
 import { useAppKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { SHOP_CATEGORIES } from "@/lib/shop-categories";
 import SearchAutocomplete from "./SearchAutocomplete";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isShopHovered, setIsShopHovered] = useState(false);
   const { scrollY } = useScroll();
   const pathname = usePathname();
   const isHomePage = pathname === "/";
@@ -38,6 +40,7 @@ export default function Header() {
           ? "bg-white/80 backdrop-blur-md py-3 sm:py-4 text-black border-gray-100 shadow-sm"
           : "bg-transparent py-6 sm:py-8 text-white border-transparent"
           }`}
+        onMouseLeave={() => setIsShopHovered(false)}
       >
         <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between relative">
           {/* Mobile Menu Button */}
@@ -54,10 +57,55 @@ export default function Header() {
             className={`hidden lg:flex items-center space-x-8 text-sm tracking-[0.15em] uppercase font-medium transition-colors duration-300 ${isSolidHeader ? "text-black" : "text-white"
               }`}
           >
-            <Link href="/shop" className="hover:text-accent-gold transition-colors relative group">
-              <span>Shop</span>
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
-            </Link>
+            <div
+              className="relative group"
+              onMouseEnter={() => setIsShopHovered(true)}
+            >
+              <Link href="/shop" className="hover:text-accent-gold transition-colors flex items-center gap-1 py-4">
+                <span>Shop</span>
+                <ChevronDown size={14} className={`transition-transform duration-300 ${isShopHovered ? 'rotate-180' : ''}`} />
+                <span className="absolute bottom-3 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
+              </Link>
+
+              {/* Mega Menu Dropdown */}
+              <AnimatePresence>
+                {isShopHovered && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full left-0 w-[800px] -ml-4 bg-white shadow-xl rounded-lg p-8 grid grid-cols-3 gap-8 text-left z-50 border border-gray-100"
+                    onMouseEnter={() => setIsShopHovered(true)}
+                    onMouseLeave={() => setIsShopHovered(false)}
+                  >
+                    {SHOP_CATEGORIES.map((category) => (
+                      <div key={category.slug} className="space-y-4">
+                        <Link
+                          href={`/shop?category=${category.slug}`}
+                          className="block text-base font-serif font-bold text-black border-b border-gray-100 pb-2 hover:text-accent-gold transition-colors"
+                        >
+                          {category.title}
+                        </Link>
+                        <ul className="space-y-2">
+                          {category.items.map((item) => (
+                            <li key={item.slug}>
+                              <Link
+                                href={`/shop?category=${category.slug}&sub=${item.slug}`}
+                                className="text-xs text-gray-500 hover:text-accent-gold transition-colors tracking-wide capitalize"
+                              >
+                                {item.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <Link href="/story" className="hover:text-accent-gold transition-colors relative group">
               <span>Our Story</span>
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
@@ -157,7 +205,7 @@ export default function Header() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "-100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed inset-0 z-[60] bg-white text-foreground flex flex-col"
+            className="fixed inset-0 z-[60] bg-white text-foreground flex flex-col overflow-y-auto"
           >
             <div className="p-6 flex justify-between items-center border-b border-gray-100">
               <span className="font-serif text-xl font-bold">Menu</span>
@@ -173,13 +221,43 @@ export default function Header() {
               >
                 Home
               </Link>
-              <Link
-                href="/shop"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="hover:text-accent-gold transition-colors"
-              >
-                Shop
-              </Link>
+
+              <div className="space-y-4">
+                <Link
+                  href="/shop"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="hover:text-accent-gold transition-colors block"
+                >
+                  Shop
+                </Link>
+                {/* Mobile Submenu */}
+                <div className="pl-4 space-y-4 border-l-2 border-gray-100/50">
+                  {SHOP_CATEGORIES.map((cat) => (
+                    <div key={cat.slug} className="space-y-2">
+                      <Link
+                        href={`/shop?category=${cat.slug}`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-base font-medium text-gray-800"
+                      >
+                        {cat.title}
+                      </Link>
+                      <div className="pl-2 space-y-1">
+                        {cat.items.map(sub => (
+                          <Link
+                            key={sub.slug}
+                            href={`/shop?category=${cat.slug}&sub=${sub.slug}`}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="block text-sm text-gray-500 font-sans"
+                          >
+                            - {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <Link
                 href="/story"
                 onClick={() => setIsMobileMenuOpen(false)}

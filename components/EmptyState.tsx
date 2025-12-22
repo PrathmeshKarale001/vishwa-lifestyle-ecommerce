@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Search, Package, ShoppingBag, Info, AlertTriangle, LucideIcon } from "lucide-react";
+import { Search, Package, ShoppingBag, Info, AlertTriangle, LucideIcon, MapPin } from "lucide-react";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   search: Search,
@@ -9,6 +9,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   shopping: ShoppingBag,
   info: Info,
   alert: AlertTriangle,
+  "map-pin": MapPin,
 };
 
 interface EmptyStateProps {

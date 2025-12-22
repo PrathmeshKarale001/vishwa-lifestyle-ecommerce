@@ -305,10 +305,10 @@ export default function AddressesPage() {
                           type="text"
                           {...register("name")}
                           className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${errors.name
-                              ? "border-red-500 bg-red-50"
-                              : touchedFields.name && !errors.name
-                                ? "border-green-500 bg-green-50"
-                                : "border-gray-200"
+                            ? "border-red-500 bg-red-50"
+                            : touchedFields.name && !errors.name
+                              ? "border-green-500 bg-green-50"
+                              : "border-gray-200"
                             }`}
                           placeholder="John Doe"
                         />
@@ -540,7 +540,7 @@ export default function AddressesPage() {
             </div>
           ) : (
             <EmptyState
-              icon={MapPin}
+              icon="map-pin"
               title="No addresses saved"
               description="Add an address to make checkout faster and easier. You can save multiple addresses for home, work, or other locations."
               secondaryAction={{

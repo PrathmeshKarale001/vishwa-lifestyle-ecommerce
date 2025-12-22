@@ -151,8 +151,8 @@ export default function OrdersPage() {
                       key={status}
                       onClick={() => setStatusFilter(status)}
                       className={`px-4 py-2 text-sm whitespace-nowrap transition-colors ${statusFilter === status
-                          ? "bg-foreground text-white"
-                          : "bg-gray-100 hover:bg-gray-200"
+                        ? "bg-foreground text-white"
+                        : "bg-gray-100 hover:bg-gray-200"
                         }`}
                     >
                       {status}
@@ -241,7 +241,7 @@ export default function OrdersPage() {
                 </div>
               ) : (
                 <EmptyState
-                  icon={ShoppingBag}
+                  icon="shopping"
                   title={searchQuery || statusFilter !== "All" ? "No orders found" : "No orders yet"}
                   description={
                     searchQuery || statusFilter !== "All"

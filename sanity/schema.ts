@@ -78,7 +78,7 @@ const product: SchemaTypeDefinition = {
           'Heritage Craft', 'Design Plate', 'Wall Clock', 'Wall Painting', 'Showpiece',
           'Jewellery Box', 'Bracelet', 'Living Room', 'Bedroom', 'Kitchen', 'Bathroomware',
           'Idol', 'Diya', 'Aarti Lamp', 'Lota', 'Temple', 'Chowki', 'Aarti Thali',
-          'Panch Aarti', 'Samai', 'Grains', 'Pulses', 'Edible Oils', 'Sweeteners & Salts',
+          'Panch Aarti', 'Samai', 'Bell', 'Grains', 'Pulses', 'Edible Oils', 'Sweeteners & Salts',
           'Flours', 'Spices', 'Pre-Mixes', 'Ready to Eat', 'Honey', 'Chavanprasha', 'Gulkand'
         ]
       }

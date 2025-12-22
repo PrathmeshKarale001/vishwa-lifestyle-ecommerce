@@ -99,7 +99,7 @@ export default function CartDrawer() {
             <div className="flex-1 overflow-y-auto p-6">
               {items.length === 0 ? (
                 <EmptyState
-                  icon={ShoppingBag}
+                  icon="shopping"
                   title="Your cart is empty"
                   description="Discover our collection of sacred essentials and lifestyle products. Add items to your cart to get started."
                   action={{

@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import path from "path";
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
-import { getFilteredProducts } from "./lib/sanity";
+import { getFilteredProducts } from "../lib/sanity";
 
 async function debug() {
     console.log("Testing getFilteredProducts with category='crafts'...");

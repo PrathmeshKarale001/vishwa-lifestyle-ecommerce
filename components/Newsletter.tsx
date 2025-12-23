@@ -12,11 +12,11 @@ export default function Newsletter() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email) return;
 
     setIsSubmitting(true);
-    
+
     try {
       // In production, send to API
       await new Promise((resolve) => setTimeout(resolve, 1000));

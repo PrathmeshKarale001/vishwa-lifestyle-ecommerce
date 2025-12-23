@@ -40,7 +40,15 @@ export const SHOP_CATEGORIES = [
             { name: "Living Room", slug: "Living Room" },
             { name: "Bedroom", slug: "Bedroom" },
             { name: "Kitchen", slug: "Kitchen" },
-            { name: "Bathroomware", slug: "Bathroomware" }
+            { name: "Bathroomware", slug: "Bathroomware" },
+            { name: "Dinnerware", slug: "Dinnerware" }
+        ]
+    },
+    {
+        title: "Bags & Accessories",
+        slug: "bags-accessories",
+        items: [
+            { name: "Women", slug: "Women" }
         ]
     },
     {
@@ -61,7 +69,13 @@ export const SHOP_CATEGORIES = [
             { name: "Design Plate", slug: "Design Plate" },
             { name: "Wall Clock", slug: "Wall Clock" },
             { name: "Wall Painting", slug: "Wall Painting" },
-            { name: "Showpiece", slug: "Showpiece" },
+            { name: "Showpiece", slug: "Showpiece" }
+        ]
+    },
+    {
+        title: "Gems & Jewellers",
+        slug: "gems-jewellers",
+        items: [
             { name: "Jewellery Box", slug: "Jewellery Box" },
             { name: "Bracelet", slug: "Bracelet" }
         ]

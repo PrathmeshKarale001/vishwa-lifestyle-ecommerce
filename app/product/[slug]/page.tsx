@@ -52,6 +52,11 @@ interface Product {
   variants?: ProductVariant[];
   metaTitle?: string;
   metaDescription?: string;
+  dimensions?: string;
+  weight?: string;
+  shelfLife?: string;
+  unitType?: string;
+  packaging?: string;
 }
 
 interface Review {
@@ -562,6 +567,45 @@ export default function ProductPage() {
                   </span>
                 </div>
               </div>
+
+              {/* Technical Specifications */}
+              {(product.dimensions || product.weight || product.shelfLife || product.packaging) && (
+                <div className="mb-8 border-t border-gray-100 pt-8">
+                  <h2 className="font-serif text-lg mb-4">Product Specifications</h2>
+                  <div className="grid grid-cols-2 gap-y-4 text-sm">
+                    {product.dimensions && (
+                      <>
+                        <span className="text-foreground-muted">Dimensions</span>
+                        <span className="text-foreground font-medium">{product.dimensions}</span>
+                      </>
+                    )}
+                    {product.weight && (
+                      <>
+                        <span className="text-foreground-muted">Weight</span>
+                        <span className="text-foreground font-medium">{product.weight}</span>
+                      </>
+                    )}
+                    {product.shelfLife && (
+                      <>
+                        <span className="text-foreground-muted">Shelf Life</span>
+                        <span className="text-foreground font-medium">{product.shelfLife}</span>
+                      </>
+                    )}
+                    {product.unitType && (
+                      <>
+                        <span className="text-foreground-muted">Unit Type</span>
+                        <span className="text-foreground font-medium">{product.unitType}</span>
+                      </>
+                    )}
+                    {product.packaging && (
+                      <>
+                        <span className="text-foreground-muted">Packaging</span>
+                        <span className="text-foreground font-medium">{product.packaging}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Features */}
               {product.features && product.features.length > 0 && (

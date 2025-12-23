@@ -16,7 +16,8 @@ const slides = [
     },
     {
         id: 2,
-        image: "/products/hero-swipe/3.jpg",
+        image: "/hero-images/VISHWA WORLD.png",
+        mobileImage: "/hero-images/1X1.jpg",
         title: "Vishwa Living",
         subtitle: "Pure. Sacred. Inspired.",
         cta: "Explore Lifestyle",
@@ -32,20 +33,26 @@ const slides = [
     },
 ];
 
-export default function Hero({ heroProductImage }: { heroProductImage?: string }) {
+export default function Hero() {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
 
-    const activeSlides = slides.map(slide => {
-        if (slide.id === 2 && heroProductImage) {
-            return { ...slide, image: heroProductImage };
-        }
-        return slide;
-    });
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    // Reorder slides for mobile: Slide with ID 2 (1x1.jpg) comes first
+    const activeSlides = isMobile
+        ? [slides[1], slides[0], slides[2]]
+        : slides;
 
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
-        }, 8000); // Increased duration for Ken Burns effect
+        }, 8000);
         return () => clearInterval(timer);
     }, [activeSlides.length]);
 
@@ -67,7 +74,7 @@ export default function Hero({ heroProductImage }: { heroProductImage?: string }
                         transition={{ duration: 10, ease: "linear" }} // Ken Burns Effect
                     >
                         <Image
-                            src={activeSlides[currentSlide].image}
+                            src={(isMobile && activeSlides[currentSlide].mobileImage) || activeSlides[currentSlide].image}
                             alt={activeSlides[currentSlide].title}
                             fill
                             priority={currentSlide === 0}

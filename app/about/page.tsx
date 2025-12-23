@@ -21,7 +21,7 @@ export default function AboutPage() {
                         transition={{ duration: 0.8 }}
                         className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground mb-6"
                     >
-                        Empowering Lives Through Teachings from the 5 Fold Path
+                        Elevating Everyday Life Through Teachings from the 5 Fold Path
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -29,7 +29,7 @@ export default function AboutPage() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-lg md:text-xl text-foreground-muted font-light"
                     >
-                        Resetting Human Lives and Rebuilding the Planet by blending Timeless Wisdom with Modern Scientific Knowledge.
+                        Enhancing Modern Living and Rebuilding the Planet by blending Timeless Wisdom with Modern Scientific Knowledge.
                     </motion.p>
                 </div>
             </section>
@@ -72,7 +72,7 @@ export default function AboutPage() {
                         <h2 className="text-3xl font-serif text-foreground mb-4">Our Mission</h2>
                         <div className="w-16 h-1 bg-accent-gold mb-6 mx-auto md:mx-0"></div>
                         <p className="text-foreground-muted leading-relaxed">
-                            Our mission at Vishwa is to disseminate the profound teachings of the 170+ year old Guru Lineage, empowering individuals to embark on a transformative journey and learn to heal themselves. Vishwa is committed to cultivating individuals who are spiritually awakened, environmentally aware and driven to create social change for a better tomorrow.
+                            Our mission at Vishwa is to disseminate the profound teachings of the 170+ year old Guru Lineage, enabling individuals to embark on a transformative journey and learn to heal themselves. Vishwa is committed to cultivating individuals who are spiritually awakened, environmentally aware and driven to create a better future through mindful living.
                         </p>
                     </motion.div>
                 </motion.div>

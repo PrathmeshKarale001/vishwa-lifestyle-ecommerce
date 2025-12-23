@@ -63,3 +63,14 @@ next-env.d.ts
 # Build and Sanity
 /dist
 /.sanity
+
+# Heavy Folders
+/Vishwa Products (23Dec)
+/Vishwa-Lifestyle Products
+
+# Local scripts
+/scripts/merge-categories.mjs
+/scripts/import-dec-23-data.mjs
+/scripts/import-variants-data.mjs
+/scripts/get-existing-skus.js
+/scripts/inspect-headers.js

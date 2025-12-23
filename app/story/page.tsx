@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Heart, Users, Sprout, Home } from "lucide-react";
 
@@ -56,17 +57,26 @@ const values = [
 ];
 
 export default function StoryPage() {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     return (
         <main className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="relative h-[70vh] flex items-center justify-center bg-black text-white overflow-hidden">
+            <section className="relative h-[80vh] flex items-center justify-center bg-black text-white overflow-hidden">
                 <div
-                    className="absolute inset-0 bg-cover bg-center opacity-50"
+                    className="absolute inset-0 bg-cover bg-center opacity-70 transition-opacity duration-1000"
                     style={{
-                        backgroundImage:
-                            "url(/products/3.jpg)",
+                        backgroundImage: `url(${isMobile ? '/hero-images/1X1.jpg' : '/hero-images/VISHWA%20WORLD.png'})`,
                     }}
                 />
+                <div className="absolute inset-0 bg-black/20" />
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -243,7 +253,7 @@ export default function StoryPage() {
                                 href="/shop"
                                 className="inline-block bg-white text-accent-sage px-10 py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-accent-gold hover:text-white transition-colors duration-300"
                             >
-                                Join the Movement
+                                Shop the Collection
                             </a>
                         </motion.div>
                     </div>
@@ -287,7 +297,7 @@ export default function StoryPage() {
                             href="/shop"
                             className="inline-block border-2 border-foreground px-10 py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-foreground hover:text-white transition-colors duration-300"
                         >
-                            Start Your Journey
+                            Explore Shop
                         </a>
                     </motion.div>
                 </div>

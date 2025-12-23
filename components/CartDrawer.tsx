@@ -115,7 +115,7 @@ export default function CartDrawer() {
                 <ul className="space-y-6" role="list">
                   {items.map((item) => (
                     <motion.li
-                      key={item.productId}
+                      key={item.id}
                       layout
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -147,15 +147,22 @@ export default function CartDrawer() {
                         >
                           {item.name}
                         </Link>
-                        <span className="text-sm text-foreground-muted mt-1">
-                          {formatPrice(item.price)}
-                        </span>
+                        <div className="flex flex-col gap-0.5 mt-1">
+                          <span className="text-sm text-foreground-muted">
+                            {formatPrice(item.price)}
+                          </span>
+                          {item.size && (
+                            <span className="text-[10px] text-accent-gold uppercase tracking-widest font-medium">
+                              Size: {item.size}
+                            </span>
+                          )}
+                        </div>
 
                         {/* Quantity Controls */}
                         <div className="flex items-center justify-between mt-auto">
                           <div className="flex items-center border border-gray-200" role="group" aria-label="Quantity controls">
                             <button
-                              onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
                               className="p-2 hover:bg-gray-50 transition-colors"
                               aria-label="Decrease quantity"
                             >
@@ -165,7 +172,7 @@ export default function CartDrawer() {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
                               disabled={item.quantity >= item.maxQuantity}
                               className="p-2 hover:bg-gray-50 transition-colors disabled:opacity-50"
                               aria-label="Increase quantity"
@@ -176,7 +183,7 @@ export default function CartDrawer() {
 
                           <button
                             onClick={() => {
-                              removeItem(item.productId);
+                              removeItem(item.id);
                               toast.success("Item removed from cart");
                             }}
                             className="p-2 text-foreground-muted hover:text-red-500 transition-colors"

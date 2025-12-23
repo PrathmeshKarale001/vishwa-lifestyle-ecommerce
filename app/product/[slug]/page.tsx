@@ -22,6 +22,14 @@ import { addToRecentlyViewed } from "@/lib/recently-viewed";
 import { log } from "@/lib/logger";
 import { useAppKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
+interface ProductVariant {
+  size: string;
+  sku: string;
+  price: number;
+  compareAtPrice?: number;
+  inventory: number;
+}
+
 interface Product {
   _id: string;
   slug: string;
@@ -41,6 +49,9 @@ interface Product {
   isNew?: boolean;
   isBestSeller?: boolean;
   sku?: string;
+  variants?: ProductVariant[];
+  metaTitle?: string;
+  metaDescription?: string;
 }
 
 interface Review {
@@ -68,6 +79,7 @@ export default function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
 
   // Fetch product data
   useEffect(() => {
@@ -80,6 +92,9 @@ export default function ProductPage() {
         }
         setProduct(data);
         setSelectedImage(0);
+        if (data.variants && data.variants.length > 0) {
+          setSelectedVariant(data.variants[0]);
+        }
 
         // Track recently viewed
         if (data) {
@@ -182,24 +197,30 @@ export default function ProductPage() {
   const handleAddToCart = useCallback(() => {
     if (!product) return;
 
-    if (product.inventory !== undefined && product.inventory <= 0) {
+    const currentInventory = selectedVariant ? selectedVariant.inventory : product.inventory;
+    const currentPrice = selectedVariant ? selectedVariant.price : product.price;
+    const currentSku = selectedVariant ? selectedVariant.sku : product.sku;
+
+    if (currentInventory !== undefined && currentInventory <= 0) {
       toast.error("This product is out of stock");
       return;
     }
 
     const productImage = product.images?.[0] || product.mainImage || "";
     addItem({
-      id: `${product._id}-${Date.now()}`,
+      id: selectedVariant ? `${product._id}-${selectedVariant.sku}` : `${product._id}-${Date.now()}`,
       productId: product._id,
       name: product.name,
-      price: product.price,
+      price: currentPrice,
       image: productImage,
       slug: slug,
-      maxQuantity: product.inventory || 10,
+      maxQuantity: currentInventory || 10,
       quantity,
+      size: selectedVariant?.size,
+      variantSku: currentSku,
     });
-    toast.success(`${product.name} added to cart`);
-  }, [product, quantity, slug, addItem]);
+    toast.success(`${product.name}${selectedVariant ? ` (${selectedVariant.size})` : ''} added to cart`);
+  }, [product, quantity, slug, addItem, selectedVariant]);
 
   const handleToggleWishlist = useCallback(() => {
     if (!product) return;
@@ -309,23 +330,34 @@ export default function ProductPage() {
   const displayImages = productImages.length > 0
     ? productImages
     : ["https://images.unsplash.com/photo-1602825266970-721285fc6e43?q=80&w=1200&auto=format&fit=crop"];
-  const isOutOfStock = product.inventory !== undefined && product.inventory <= 0;
-  const isLowStock = product.inventory !== undefined && product.inventory > 0 && product.inventory <= 5;
+  const currentInventory = selectedVariant ? selectedVariant.inventory : product.inventory;
+  const currentPrice = selectedVariant ? selectedVariant.price : product.price;
+  const currentCompareAtPrice = selectedVariant ? selectedVariant.compareAtPrice : product.compareAtPrice;
+  const currentSku = selectedVariant ? selectedVariant.sku : product.sku;
+
+  const isOutOfStock = currentInventory !== undefined && currentInventory <= 0;
+  const isLowStock = currentInventory !== undefined && currentInventory > 0 && currentInventory <= 5;
   const averageRating = reviews.length > 0
     ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
     : product.rating || 0;
 
   // Generate JSON-LD structured data
   const productSchema = generateProductSchema({
-    name: product.name,
-    description: product.description,
+    name: product.metaTitle || product.name,
+    description: product.metaDescription || product.description,
     image: productImages[0] || "",
-    price: product.price,
+    price: currentPrice,
     currency: "INR",
     availability: isOutOfStock ? "OutOfStock" : "InStock",
-    sku: product.sku || product._id,
+    sku: currentSku || product._id,
     rating: averageRating,
     reviewCount: reviews.length || product.reviewCount || 0,
+    variants: product.variants?.map(v => ({
+      size: v.size,
+      price: v.price,
+      sku: v.sku,
+      inventory: v.inventory
+    }))
   });
 
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -375,9 +407,9 @@ export default function ProductPage() {
                 <span className="text-accent-gold text-xs tracking-[0.2em] uppercase font-medium">
                   {product.category}
                 </span>
-                {product.sku && (
+                {currentSku && (
                   <span className="text-xs text-foreground-muted bg-gray-100 px-2 py-0.5 rounded">
-                    SKU: {product.sku}
+                    SKU: {currentSku}
                   </span>
                 )}
               </div>
@@ -391,10 +423,10 @@ export default function ProductPage() {
               {/* Price & Rating */}
               <div className="flex items-center flex-wrap gap-4 mb-6">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl font-light">{formatPrice(product.price)}</span>
-                  {product.compareAtPrice && product.compareAtPrice > product.price && (
+                  <span className="text-2xl font-light">{formatPrice(currentPrice)}</span>
+                  {currentCompareAtPrice && currentCompareAtPrice > currentPrice && (
                     <span className="text-lg text-foreground-muted line-through">
-                      {formatPrice(product.compareAtPrice)}
+                      {formatPrice(currentCompareAtPrice)}
                     </span>
                   )}
                 </div>
@@ -423,7 +455,28 @@ export default function ProductPage() {
               {isLowStock && (
                 <div className="flex items-center gap-2 text-orange-500 mb-4 p-3 bg-orange-50 rounded">
                   <AlertCircle size={18} />
-                  <span className="text-sm font-medium">Only {product.inventory} left in stock - order soon!</span>
+                  <span className="text-sm font-medium">Only {currentInventory} left in stock - order soon!</span>
+                </div>
+              )}
+
+              {/* Size Selector */}
+              {product.variants && product.variants.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-xs uppercase tracking-widest text-foreground-muted mb-4">Select Size</h3>
+                  <div className="flex flex-wrap gap-3">
+                    {product.variants.map((v) => (
+                      <button
+                        key={v.sku}
+                        onClick={() => setSelectedVariant(v)}
+                        className={`min-w-[48px] h-12 px-4 border text-sm transition-all duration-300 ${selectedVariant?.sku === v.sku
+                          ? "border-foreground bg-foreground text-white"
+                          : "border-gray-200 text-foreground hover:border-foreground"
+                          }`}
+                      >
+                        {v.size}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -447,10 +500,10 @@ export default function ProductPage() {
                       {quantity}
                     </span>
                     <button
-                      onClick={() => setQuantity(Math.min(product.inventory || 10, quantity + 1))}
+                      onClick={() => setQuantity(Math.min(currentInventory || 10, quantity + 1))}
                       className="p-2 sm:p-3 hover:bg-gray-50 transition-colors"
                       aria-label="Increase quantity"
-                      disabled={isOutOfStock || quantity >= (product.inventory || 10)}
+                      disabled={isOutOfStock || quantity >= (currentInventory || 10)}
                     >
                       <Plus size={14} className="sm:w-4 sm:h-4" />
                     </button>

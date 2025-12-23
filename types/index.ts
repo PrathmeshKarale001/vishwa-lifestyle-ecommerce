@@ -3,22 +3,38 @@
 // ==========================================
 export interface Product {
   id: string;
+  _id?: string; // Sanity ID
   slug: string;
   name: string;
   description: string;
+  sku?: string;
   price: number;
   compareAtPrice?: number;
-  category: ProductCategory;
-  images: ProductImage[];
+  category: any; // Updated to any or more specific type if needed
+  images: any[];
   features?: string[];
   inventory: number;
   tags?: string[];
   rating?: number;
   reviewCount?: number;
+  metaTitle?: string;
+  metaDescription?: string;
   isNew?: boolean;
   isBestSeller?: boolean;
   createdAt: string;
   updatedAt: string;
+  variants?: ProductVariant[];
+  weight?: string;
+  dimensions?: string;
+  hsnCode?: string;
+}
+
+export interface ProductVariant {
+  size: string;
+  sku: string;
+  price: number;
+  compareAtPrice?: number;
+  inventory: number;
 }
 
 export interface ProductImage {
@@ -36,6 +52,17 @@ export type ProductCategory =
   | 'home-decor'
   | 'combos';
 
+export interface Category {
+  _id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image: string;
+  order?: number;
+  metaTitle?: string;
+  metaDescription?: string;
+}
+
 // ==========================================
 // Cart Types
 // ==========================================
@@ -48,6 +75,8 @@ export interface CartItem {
   image: string;
   slug: string;
   maxQuantity: number;
+  size?: string;
+  variantSku?: string;
 }
 
 export interface Cart {

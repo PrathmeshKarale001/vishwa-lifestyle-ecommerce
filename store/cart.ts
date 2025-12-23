@@ -11,8 +11,8 @@ const TAX_RATE = 0.18; // 18% GST
 interface CartState extends Cart {
   // Actions
   addItem: (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (id: string) => void;
+  updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   applyPromoCode: (code: string) => Promise<boolean>;
   removePromoCode: () => void;
@@ -56,7 +56,7 @@ export const useCartStore = create<CartState>()(
       // Add item to cart
       addItem: (item) => {
         set((state) => {
-          const existingItem = state.items.find((i) => i.productId === item.productId);
+          const existingItem = state.items.find((i) => i.id === item.id);
 
           let newItems: CartItem[];
           const quantityToAdd = item.quantity || 1;
@@ -67,10 +67,10 @@ export const useCartStore = create<CartState>()(
               item.maxQuantity
             );
             newItems = state.items.map((i) =>
-              i.productId === item.productId ? { ...i, quantity: newQuantity } : i
+              i.id === item.id ? { ...i, quantity: newQuantity } : i
             );
           } else {
-            newItems = [...state.items, { ...item, quantity: quantityToAdd }];
+            newItems = [...state.items, { ...item, quantity: quantityToAdd } as CartItem];
           }
 
           // Track analytics
@@ -87,10 +87,10 @@ export const useCartStore = create<CartState>()(
       },
 
       // Remove item from cart
-      removeItem: (productId) => {
+      removeItem: (id) => {
         set((state) => {
-          const removedItem = state.items.find((i) => i.productId === productId);
-          const newItems = state.items.filter((i) => i.productId !== productId);
+          const removedItem = state.items.find((i) => i.id === id);
+          const newItems = state.items.filter((i) => i.id !== id);
 
           // Track analytics
           if (removedItem) {
@@ -108,11 +108,11 @@ export const useCartStore = create<CartState>()(
       },
 
       // Update item quantity
-      updateQuantity: (productId, quantity) => {
+      updateQuantity: (id, quantity) => {
         set((state) => {
           if (quantity <= 0) {
-            const removedItem = state.items.find((i) => i.productId === productId);
-            const newItems = state.items.filter((i) => i.productId !== productId);
+            const removedItem = state.items.find((i) => i.id === id);
+            const newItems = state.items.filter((i) => i.id !== id);
 
             // Track analytics
             if (removedItem) {
@@ -129,7 +129,7 @@ export const useCartStore = create<CartState>()(
           }
 
           const newItems = state.items.map((i) =>
-            i.productId === productId
+            i.id === id
               ? { ...i, quantity: Math.min(quantity, i.maxQuantity) }
               : i
           );

@@ -60,7 +60,10 @@ export const queries = {
     reviewCount,
     weight,
     dimensions,
-    hsnCode
+    hsnCode,
+    variants,
+    metaTitle,
+    metaDescription
   }`,
 
 
@@ -117,7 +120,9 @@ export const queries = {
     name,
     "slug": slug.current,
     description,
-    "image": image.asset->url
+    "image": image.asset->url,
+    metaTitle,
+    metaDescription
   }`,
 
   // Get blog/story posts
@@ -214,7 +219,8 @@ export async function getFilteredProducts({
           inventory,
           tags,
           isNew,
-          isBestSeller
+          isBestSeller,
+          variants
 } `;
 
 

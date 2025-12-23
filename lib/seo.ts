@@ -94,7 +94,35 @@ export function generateProductSchema(product: {
   brand?: string;
   rating?: number;
   reviewCount?: number;
+  variants?: { size: string; price: number; sku: string; inventory?: number }[];
 }) {
+  const hasVariants = product.variants && product.variants.length > 0;
+
+  const offers = hasVariants
+    ? product.variants!.map((variant) => ({
+      '@type': 'Offer',
+      price: variant.price,
+      priceCurrency: product.currency || 'INR',
+      availability: `https://schema.org/${(variant.inventory ?? 1) > 0 ? 'InStock' : 'OutOfStock'}`,
+      sku: variant.sku,
+      name: `${product.name} - ${variant.size}`,
+      url: `${siteConfig.url}/product/${product.sku}`, // Assuming SKU is part of slug or similar
+      seller: {
+        '@type': 'Organization',
+        name: siteConfig.name,
+      },
+    }))
+    : {
+      '@type': 'Offer',
+      price: product.price,
+      priceCurrency: product.currency || 'INR',
+      availability: `https://schema.org/${product.availability || 'InStock'}`,
+      seller: {
+        '@type': 'Organization',
+        name: siteConfig.name,
+      },
+    };
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -106,16 +134,7 @@ export function generateProductSchema(product: {
       '@type': 'Brand',
       name: product.brand || siteConfig.name,
     },
-    offers: {
-      '@type': 'Offer',
-      price: product.price,
-      priceCurrency: product.currency || 'INR',
-      availability: `https://schema.org/${product.availability || 'InStock'}`,
-      seller: {
-        '@type': 'Organization',
-        name: siteConfig.name,
-      },
-    },
+    offers: hasVariants ? offers : [offers],
     ...(product.rating && product.reviewCount
       ? {
         aggregateRating: {

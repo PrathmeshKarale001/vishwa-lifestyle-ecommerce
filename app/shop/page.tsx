@@ -8,11 +8,30 @@ import SearchBar from "@/components/SearchBar";
 import CategorySidebar from "@/components/CategorySidebar";
 import { getFilteredProducts, getCategories } from "@/lib/sanity";
 import { generateMetadata as generateSeoMetadata } from "@/lib/seo";
+import { Category } from "@/types";
 
-export const metadata: Metadata = generateSeoMetadata({
-  title: "Shop All Products",
-  description: "Browse our collection of Agnihotra essentials, Vedic lifestyle products, and sacred home decor.",
-});
+export async function generateMetadata({ searchParams }: ShopPageProps): Promise<Metadata> {
+  const resolvedParams = await searchParams;
+  const { category } = resolvedParams;
+
+  if (category) {
+    const categories = await getCategories();
+    const currentCategory = categories.find((c: Category) => c.slug === category);
+    if (currentCategory) {
+      return generateSeoMetadata({
+        title: currentCategory.metaTitle || `${currentCategory.name} | Vishwa Lifestyle`,
+        description: currentCategory.metaDescription || currentCategory.description,
+        image: currentCategory.image,
+        canonical: `/shop?category=${category}`,
+      });
+    }
+  }
+
+  return generateSeoMetadata({
+    title: "Shop All Products",
+    description: "Browse our collection of Agnihotra essentials, Vedic lifestyle products, and sacred home decor.",
+  });
+}
 
 interface ShopPageProps {
   searchParams: Promise<{

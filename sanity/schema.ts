@@ -234,6 +234,71 @@ const product: SchemaTypeDefinition = {
       title: 'Review Count',
       type: 'number',
     },
+    {
+      name: 'variants',
+      title: 'Product Variants (Sizes)',
+      type: 'array',
+      description: 'Add different sizes/variants for this product. If empty, the top-level price and SKU will be used.',
+      of: [
+        {
+          type: 'object',
+          name: 'variant',
+          fields: [
+            {
+              name: 'size',
+              title: 'Size',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+              options: {
+                list: [
+                  { title: 'Small (S)', value: 'S' },
+                  { title: 'Medium (M)', value: 'M' },
+                  { title: 'Large (L)', value: 'L' },
+                  { title: 'Extra Large (XL)', value: 'XL' },
+                  { title: 'Size 37', value: '37' },
+                  { title: 'Size 38', value: '38' },
+                  { title: 'Size 39', value: '39' },
+                  { title: 'Size 40', value: '40' },
+                  { title: 'Size 41', value: '41' },
+                ]
+              }
+            },
+            { name: 'sku', title: 'SKU', type: 'string', validation: (Rule) => Rule.required() },
+            { name: 'price', title: 'Price', type: 'number', validation: (Rule) => Rule.required().positive() },
+            { name: 'compareAtPrice', title: 'Compare at Price', type: 'number' },
+            { name: 'inventory', title: 'Inventory', type: 'number', validation: (Rule) => Rule.min(0) },
+          ],
+          preview: {
+            select: {
+              title: 'size',
+              subtitle: 'sku',
+              price: 'price',
+            },
+            prepare({ title, subtitle, price }) {
+              return {
+                title: `Size: ${title}`,
+                subtitle: `${subtitle} | ₹${price}`,
+              };
+            },
+          },
+        },
+      ],
+    },
+    {
+      name: 'metaTitle',
+      title: 'Meta Title (SEO)',
+      type: 'string',
+      description: 'Highly recommended for SEO. Keep under 60 characters.',
+      validation: (Rule) => Rule.max(60),
+    },
+    {
+      name: 'metaDescription',
+      title: 'Meta Description (SEO)',
+      type: 'text',
+      rows: 3,
+      description: 'Highly recommended for SEO. Keep under 160 characters.',
+      validation: (Rule) => Rule.max(160),
+    },
   ],
   preview: {
     select: {
@@ -293,6 +358,21 @@ const category: SchemaTypeDefinition = {
       name: 'order',
       title: 'Display Order',
       type: 'number',
+    },
+    {
+      name: 'metaTitle',
+      title: 'Meta Title (SEO)',
+      type: 'string',
+      description: 'Highly recommended for SEO. Keep under 60 characters.',
+      validation: (Rule) => Rule.max(60),
+    },
+    {
+      name: 'metaDescription',
+      title: 'Meta Description (SEO)',
+      type: 'text',
+      rows: 3,
+      description: 'Highly recommended for SEO. Keep under 160 characters.',
+      validation: (Rule) => Rule.max(160),
     },
   ],
 };

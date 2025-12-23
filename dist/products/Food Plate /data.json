@@ -1,0 +1,21 @@
+{
+  "name": "Traditional Brass Food & Pooja Plate",
+  "slug": "traditional-brass-food-pooja-plate",
+  "price": 550,
+  "compareAtPrice": 700,
+  "description": "A classic brass plate with intricate engraving that turns simple offerings into a beautiful Vishwa Wellness ritual. Perfect as a base thali for your Agnihotra kit, diya, flowers and samagri.",
+  "category": "ritual",
+  "inventory": 20,
+  "tags": ["ritual", "brass", "plate", "thali", "pooja", "offering"],
+  "features": [
+    "Round engraved brass plate",
+    "Raised rim for secure placement",
+    "Intricate traditional design"
+  ],
+  "ritualSignificance": "A sacred vessel that holds your offerings and ritual items, creating a beautiful foundation for your spiritual practice.",
+  "isNew": false,
+  "isBestSeller": false,
+  "rating": 4.6,
+  "reviewCount": 16
+}
+

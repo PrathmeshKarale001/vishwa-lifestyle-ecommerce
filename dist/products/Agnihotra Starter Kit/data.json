@@ -1,0 +1,25 @@
+{
+  "name": "Agnihotra Starter Kit",
+  "slug": "agnihotra-starter-kit",
+  "price": 2100,
+  "compareAtPrice": 2500,
+  "description": "Begin your journey into the sacred rhythm of Agnihotra. The Agnihotra Starter Kit is a complete initiation into a timeless ritual that purifies the home, balances the mind, and harmonizes the energy field. This kit helps you start the sunrise sunset practice effortlessly, giving your space a protective shield of peace and positivity.",
+  "category": "ritual",
+  "inventory": 15,
+  "tags": ["ritual", "essential", "agnihotra", "starter-kit", "best-seller"],
+  "features": [
+    "Pure Copper Pyramid Pot",
+    "Copper Stand",
+    "Copper Spoon",
+    "Organic Rice Grains",
+    "Desi Cow Dung Cakes",
+    "Desi Cow Ghee (Travel-friendly bottle)",
+    "Instruction Guide for sunrise & sunset rituals"
+  ],
+  "ritualSignificance": "Performing Agnihotra creates a healing field around your home, purifies indoor air, reduces stress, and uplifts emotional harmony. With this kit, you're not just performing a ritual, you're becoming part of a global movement of healing and consciousness.",
+  "isNew": false,
+  "isBestSeller": true,
+  "rating": 4.8,
+  "reviewCount": 24
+}
+

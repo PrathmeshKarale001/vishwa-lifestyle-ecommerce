@@ -1,0 +1,22 @@
+{
+  "name": "Ocean Mist Scented Candle",
+  "slug": "ocean-mist-scented-candle",
+  "price": 550,
+  "compareAtPrice": 650,
+  "description": "A calming Ocean mist scented candle that fills your space with a gentle, serene glow. Light it beside your Agnihotra setup to balance energies and add a peaceful Vishwa Wellness touch.",
+  "category": "lifestyle",
+  "inventory": 30,
+  "tags": ["lifestyle", "candle", "scented", "wellness", "aromatherapy"],
+  "features": [
+    "Hand-poured soy wax",
+    "Enamel-finish container",
+    "Cotton wick",
+    "Long burn time"
+  ],
+  "ritualSignificance": "Creates a serene atmosphere that complements your meditation and Agnihotra practice, promoting inner peace and tranquility.",
+  "isNew": true,
+  "isBestSeller": false,
+  "rating": 4.7,
+  "reviewCount": 15
+}
+

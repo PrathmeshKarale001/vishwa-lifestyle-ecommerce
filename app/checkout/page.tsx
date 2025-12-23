@@ -129,6 +129,8 @@ export default function CheckoutPage() {
             price: item.price,
             quantity: item.quantity,
             image: item.image,
+            size: item.size,
+            sku: item.variantSku || item.productId, // Use variantSku if available
           })),
           subtotal,
           discount,
@@ -622,7 +624,7 @@ export default function CheckoutPage() {
             {/* Items */}
             <div className="space-y-4 mb-6">
               {items.map((item) => (
-                <div key={item.productId} className="flex gap-4">
+                <div key={item.id} className="flex gap-4">
                   <div className="relative w-16 h-16 bg-white flex-shrink-0">
                     <img
                       src={item.image}
@@ -635,6 +637,11 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium">{item.name}</p>
+                    {item.size && (
+                      <p className="text-[10px] text-accent-gold uppercase tracking-widest font-medium">
+                        Size: {item.size}
+                      </p>
+                    )}
                     <p className="text-xs text-foreground-muted">Qty: {item.quantity}</p>
                   </div>
                   <span className="text-sm">{formatPrice(item.price * item.quantity)}</span>

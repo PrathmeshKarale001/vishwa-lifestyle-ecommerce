@@ -95,10 +95,26 @@ const product: SchemaTypeDefinition = {
       of: [{ type: 'string' }],
     },
     {
-      name: 'ritualSignificance',
-      title: 'Ritual Significance',
-      type: 'text',
-      description: 'Spiritual or ritual importance of the product',
+      name: 'additionalDetails',
+      title: 'Additional Description Entities (Marketing)',
+      type: 'array',
+      description: 'Add entities in "Main Point: Description" format. These will be displayed in a beautiful grid below the product.',
+      of: [
+        {
+          type: 'object',
+          name: 'detail',
+          fields: [
+            { name: 'title', title: 'Main Point', type: 'string', validation: (Rule) => Rule.required() },
+            { name: 'content', title: 'Description', type: 'text', rows: 3, validation: (Rule) => Rule.required() }
+          ],
+          preview: {
+            select: {
+              title: 'title',
+              subtitle: 'content'
+            }
+          }
+        }
+      ]
     },
     {
       name: 'subSegments',

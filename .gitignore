@@ -69,6 +69,7 @@ next-env.d.ts
 /Vishwa-Lifestyle Products
 
 # Local scripts
+/scripts
 /scripts/merge-categories.mjs
 /scripts/import-dec-23-data.mjs
 /scripts/import-variants-data.mjs

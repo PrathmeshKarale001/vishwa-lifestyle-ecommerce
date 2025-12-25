@@ -51,7 +51,7 @@ export const queries = {
     "images": images[].asset->url,
     "mainImage": images[0].asset->url,
     features,
-    ritualSignificance,
+    additionalDetails,
     inventory,
     tags,
     isNew,

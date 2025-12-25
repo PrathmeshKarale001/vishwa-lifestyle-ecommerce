@@ -45,7 +45,8 @@ interface Product {
   rating?: number;
   reviewCount?: number;
   inventory?: number;
-  ritualSignificance?: string;
+  unitType?: string;
+  packaging?: string;
   isNew?: boolean;
   isBestSeller?: boolean;
   sku?: string;
@@ -55,8 +56,10 @@ interface Product {
   dimensions?: string;
   weight?: string;
   shelfLife?: string;
-  unitType?: string;
-  packaging?: string;
+  additionalDetails?: {
+    title: string;
+    content: string;
+  }[];
 }
 
 interface Review {
@@ -357,7 +360,7 @@ export default function ProductPage() {
     sku: currentSku || product._id,
     rating: averageRating,
     reviewCount: reviews.length || product.reviewCount || 0,
-    variants: product.variants?.map(v => ({
+    variants: product.variants?.map((v: ProductVariant) => ({
       size: v.size,
       price: v.price,
       sku: v.sku,
@@ -469,7 +472,7 @@ export default function ProductPage() {
                 <div className="mb-8">
                   <h3 className="text-xs uppercase tracking-widest text-foreground-muted mb-4">Select Size</h3>
                   <div className="flex flex-wrap gap-3">
-                    {product.variants.map((v) => (
+                    {product.variants.map((v: ProductVariant) => (
                       <button
                         key={v.sku}
                         onClick={() => setSelectedVariant(v)}
@@ -618,18 +621,25 @@ export default function ProductPage() {
                   </ul>
                 </div>
               )}
-
-              {/* Ritual Significance */}
-              {product.ritualSignificance && (
-                <div className="bg-background-alt p-6 rounded">
-                  <h2 className="font-serif text-lg mb-3">Ritual Significance</h2>
-                  <p className="text-sm text-foreground-muted font-light leading-relaxed">
-                    {product.ritualSignificance}
-                  </p>
-                </div>
-              )}
             </div>
           </div>
+          {/* Additional Description - Grid of 4 */}
+          {product.additionalDetails && product.additionalDetails.length > 0 && (
+            <div className="mt-20 border-t border-gray-100 pt-16 mb-20">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                {product.additionalDetails.map((detail, index) => (
+                  <div key={index} className="space-y-4">
+                    <h3 className="font-serif text-xl text-foreground relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-px after:bg-accent-gold">
+                      {detail.title}
+                    </h3>
+                    <p className="text-sm text-foreground-muted font-light leading-relaxed">
+                      {detail.content}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Reviews Section */}

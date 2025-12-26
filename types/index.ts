@@ -263,24 +263,4 @@ export interface NewsletterFormData {
   name?: string;
 }
 
-// ==========================================
-// CCAvenue Types
-// ==========================================
-export interface CCAvenuePaymentDetails {
-  merchant_id: string;
-  order_id: string;
-  amount: number;
-  currency: string;
-  redirect_url: string;
-  cancel_url: string;
-  language: string;
-  billing_name?: string;
-  billing_address?: string;
-  billing_city?: string;
-  billing_state?: string;
-  billing_zip?: string;
-  billing_country?: string;
-  billing_tel?: string;
-  billing_email?: string;
-}
 

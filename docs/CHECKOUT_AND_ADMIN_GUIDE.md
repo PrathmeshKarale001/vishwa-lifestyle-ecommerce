@@ -44,11 +44,11 @@
 │     └── Order summary displayed                                             │
 │     └── Apply promo code (optional)                                         │
 │     └── Click "Pay Now"                                                     │
-│     └── CCAvenue modal opens                                                │
+│     └── Razorpay modal opens                                                │
 │     └── User completes payment                                              │
 │                                                                             │
 │  6. ORDER CONFIRMATION                                                      │
-│     └── CCAvenue sends success callback                                     │
+│     └── Razorpay sends success callback                                     │
 │     └── Order created in Supabase                                           │
 │     └── Order confirmation page shown                                       │
 │     └── Confirmation email sent                                             │
@@ -61,7 +61,7 @@
 
 ```
 ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
-│   Frontend   │    │  API Routes  │    │   CCAvenue   │    │   Supabase   │
+│   Frontend   │    │  API Routes  │    │   Razorpay   │    │   Supabase   │
 │  (Next.js)   │    │  (Next.js)   │    │   Gateway    │    │   Database   │
 └──────┬───────┘    └──────┬───────┘    └──────┬───────┘    └──────┬───────┘
        │                   │                   │                   │
@@ -74,7 +74,7 @@
        │                   │ 3. Order ID       │                   │
        │                   │<──────────────────│                   │
        │                   │                   │                   │
-       │ 4. CCAvenue Modal │                   │                   │
+       │ 4. Razorpay Modal │                   │                   │
        │<──────────────────│                   │                   │
        │                   │                   │                   │
        │ 5. Payment        │                   │                   │
@@ -309,10 +309,9 @@ NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
 NEXT_PUBLIC_SANITY_DATASET=production
 SANITY_API_TOKEN=skxxx
 
-# CCAvenue (LIVE keys - not test!)
-NEXT_PUBLIC_CCAVENUE_MERCHANT_ID=xxx
-CCAVENUE_ACCESS_CODE=xxx
-CCAVENUE_WORKING_KEY=xxx
+# Razorpay (LIVE keys - not test!)
+NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_live_xxxxxxxxxxxxxx
+RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxxxxxxxxxx
 
 # Google OAuth
 GOOGLE_CLIENT_ID=xxx.apps.googleusercontent.com
@@ -322,17 +321,13 @@ GOOGLE_CLIENT_SECRET=xxx
 NEXT_PUBLIC_APP_URL=https://vishwalifestyle.com
 ```
 
-####- **CCAvenue Config**: `NEXT_PUBLIC_CCAVENUE_MERCHANT_ID`, `CCAVENUE_ACCESS_CODE`, `CCAVENUE_WORKING_KEY`
-- **Keys**: Obtain these from the CCAvenue Dashboard -> Settings -> API Keys.
-- **Whitelisting**: Ensure your domain is whitelisted in CCAvenue settings.
+#### Razorpay Setup
 
-#### CCAvenue Setup
-
-1. Login to [CCAvenue Dashboard](https://dashboard.ccavenue.com)
+1. Login to [Razorpay Dashboard](https://dashboard.razorpay.com)
 2. Complete KYC verification
 3. Get **LIVE** API keys (not test)
 4. Set up webhook:
-   - URL: `https://vishwalifestyle.com/api/webhook/ccavenue`
+   - URL: `https://vishwalifestyle.com/api/webhook/razorpay`
    - Events: `payment.captured`, `payment.failed`
 
 #### Supabase Production
@@ -366,7 +361,7 @@ git push origin main
 
 # 3. Update URLs
 # - Supabase: Add production URL to allowed redirects
-# - CCAvenue: Add production URL to webhooks
+# - Razorpay: Add production URL to webhooks
 # - Google OAuth: Add production callback URL
 ```
 
@@ -426,7 +421,7 @@ If you want a custom admin panel instead of using Supabase directly, here's what
 | Issue | Contact |
 |-------|---------|
 | Website bugs | Developer |
-| Payment issues | CCAvenue Support |
+| Payment issues | Razorpay Support |
 | Database issues | Supabase Support |
 | Product images | Sanity Support |
 | Domain/SSL | Vercel Support |

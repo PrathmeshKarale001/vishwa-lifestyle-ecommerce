@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-// import { createRazorpayOrder } from '@/lib/razorpay'; // Disabled for migration
+import { createRazorpayOrder } from '@/lib/razorpay';
 import { createOrder, generateOrderNumber } from '@/lib/supabase';
 import { rateLimit, getClientIP } from '@/lib/rate-limit';
 import { sanitizeEmail, sanitizeText, sanitizePhone } from '@/lib/sanitize';
@@ -120,7 +120,6 @@ export async function POST(request: NextRequest) {
     const orderNumber = generateOrderNumber();
 
     // Create Razorpay order
-    const { createRazorpayOrder } = await import('@/lib/razorpay');
     const razorpayResult = await createRazorpayOrder({
       amount: total,
       receipt: orderNumber,

@@ -45,7 +45,7 @@ export default async function ShopGrid() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 sm:mb-12 gap-4">
           <div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif text-foreground mb-2">
-              Featured Other Essentials
+              Featured Products
             </h2>
             <p className="text-sm sm:text-base text-foreground-muted font-light">
               Bring Harmony Home.

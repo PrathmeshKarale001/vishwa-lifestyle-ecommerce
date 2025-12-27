@@ -83,8 +83,8 @@ export const queries = {
     isBestSeller
   }`,
 
-  // Get featured products (prioritize ritual category, then best sellers/new)
-  featuredProducts: `*[_type == "product" && category->slug.current == "ritual"] {
+  // Get featured products (those tagged with 'featured' OR best sellers/new if none tagged)
+  featuredProducts: `*[_type == "product"] {
     _id,
     name,
     "slug": slug.current,
@@ -97,7 +97,15 @@ export const queries = {
     isNew,
     isBestSeller,
     _createdAt
-  } | order(isBestSeller desc, isNew desc, _createdAt desc)[0...8]`,
+  } | order(
+    select(
+      "featured" in tags[] || "Featured" in tags[] || lower("featured") in tags[] => 0,
+      isBestSeller == true => 1,
+      isNew == true => 2,
+      3
+    ),
+    _createdAt desc
+  )[0...12]`,
 
   // Search products
   searchProducts: `*[_type == "product" && (name match $query || tags[] match $query || description match $query)]

@@ -93,11 +93,14 @@ export default function ProductPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        console.log(`Product Page: Fetching data for slug: ${slug}`);
         const data = await getProductBySlug(slug);
         if (!data) {
+          console.warn(`Product Page: No data found for slug: ${slug}, redirecting to /shop`);
           router.push("/shop");
           return;
         }
+        console.log(`Product Page: Successfully fetched data for: ${data.name}`);
         setProduct(data);
         setSelectedImage(0);
         if (data.variants && data.variants.length > 0) {

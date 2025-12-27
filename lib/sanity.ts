@@ -245,7 +245,10 @@ export async function getFilteredProducts({
   return result;
 }
 export async function getProductBySlug(slug: string) {
-  return await sanityClient.fetch(queries.productBySlug, { slug } as Record<string, unknown>);
+  console.log(`Fetching product by slug: ${slug}`);
+  const data = await sanityClient.fetch(queries.productBySlug, { slug } as Record<string, unknown>, { cache: 'no-store' });
+  console.log(`Product data ${data ? 'found' : 'NOT found'} for slug: ${slug}`);
+  return data;
 }
 
 export async function getProductsByCategory(category: string) {

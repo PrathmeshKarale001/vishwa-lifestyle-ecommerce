@@ -6,11 +6,3 @@ export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'bx7dajcl'
 
 export const useCdn = process.env.NODE_ENV === 'production'
-
-function assertValue<T>(v: T | undefined, errorMessage: string): T {
-  if (v === undefined) {
-    throw new Error(errorMessage)
-  }
-
-  return v
-}

@@ -11,13 +11,9 @@ const BLUR_DATA_URL = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA
  * @returns A base64 blur placeholder
  */
 export function getBlurPlaceholder(imageUrl?: string): string {
-  if (!imageUrl) return BLUR_DATA_URL;
-
-  // If it's a Sanity image, return a low-quality, highly blurred URL
-  if (imageUrl.includes("cdn.sanity.io")) {
-    return getLowQualityImageUrl(imageUrl, 10);
-  }
-
+  // Always return a valid base64 placeholder.
+  // Next.js Image component placeholder="blur" REQUIRES a base64 Data URL.
+  // Remote URLs will cause the image to fail rendering in production.
   return BLUR_DATA_URL;
 }
 

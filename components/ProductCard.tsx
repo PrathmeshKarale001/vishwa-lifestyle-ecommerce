@@ -138,7 +138,7 @@ export default function ProductCard({
               alt={name}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-              className={`object-cover transition-transform duration-1000 ease-out group-hover:scale-110 ${isOutOfStock ? "opacity-50 grayscale" : ""
+              className={`object-cover transition-all duration-1000 ease-out group-hover:scale-110 ${isOutOfStock ? "opacity-50 grayscale" : "opacity-100"
                 }`}
               loading="lazy"
               placeholder="blur"

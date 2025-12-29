@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ZoomIn, ChevronLeft, ChevronRight } from "lucide-react";
@@ -24,6 +24,7 @@ export default function ImageZoom({
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isLightboxZoomed, setIsLightboxZoomed] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
   const [lightboxZoomPosition, setLightboxZoomPosition] = useState({ x: 50, y: 50 });
   const imageRef = useRef<HTMLDivElement>(null);
@@ -78,6 +79,11 @@ export default function ImageZoom({
     }
   }, [handlePrevious, handleNext]);
 
+  // Reset image loaded state when index changes
+  useEffect(() => {
+    setIsImageLoaded(false);
+  }, [selectedIndex]);
+
   return (
     <>
       {/* Main Image with Hover Zoom */}
@@ -105,10 +111,11 @@ export default function ImageZoom({
               alt={alt}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover transition-opacity duration-300"
+              className={`object-cover transition-opacity duration-500 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
               priority
               placeholder="blur"
               blurDataURL={lqips?.[selectedIndex] || getBlurPlaceholder(currentImage)}
+              onLoad={() => setIsImageLoaded(true)}
             />
           </div>
 

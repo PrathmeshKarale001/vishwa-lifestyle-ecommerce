@@ -250,7 +250,7 @@ async function transformProduct(product, uploadedImages) {
     name: product.data.name,
     slug: {
       _type: 'slug',
-      current: product.data.slug || generateSlug(product.data.name),
+      current: generateSlug(product.data.slug || product.data.name),
     },
     price: product.data.price,
     description: product.data.description || '',

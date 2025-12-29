@@ -26,7 +26,10 @@ interface Product {
   description: string;
   category: string;
   images?: string[];
+  imageLqips?: string[];
   mainImage?: string;
+  mainImageLqip?: string;
+  lqip?: string;
   inventory?: number;
   rating?: number;
   reviewCount?: number;
@@ -113,11 +116,11 @@ export default function ProductQuickView({
     }).format(amount);
   };
 
-  const productImages = product?.images?.filter(Boolean) || 
-                       (product?.mainImage ? [product.mainImage] : []) || 
-                       [];
-  const displayImages = productImages.length > 0 
-    ? productImages 
+  const productImages = product?.images?.filter(Boolean) ||
+    (product?.mainImage ? [product.mainImage] : []) ||
+    [];
+  const displayImages = productImages.length > 0
+    ? productImages
     : ["https://images.unsplash.com/photo-1602825266970-721285fc6e43?q=80&w=1200&auto=format&fit=crop"];
   const currentImage = displayImages[selectedImage] || displayImages[0];
   const isOutOfStock = product?.inventory !== undefined && product.inventory <= 0;
@@ -173,7 +176,7 @@ export default function ProductQuickView({
                       className="object-cover"
                       priority
                       placeholder="blur"
-                      blurDataURL={getBlurPlaceholder(currentImage)}
+                      blurDataURL={product.imageLqips?.[selectedImage] || product.lqip || product.mainImageLqip || getBlurPlaceholder(currentImage)}
                     />
                   </div>
                   {displayImages.length > 1 && (
@@ -182,11 +185,10 @@ export default function ProductQuickView({
                         <button
                           key={idx}
                           onClick={() => setSelectedImage(idx)}
-                          className={`aspect-square rounded overflow-hidden border-2 transition-colors ${
-                            selectedImage === idx
-                              ? "border-accent-gold"
-                              : "border-transparent hover:border-gray-300"
-                          }`}
+                          className={`aspect-square rounded overflow-hidden border-2 transition-colors ${selectedImage === idx
+                            ? "border-accent-gold"
+                            : "border-transparent hover:border-gray-300"
+                            }`}
                         >
                           <div className="relative w-full h-full">
                             <Image
@@ -196,7 +198,7 @@ export default function ProductQuickView({
                               sizes="100px"
                               className="object-cover"
                               placeholder="blur"
-                              blurDataURL={getBlurPlaceholder(img)}
+                              blurDataURL={product.imageLqips?.[idx] || getBlurPlaceholder(img)}
                             />
                           </div>
                         </button>
@@ -268,20 +270,18 @@ export default function ProductQuickView({
                     <button
                       onClick={handleAddToCart}
                       disabled={isOutOfStock}
-                      className={`flex-1 flex items-center justify-center gap-2 bg-foreground text-white py-3 px-6 uppercase tracking-widest text-sm hover:bg-accent-gold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-                        isOutOfStock ? "" : ""
-                      }`}
+                      className={`flex-1 flex items-center justify-center gap-2 bg-foreground text-white py-3 px-6 uppercase tracking-widest text-sm hover:bg-accent-gold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${isOutOfStock ? "" : ""
+                        }`}
                     >
                       <ShoppingBag size={16} />
                       {isOutOfStock ? "Out of Stock" : "Add to Cart"}
                     </button>
                     <button
                       onClick={handleToggleWishlist}
-                      className={`p-3 border-2 transition-colors ${
-                        isWishlisted
-                          ? "border-red-500 text-red-500"
-                          : "border-gray-200 text-foreground-muted hover:border-red-500 hover:text-red-500"
-                      }`}
+                      className={`p-3 border-2 transition-colors ${isWishlisted
+                        ? "border-red-500 text-red-500"
+                        : "border-gray-200 text-foreground-muted hover:border-red-500 hover:text-red-500"
+                        }`}
                       aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
                     >
                       <Heart size={20} fill={isWishlisted ? "currentColor" : "none"} />

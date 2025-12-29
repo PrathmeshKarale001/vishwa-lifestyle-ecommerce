@@ -15,6 +15,7 @@ interface Product {
     isNew?: boolean;
     isBestSeller?: boolean;
     tags?: string[];
+    lqip?: string;
 }
 
 import Link from "next/link";
@@ -111,6 +112,7 @@ export default function ProductGrid({
                                 typeof product.category === "string" ? product.category : ""
                             )}
                             inventory={product.inventory}
+                            lqip={product.lqip}
                         />
                     );
                 })}

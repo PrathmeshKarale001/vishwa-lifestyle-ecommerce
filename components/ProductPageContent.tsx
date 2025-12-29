@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Star, Minus, Plus, ShoppingBag, Heart, Share2, Truck, Shield, RotateCcw, AlertCircle, Copy, Check } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
@@ -30,8 +31,11 @@ interface Product {
     description: string;
     features?: string[];
     images?: string[];
+    imageLqips?: string[];
     mainImage?: string;
+    mainImageLqip?: string;
     image?: string;
+    lqip?: string;
     rating?: number;
     reviewCount?: number;
     inventory?: number;
@@ -245,17 +249,23 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                         alt={product.name}
                         selectedIndex={selectedImage}
                         onIndexChange={setSelectedImage}
+                        lqips={product.imageLqips}
                     />
 
-                    {/* Product Info */}
-                    <div className="w-full lg:w-1/2 lg:pl-8">
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="w-full lg:w-1/2 lg:pl-8"
+                    >
                         {/* Category & SKU */}
                         <div className="flex items-center gap-3 mb-2">
-                            <span className="text-accent-gold text-xs tracking-[0.2em] uppercase font-medium">
+                            <span className="text-accent-gold text-[10px] sm:text-xs tracking-[0.2em] uppercase font-medium">
                                 {product.category}
                             </span>
                             {currentSku && (
-                                <span className="text-xs text-foreground-muted bg-gray-100 px-2 py-0.5 rounded">
+                                <span className="text-[10px] sm:text-xs text-foreground-muted bg-gray-100 px-2 py-0.5 rounded">
                                     SKU: {currentSku}
                                 </span>
                             )}
@@ -451,15 +461,18 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                         {/* Features */}
                         {product.features && product.features.length > 0 && (
                             <div className="mb-8">
-                                <h2 className="font-serif text-lg mb-4">What's Included</h2>
-                                <ul className="list-disc list-inside text-sm text-foreground-muted space-y-2 font-light">
+                                <h2 className="font-serif text-lg mb-4 text-foreground/90">What's Included</h2>
+                                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm text-foreground-muted font-light">
                                     {product.features.map((feature: string, idx: number) => (
-                                        <li key={idx}>{feature}</li>
+                                        <li key={idx} className="flex items-start gap-2">
+                                            <span className="text-accent-gold mt-1">•</span>
+                                            {feature}
+                                        </li>
                                     ))}
                                 </ul>
                             </div>
                         )}
-                    </div>
+                    </motion.div>
                 </div>
                 {/* Additional Description - Grid of 4 */}
                 {product.additionalDetails && product.additionalDetails.length > 0 && (
@@ -555,6 +568,7 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                                     category={getCategoryLabel(relatedProduct.category || "")}
                                     tag={tag}
                                     inventory={relatedProduct.inventory}
+                                    lqip={relatedProduct.lqip}
                                 />
                             );
                         })}

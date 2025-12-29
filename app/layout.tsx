@@ -9,6 +9,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import Providers from "@/components/Providers";
 import { generateOrganizationSchema } from "@/lib/seo";
+import ConditionalWrapper from "@/components/ConditionalWrapper";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -60,8 +61,6 @@ const organizationSchema = generateOrganizationSchema();
 
 import Footer from "@/components/Footer";
 
-// ... existing imports
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -78,15 +77,9 @@ export default function RootLayout({
       </head>
       <body className={`${playfair.variable} ${lato.variable}`}>
         <Providers>
-          <SkipLink />
-          <Header />
-          <CartDrawer />
-          <ScrollToTop />
-          <MobileBottomNav />
-          <div id="main-content">
+          <ConditionalWrapper>
             {children}
-          </div>
-          <Footer />
+          </ConditionalWrapper>
         </Providers>
       </body>
     </html>

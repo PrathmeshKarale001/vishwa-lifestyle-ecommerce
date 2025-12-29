@@ -11,6 +11,7 @@ interface ImageZoomProps {
   alt: string;
   selectedIndex: number;
   onIndexChange: (index: number) => void;
+  lqips?: string[];
 }
 
 export default function ImageZoom({
@@ -18,11 +19,15 @@ export default function ImageZoom({
   alt,
   selectedIndex,
   onIndexChange,
+  lqips,
 }: ImageZoomProps) {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
+  const [isLightboxZoomed, setIsLightboxZoomed] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
+  const [lightboxZoomPosition, setLightboxZoomPosition] = useState({ x: 50, y: 50 });
   const imageRef = useRef<HTMLDivElement>(null);
+  const lightboxImageRef = useRef<HTMLDivElement>(null);
 
   // Fallback placeholder if no images
   const placeholderImage = "https://images.unsplash.com/photo-1602825266970-721285fc6e43?q=80&w=1200&auto=format&fit=crop";
@@ -38,6 +43,16 @@ export default function ImageZoom({
 
     setZoomPosition({ x, y });
   }, []);
+
+  const handleLightboxMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!lightboxImageRef.current || !isLightboxZoomed) return;
+
+    const rect = lightboxImageRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    setLightboxZoomPosition({ x, y });
+  }, [isLightboxZoomed]);
 
   const handlePrevious = useCallback(() => {
     const newIndex = selectedIndex === 0 ? displayImages.length - 1 : selectedIndex - 1;
@@ -93,19 +108,20 @@ export default function ImageZoom({
               className="object-cover transition-opacity duration-300"
               priority
               placeholder="blur"
-              blurDataURL={getBlurPlaceholder(currentImage)}
+              blurDataURL={lqips?.[selectedIndex] || getBlurPlaceholder(currentImage)}
             />
           </div>
 
           {/* Zoomed Image (visible on hover, desktop only) */}
           <div
-            className={`absolute inset-0 hidden lg:block transition-opacity duration-200 ${isZoomed ? "opacity-100" : "opacity-0"
+            className={`absolute inset-0 hidden lg:block transition-opacity duration-300 ${isZoomed ? "opacity-100" : "opacity-0"
               }`}
             style={{
-              backgroundImage: `url(${currentImage})`,
+              backgroundImage: `url("${currentImage}")`,
               backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
-              backgroundSize: "200%",
+              backgroundSize: "250%",
               backgroundRepeat: "no-repeat",
+              pointerEvents: "none",
             }}
           />
 
@@ -134,6 +150,8 @@ export default function ImageZoom({
                   sizes="(max-width: 768px) 25vw, 10vw"
                   className="object-cover"
                   loading="lazy"
+                  placeholder="blur"
+                  blurDataURL={lqips?.[idx] || getBlurPlaceholder(img)}
                 />
               </button>
             ))}
@@ -197,19 +215,35 @@ export default function ImageZoom({
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="relative w-full max-w-4xl h-[80vh] mx-4"
+              className="relative w-full max-w-5xl h-[70vh] mx-4 overflow-hidden flex items-center justify-center bg-transparent"
               onClick={(e) => e.stopPropagation()}
             >
-              <Image
-                src={currentImage}
-                alt={alt}
-                fill
-                sizes="100vw"
-                className="object-contain"
-                priority
-                placeholder="blur"
-                blurDataURL={getBlurPlaceholder(currentImage)}
-              />
+              <div
+                ref={lightboxImageRef}
+                className={`relative w-full h-full transition-transform duration-300 ease-out cursor-zoom-in ${isLightboxZoomed ? 'scale-150 cursor-zoom-out' : 'scale-100'}`}
+                onMouseMove={handleLightboxMouseMove}
+                onClick={() => setIsLightboxZoomed(!isLightboxZoomed)}
+                style={isLightboxZoomed ? {
+                  transformOrigin: `${lightboxZoomPosition.x}% ${lightboxZoomPosition.y}%`
+                } : {}}
+              >
+                <Image
+                  src={currentImage}
+                  alt={alt}
+                  fill
+                  sizes="100vw"
+                  className="object-contain"
+                  priority
+                  placeholder="blur"
+                  blurDataURL={lqips?.[selectedIndex] || getBlurPlaceholder(currentImage)}
+                />
+              </div>
+
+              {!isLightboxZoomed && (
+                <div className="absolute bottom-4 right-4 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white/70 text-xs uppercase tracking-widest pointer-events-none">
+                  Click to Zoom
+                </div>
+              )}
             </motion.div>
 
             {/* Image Counter */}

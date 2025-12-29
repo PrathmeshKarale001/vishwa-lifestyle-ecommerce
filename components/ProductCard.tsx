@@ -21,6 +21,7 @@ interface ProductCardProps {
   category?: string;
   tag?: string;
   inventory?: number;
+  lqip?: string;
 }
 
 export default function ProductCard({
@@ -33,6 +34,7 @@ export default function ProductCard({
   category,
   tag,
   inventory = 10,
+  lqip,
 }: ProductCardProps) {
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
@@ -140,7 +142,7 @@ export default function ProductCard({
                 }`}
               loading="lazy"
               placeholder="blur"
-              blurDataURL={image && image.trim() ? getBlurPlaceholder(image) : getBlurPlaceholder("/placeholder-product.svg")}
+              blurDataURL={lqip || (image && image.trim() ? getBlurPlaceholder(image) : getBlurPlaceholder("/placeholder-product.svg"))}
               onError={(e) => {
                 // Fallback to placeholder if image fails to load
                 const target = e.target as HTMLImageElement;

@@ -31,19 +31,19 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files
-# .env*
-# .env.local
-# .env.development.local
-# .env.test.local
-# .env.production.local
+.env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # agent
-.agent/
-.gemini/
-brain/
-walkthrough.md
-task.md
-implementation_plan.md
+# .agent/
+# .gemini/
+# brain/
+# walkthrough.md
+# task.md
+# implementation_plan.md
 
 # vercel
 .vercel
@@ -69,9 +69,9 @@ next-env.d.ts
 /Vishwa-Lifestyle Products
 
 # Local scripts
-/scripts
-/scripts/merge-categories.mjs
-/scripts/import-dec-23-data.mjs
-/scripts/import-variants-data.mjs
-/scripts/get-existing-skus.js
-/scripts/inspect-headers.js
+# /scripts
+# /scripts/merge-categories.mjs
+# /scripts/import-dec-23-data.mjs
+# /scripts/import-variants-data.mjs
+# /scripts/get-existing-skus.js
+# /scripts/inspect-headers.js

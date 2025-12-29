@@ -29,6 +29,7 @@ export const queries = {
     description,
     "category": category->slug.current,
     "image": images[0].asset->url,
+    "lqip": images[0].asset->metadata.lqip,
     inventory,
     tags,
     isNew,
@@ -36,7 +37,7 @@ export const queries = {
   }`,
 
   // Get single product by slug
-  productBySlug: `*[_type == "product" && slug.current == $slug][0] {
+  productBySlug: `*[_type == "product" && (slug.current == $slug || slug.current == $altSlug || lower(name) == lower($altSlug))][0] {
     _id,
     name,
     "slug": slug.current,
@@ -49,7 +50,9 @@ export const queries = {
     subCategory,
     brand,
     "images": images[].asset->url,
+    "imageLqips": images[].asset->metadata.lqip,
     "mainImage": images[0].asset->url,
+    "mainImageLqip": images[0].asset->metadata.lqip,
     features,
     additionalDetails,
     inventory,
@@ -94,6 +97,7 @@ export const queries = {
     price,
     compareAtPrice,
     "image": images[0].asset->url,
+    "lqip": images[0].asset->metadata.lqip,
     "category": category->slug.current,
     inventory,
     tags,
@@ -121,6 +125,7 @@ export const queries = {
     price,
     compareAtPrice,
     "image": images[0].asset->url,
+    "lqip": images[0].asset->metadata.lqip,
     "category": category->slug.current
 
   }`,
@@ -231,6 +236,7 @@ export async function getFilteredProducts({
           tags,
           isNew,
           isBestSeller,
+          "lqip": images[0].asset->metadata.lqip,
           variants
 } `;
 
@@ -249,8 +255,13 @@ export async function getFilteredProducts({
 }
 export async function getProductBySlug(slug: string) {
   console.log(`Fetching product by slug: ${slug}`);
-  const data = await sanityClient.fetch(queries.productBySlug, { slug } as Record<string, unknown>, { cache: 'no-store' });
-  console.log(`Product data ${data ? 'found' : 'NOT found'} for slug: ${slug}`);
+  const altSlug = slug.replace(/-/g, ' ');
+  const data = await sanityClient.fetch(
+    queries.productBySlug,
+    { slug, altSlug } as Record<string, unknown>,
+    { cache: 'no-store' }
+  );
+  console.log(`Product data ${data ? 'found' : 'NOT found'} for slug: ${slug} (alt: ${altSlug})`);
   return data;
 }
 

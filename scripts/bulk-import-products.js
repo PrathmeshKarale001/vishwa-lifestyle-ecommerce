@@ -99,7 +99,7 @@ function transformProduct(product) {
     name: product.name,
     slug: {
       _type: 'slug',
-      current: product.slug || generateSlug(product.name),
+      current: generateSlug(product.slug || product.name),
     },
     price: product.price,
     description: product.description || '',

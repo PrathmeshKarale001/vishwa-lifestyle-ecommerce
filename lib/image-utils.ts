@@ -12,10 +12,12 @@ const BLUR_DATA_URL = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA
  */
 export function getBlurPlaceholder(imageUrl?: string): string {
   if (!imageUrl) return BLUR_DATA_URL;
-  
-  // For Sanity images, we can use a low-quality version as placeholder
-  // This is a simple approach - in production, you might want to generate
-  // actual blur placeholders using Sanity's image API
+
+  // If it's a Sanity image, return a low-quality, highly blurred URL
+  if (imageUrl.includes("cdn.sanity.io")) {
+    return getLowQualityImageUrl(imageUrl, 10);
+  }
+
   return BLUR_DATA_URL;
 }
 
@@ -27,7 +29,7 @@ export function getBlurPlaceholder(imageUrl?: string): string {
  */
 export function getLowQualityImageUrl(imageUrl: string, width: number = 20): string {
   if (!imageUrl) return "";
-  
+
   // If it's a Sanity CDN URL, add quality and blur parameters
   if (imageUrl.includes("cdn.sanity.io")) {
     const url = new URL(imageUrl);
@@ -36,7 +38,7 @@ export function getLowQualityImageUrl(imageUrl: string, width: number = 20): str
     url.searchParams.set("blur", "50"); // Blur effect
     return url.toString();
   }
-  
+
   return imageUrl;
 }
 

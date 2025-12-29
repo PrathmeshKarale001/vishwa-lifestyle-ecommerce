@@ -10,8 +10,13 @@ export interface Product {
   sku?: string;
   price: number;
   compareAtPrice?: number;
-  category: any; // Updated to any or more specific type if needed
-  images: any[];
+  category: any;
+  images: string[];
+  imageLqips?: string[];
+  image?: string;
+  lqip?: string;
+  mainImage?: string;
+  mainImageLqip?: string;
   features?: string[];
   inventory: number;
   tags?: string[];

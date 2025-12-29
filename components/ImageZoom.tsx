@@ -111,7 +111,7 @@ export default function ImageZoom({
               alt={alt}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className={`object-cover transition-opacity duration-500 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className="object-cover transition-opacity duration-300"
               priority
               placeholder="blur"
               blurDataURL={lqips?.[selectedIndex] || getBlurPlaceholder(currentImage)}

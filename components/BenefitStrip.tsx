@@ -5,14 +5,30 @@ import { motion } from "framer-motion";
 import { CheckCircle, Sun } from "lucide-react";
 import { fadeInUp, staggerContainer } from "@/utils/animations";
 
-const benefits = [
+const defaultBenefits = [
     { icon: Leaf, text: "Natural Materials" },
     { icon: Sun, text: "Vedic Wisdom" },
     { icon: Heart, text: "Handcrafted with Love" },
     { icon: CheckCircle, text: "Ethically Sourced" },
 ];
 
-export default function BenefitStrip() {
+const iconMap: Record<string, any> = {
+    leaf: Leaf,
+    sun: Sun,
+    heart: Heart,
+    check: CheckCircle,
+    shield: ShieldCheck,
+    sparkles: Sparkles,
+};
+
+export default function BenefitStrip({ benefits: sanityBenefits }: { benefits?: any[] }) {
+    const benefits = sanityBenefits && sanityBenefits.length > 0
+        ? sanityBenefits.map(b => ({
+            icon: iconMap[b.icon] || Sparkles,
+            text: b.text
+        }))
+        : defaultBenefits;
+
     return (
         <section className="py-10 sm:py-12 md:py-16 bg-background-alt border-y border-gray-100">
             <div className="container mx-auto px-4 sm:px-6">

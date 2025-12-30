@@ -9,10 +9,9 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
 import { useAppKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
-import { SHOP_CATEGORIES } from "@/lib/shop-categories";
 import SearchAutocomplete from "./SearchAutocomplete";
 
-export default function Header() {
+export default function Header({ categories = [] }: { categories?: any[] }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -79,22 +78,22 @@ export default function Header() {
                     onMouseEnter={() => setIsShopHovered(true)}
                     onMouseLeave={() => setIsShopHovered(false)}
                   >
-                    {SHOP_CATEGORIES.map((category) => (
+                    {categories.map((category: any) => (
                       <div key={category.slug} className="space-y-4">
                         <Link
                           href={`/shop?category=${category.slug}`}
                           className="block text-base font-serif font-bold text-black border-b border-gray-100 pb-2 hover:text-accent-gold transition-colors"
                         >
-                          {category.title}
+                          {category.name}
                         </Link>
                         <ul className="space-y-2">
-                          {category.items.map((item) => (
-                            <li key={item.slug}>
+                          {category.subCategories?.map((sub: string) => (
+                            <li key={sub}>
                               <Link
-                                href={`/shop?category=${category.slug}&sub=${item.slug}`}
+                                href={`/shop?category=${category.slug}&sub=${sub}`}
                                 className="text-xs text-gray-500 hover:text-accent-gold transition-colors tracking-wide capitalize"
                               >
-                                {item.name}
+                                {sub}
                               </Link>
                             </li>
                           ))}
@@ -232,24 +231,24 @@ export default function Header() {
                 </Link>
                 {/* Mobile Submenu */}
                 <div className="pl-4 space-y-4 border-l-2 border-gray-100/50">
-                  {SHOP_CATEGORIES.map((cat) => (
+                  {categories.map((cat: any) => (
                     <div key={cat.slug} className="space-y-2">
                       <Link
                         href={`/shop?category=${cat.slug}`}
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="block text-base font-medium text-gray-800"
                       >
-                        {cat.title}
+                        {cat.name}
                       </Link>
                       <div className="pl-2 space-y-1">
-                        {cat.items.map(sub => (
+                        {cat.subCategories?.map((sub: string) => (
                           <Link
-                            key={sub.slug}
-                            href={`/shop?category=${cat.slug}&sub=${sub.slug}`}
+                            key={sub}
+                            href={`/shop?category=${cat.slug}&sub=${sub}`}
                             onClick={() => setIsMobileMenuOpen(false)}
                             className="block text-sm text-gray-500 font-sans"
                           >
-                            - {sub.name}
+                            - {sub}
                           </Link>
                         ))}
                       </div>

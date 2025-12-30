@@ -8,16 +8,19 @@ import BenefitStrip from "@/components/BenefitStrip";
 
 
 
+import { getHomePage } from "@/lib/sanity";
+
 export default async function Home() {
+  const homeData = await getHomePage();
+
   return (
     <main className="min-h-screen bg-white">
-      <Hero />
-      <LifestylePreview />
-      <StorySection />
+      <Hero slides={homeData?.heroSlides} />
+      <LifestylePreview items={homeData?.lifestyleGrid} />
+      <StorySection data={homeData?.story} />
       <ShopGrid />
-      <PhilosophySection />
-      <BenefitStrip />
-
+      <PhilosophySection data={homeData?.philosophy} />
+      <BenefitStrip benefits={homeData?.benefits} />
     </main>
   );
 }

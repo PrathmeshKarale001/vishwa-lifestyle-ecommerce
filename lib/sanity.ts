@@ -137,6 +137,7 @@ export const queries = {
     "slug": slug.current,
     description,
     "image": image.asset->url,
+    subCategories,
     metaTitle,
     metaDescription
   }`,
@@ -174,7 +175,44 @@ export const queries = {
   heroProduct: `*[_type == "product" && defined(images) && defined(images[0].asset)] {
     "image": images[0].asset->url,
     "aspectRatio": images[0].asset->metadata.dimensions.width / images[0].asset->metadata.dimensions.height
-  } | order(aspectRatio desc)[0]`
+  } | order(aspectRatio desc)[0]`,
+
+  // Homepage Dynamic Content
+  homePage: `*[_type == "homePage" && _id == "homePage"][0] {
+    heroSlides[] {
+      title,
+      subtitle,
+      "image": image.asset->url,
+      "mobileImage": mobileImage.asset->url,
+      ctaText,
+      ctaLink
+    },
+    philosophy,
+    story {
+      heading,
+      content,
+      "image": image.asset->url
+    },
+    lifestyleGrid[] {
+      title,
+      link,
+      "image": image.asset->url
+    },
+    benefits[] {
+      text,
+      icon
+    }
+  }`,
+
+  // Global Site Settings
+  siteSettings: `*[_type == "siteSettings" && _id == "siteSettings"][0] {
+    title,
+    description,
+    "logo": logo.asset->url,
+    socialLinks,
+    contactInfo,
+    announcementBar
+  }`
 };
 
 export async function getHeroProduct() {
@@ -294,4 +332,12 @@ export async function getCategories() {
     }
     return c;
   });
+}
+
+export async function getHomePage() {
+  return await sanityClient.fetch(queries.homePage, {}, { cache: 'no-store' });
+}
+
+export async function getSiteSettings() {
+  return await sanityClient.fetch(queries.siteSettings, {}, { cache: 'no-store' });
 }

@@ -6,7 +6,7 @@ import { isServerAdmin } from '@/lib/auth-server';
  * Middleware to protect admin routes
  * This runs on the edge and checks admin access
  */
-export async function adminMiddleware(request: NextRequest) {
+export async function adminProxy(request: NextRequest) {
   // Only protect /admin routes
   if (!request.nextUrl.pathname.startsWith('/admin')) {
     return NextResponse.next();

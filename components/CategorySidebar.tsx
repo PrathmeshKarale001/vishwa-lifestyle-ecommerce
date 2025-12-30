@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ChevronRight, ChevronDown } from "lucide-react";
-import { SHOP_CATEGORIES } from "@/lib/shop-categories";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,6 +11,7 @@ interface Category {
     name: string;
     slug: string;
     description?: string;
+    subCategories?: string[];
 }
 
 interface CategorySidebarProps {
@@ -79,7 +79,7 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                 >
                     All Items
                 </Link>
-                {SHOP_CATEGORIES.map((category) => (
+                {categories?.map((category) => (
                     <Link
                         key={category.slug}
                         href={buildUrl(category.slug)}
@@ -88,7 +88,7 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                             : "bg-white border-gray-100 text-foreground-muted hover:border-accent-gold/50"
                             }`}
                     >
-                        {category.title}
+                        {category.name}
                     </Link>
                 ))}
             </div>
@@ -141,7 +141,7 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                             </Link>
 
                             {/* Dynamic Categories from Constant */}
-                            {SHOP_CATEGORIES.map((category) => {
+                            {categories?.map((category) => {
                                 const isExpanded = expandedCategories.includes(category.slug);
                                 const isActive = activeCategory === category.slug;
 
@@ -159,7 +159,7 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                                                 className="flex-1"
                                                 onClick={(e) => e.stopPropagation()}
                                             >
-                                                {category.title}
+                                                {category.name}
                                             </Link>
                                             <ChevronDown
                                                 size={14}
@@ -177,16 +177,16 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                                                     className="overflow-hidden"
                                                 >
                                                     <div className="pl-4 border-l-2 border-gray-100 ml-3 space-y-1 py-1">
-                                                        {category.items.map((sub) => (
+                                                        {category.subCategories?.map((sub) => (
                                                             <Link
-                                                                key={sub.slug}
-                                                                href={buildUrl(category.slug, sub.slug)}
-                                                                className={`block py-1.5 px-2 text-xs rounded transition-colors ${activeSubCategory === sub.slug && isActive
+                                                                key={sub}
+                                                                href={buildUrl(category.slug, sub)}
+                                                                className={`block py-1.5 px-2 text-xs rounded transition-colors ${activeSubCategory === sub && isActive
                                                                     ? "text-accent-gold font-medium bg-accent-gold/5"
                                                                     : "text-gray-500 hover:text-foreground"
                                                                     }`}
                                                             >
-                                                                {sub.name}
+                                                                {sub}
                                                             </Link>
                                                         ))}
                                                     </div>

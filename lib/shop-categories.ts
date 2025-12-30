@@ -14,8 +14,15 @@ export const SHOP_CATEGORIES = [
         slug: "apparel",
         items: [
             { name: "Men", slug: "Men" },
-            { name: "Women", slug: "Women" },
-            { name: "Footwear", slug: "Footwear" }
+            { name: "Women", slug: "Women" }
+        ]
+    },
+    {
+        title: "Footwear",
+        slug: "footwear",
+        items: [
+            { name: "Men", slug: "Men" },
+            { name: "Women", slug: "Women" }
         ]
     },
     {

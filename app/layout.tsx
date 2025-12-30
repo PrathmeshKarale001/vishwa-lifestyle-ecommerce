@@ -60,12 +60,15 @@ export const metadata: Metadata = {
 const organizationSchema = generateOrganizationSchema();
 
 import Footer from "@/components/Footer";
+import { getCategories } from "@/lib/sanity";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const categories = await getCategories();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -77,7 +80,7 @@ export default function RootLayout({
       </head>
       <body className={`${playfair.variable} ${lato.variable}`}>
         <Providers>
-          <ConditionalWrapper>
+          <ConditionalWrapper categories={categories}>
             {children}
           </ConditionalWrapper>
         </Providers>

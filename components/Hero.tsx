@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 
-const slides = [
+const defaultSlides = [
     {
         id: 1,
         image: "/products/hero-swipe/6.png",
@@ -33,7 +33,20 @@ const slides = [
     },
 ];
 
-export default function Hero() {
+export default function Hero({ slides: sanitySlides }: { slides?: any[] }) {
+    // Map sanity slides to internal format or use defaults
+    const slides = sanitySlides && sanitySlides.length > 0
+        ? sanitySlides.map((s, i) => ({
+            id: i,
+            image: s.image,
+            mobileImage: s.mobileImage,
+            title: s.title,
+            subtitle: s.subtitle,
+            cta: s.ctaText || "Discover More",
+            link: s.ctaLink || "/shop"
+        }))
+        : defaultSlides;
+
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
 

@@ -5,13 +5,12 @@ import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/utils/animations";
 import Image from "next/image";
 
-const categories = [
+const defaultCategories = [
     {
         id: 1,
         title: "Vishwa Kurta",
         image: "/products/home-productgrid/Kurta.png",
         link: "/shop?category=ritual",
-        gridArea: "col-span-1 row-span-2",
         imgAlt: "Vishwa Kurta",
     },
     {
@@ -19,7 +18,6 @@ const categories = [
         title: "Sacred Candles",
         image: "/products/home-productgrid/Candle.jpeg",
         link: "/shop?category=candles",
-        gridArea: "col-span-1 row-span-1",
         imgAlt: "Sacred Candles",
     },
     {
@@ -27,7 +25,6 @@ const categories = [
         title: "Artifacts & Decor",
         image: "/products/home-productgrid/artifacts.jpeg",
         link: "/shop?category=decor",
-        gridArea: "col-span-1 row-span-1",
         imgAlt: "Artifacts & Decor",
     },
     {
@@ -35,7 +32,6 @@ const categories = [
         title: "Bags",
         image: "/products/home-productgrid/Bags.jpeg",
         link: "/shop?category=mats",
-        gridArea: "col-span-1 row-span-1",
         imgAlt: "Bags",
     },
     {
@@ -43,12 +39,20 @@ const categories = [
         title: "Other",
         image: "/products/home-productgrid/juti.png",
         link: "/shop?category=ritual",
-        gridArea: "col-span-1 row-span-1",
         imgAlt: "Other Essentials",
     },
 ];
 
-export default function LifestylePreview() {
+export default function LifestylePreview({ items: sanityItems }: { items?: any[] }) {
+    const categories = sanityItems && sanityItems.length > 0
+        ? sanityItems.map((item, i) => ({
+            id: i,
+            title: item.title,
+            image: item.image,
+            link: item.link || "/shop",
+            imgAlt: item.title
+        }))
+        : defaultCategories;
     return (
         <section className="py-12 sm:py-16 md:py-20 bg-white">
             <div className="container mx-auto px-4 sm:px-6">

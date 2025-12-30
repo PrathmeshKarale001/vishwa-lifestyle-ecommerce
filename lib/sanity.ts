@@ -30,7 +30,7 @@ export const queries = {
     "category": category->slug.current,
     "image": images[0].asset->url,
     "lqip": images[0].asset->metadata.lqip,
-    inventory,
+    "inventory": coalesce(inventory, 10),
     tags,
     isNew,
     isBestSeller
@@ -55,7 +55,7 @@ export const queries = {
     "mainImageLqip": images[0].asset->metadata.lqip,
     features,
     additionalDetails,
-    inventory,
+    "inventory": coalesce(inventory, 10),
     tags,
     isNew,
     isBestSeller,
@@ -83,7 +83,7 @@ export const queries = {
     description,
     "category": category->slug.current,
     "image": images[0].asset->url,
-    inventory,
+    "inventory": coalesce(inventory, 10),
     tags,
     isNew,
     isBestSeller
@@ -99,7 +99,7 @@ export const queries = {
     "image": images[0].asset->url,
     "lqip": images[0].asset->metadata.lqip,
     "category": category->slug.current,
-    inventory,
+    "inventory": coalesce(inventory, 10),
     tags,
     isNew,
     isBestSeller,
@@ -126,8 +126,8 @@ export const queries = {
     compareAtPrice,
     "image": images[0].asset->url,
     "lqip": images[0].asset->metadata.lqip,
-    "category": category->slug.current
-
+    "category": category->slug.current,
+    "inventory": coalesce(inventory, 10)
   }`,
 
   // Get categories
@@ -232,7 +232,7 @@ export async function getFilteredProducts({
       description,
       "category": category -> slug.current,
         "image": images[0].asset -> url,
-          inventory,
+          "inventory": coalesce(inventory, 10),
           tags,
           isNew,
           isBestSeller,

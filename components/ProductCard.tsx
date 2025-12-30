@@ -41,8 +41,9 @@ export default function ProductCard({
   const { isInWishlist, toggleItem } = useWishlistStore();
 
   const isWishlisted = isInWishlist(id);
-  const isOutOfStock = inventory <= 0;
-  const isLowStock = inventory > 0 && inventory <= 5;
+  const effectiveInventory = inventory ?? 10;
+  const isOutOfStock = effectiveInventory <= 0;
+  const isLowStock = effectiveInventory > 0 && effectiveInventory <= 5;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();

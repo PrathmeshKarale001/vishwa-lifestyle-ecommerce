@@ -72,7 +72,8 @@ export default function ProductQuickView({
   const handleAddToCart = () => {
     if (!product) return;
 
-    const isOutOfStock = product.inventory !== undefined && product.inventory <= 0;
+    const effectiveInventory = product.inventory ?? 10;
+    const isOutOfStock = effectiveInventory <= 0;
     if (isOutOfStock) {
       toast.error("This product is out of stock");
       return;
@@ -85,7 +86,7 @@ export default function ProductQuickView({
       price: product.price,
       image: product.images?.[0] || product.mainImage || "",
       slug: product.slug,
-      maxQuantity: product.inventory || 10,
+      maxQuantity: product.inventory ?? 10,
     });
 
     toast.success(`${product.name} added to cart`);
@@ -123,7 +124,8 @@ export default function ProductQuickView({
     ? productImages
     : ["https://images.unsplash.com/photo-1602825266970-721285fc6e43?q=80&w=1200&auto=format&fit=crop"];
   const currentImage = displayImages[selectedImage] || displayImages[0];
-  const isOutOfStock = product?.inventory !== undefined && product.inventory <= 0;
+  const effectiveInventory = product?.inventory ?? 10;
+  const isOutOfStock = effectiveInventory <= 0;
   const isWishlisted = product ? isInWishlist(product._id) : false;
 
   if (!isOpen) return null;
@@ -249,7 +251,7 @@ export default function ProductQuickView({
                       <span className="px-4 py-2 min-w-[60px] text-center">{quantity}</span>
                       <button
                         onClick={() => {
-                          const max = product.inventory || 10;
+                          const max = product.inventory ?? 10;
                           setQuantity(Math.min(max, quantity + 1));
                         }}
                         className="p-2 hover:bg-gray-100 transition-colors"
@@ -258,7 +260,7 @@ export default function ProductQuickView({
                         <Plus size={16} />
                       </button>
                     </div>
-                    {product.inventory !== undefined && (
+                    {product.inventory !== undefined && product.inventory !== null && (
                       <span className="text-sm text-foreground-muted">
                         {isOutOfStock ? "Out of Stock" : `${product.inventory} available`}
                       </span>

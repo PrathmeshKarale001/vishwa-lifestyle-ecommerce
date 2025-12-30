@@ -130,7 +130,8 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
         const currentPrice = selectedVariant ? selectedVariant.price : product.price;
         const currentSku = selectedVariant ? selectedVariant.sku : product.sku;
 
-        if (currentInventory !== undefined && currentInventory <= 0) {
+        const inventoryValue = currentInventory ?? 10;
+        if (inventoryValue <= 0) {
             toast.error("This product is out of stock");
             return;
         }
@@ -222,8 +223,9 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
     const currentCompareAtPrice = selectedVariant ? selectedVariant.compareAtPrice : product.compareAtPrice;
     const currentSku = selectedVariant ? selectedVariant.sku : product.sku;
 
-    const isOutOfStock = currentInventory !== undefined && currentInventory <= 0;
-    const isLowStock = currentInventory !== undefined && currentInventory > 0 && currentInventory <= 5;
+    const effectiveInventory = currentInventory ?? 10;
+    const isOutOfStock = effectiveInventory <= 0;
+    const isLowStock = effectiveInventory > 0 && effectiveInventory <= 5;
     const averageRating = reviews.length > 0
         ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
         : product.rating || 0;

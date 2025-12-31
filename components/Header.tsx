@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -11,11 +11,19 @@ import { useWishlistStore } from "@/store/wishlist";
 import { useAppKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import SearchAutocomplete from "./SearchAutocomplete";
 
-export default function Header({ categories = [] }: { categories?: any[] }) {
+interface HeaderProps {
+  categories?: any[];
+  settings?: any;
+}
+
+export default function Header({ categories = [], settings }: HeaderProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isShopHovered, setIsShopHovered] = useState(false);
+
+  const announcement = settings?.announcementBar || { show: false, text: "", link: "", backgroundColor: "#D4AF37", textColor: "#FFFFFF" };
+  const logoSrc = settings?.logo || "/vishwalogo-v2.png";
   const { scrollY } = useScroll();
   const pathname = usePathname();
   const isHomePage = pathname === "/";
@@ -33,10 +41,34 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
   const isSolidHeader = isScrolled || !isHomePage;
 
   return (
-    <>
+    <div className="fixed top-0 left-0 right-0 z-50">
+      {/* Announcement Bar - Now always sticky with header */}
+      <AnimatePresence>
+        {announcement.show && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            style={{
+              backgroundColor: announcement.backgroundColor || "#D4AF37",
+              color: announcement.textColor || "#FFFFFF"
+            }}
+            className="text-[10px] sm:text-xs py-2 px-4 text-center tracking-widest uppercase font-medium relative z-[60]"
+          >
+            {announcement.link ? (
+              <Link href={announcement.link} className="hover:underline">
+                {announcement.text}
+              </Link>
+            ) : (
+              <span>{announcement.text}</span>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out border-b ${isSolidHeader
-          ? "bg-white/80 backdrop-blur-md py-3 sm:py-4 text-black border-gray-100 shadow-sm"
+        className={`transition-all duration-500 ease-in-out border-b ${isSolidHeader
+          ? "bg-white/90 backdrop-blur-md py-3 sm:py-4 text-black border-gray-100 shadow-sm"
           : "bg-transparent py-6 sm:py-8 text-white border-transparent"
           }`}
         onMouseLeave={() => setIsShopHovered(false)}
@@ -45,7 +77,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
           {/* Mobile Menu Button */}
           <button
             className={`lg:hidden transition-colors z-10 hover:text-accent-gold ${isSolidHeader ? "text-black" : "text-white"}`}
-            onClick={() => setIsMobileMenuOpen(true)}
+            onClick={() => setIsMenuOpen(true)}
             aria-label="Open menu"
           >
             <Menu size={22} />
@@ -74,24 +106,24 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute top-full left-0 w-[1000px] -ml-4 bg-white shadow-xl rounded-lg p-8 grid grid-cols-4 gap-8 text-left z-50 border border-gray-100"
+                    className="absolute top-full left-0 w-[1000px] -ml-4 bg-white shadow-2xl rounded-xl p-8 text-left z-50 border border-gray-100 columns-4 gap-x-10 space-y-8"
                     onMouseEnter={() => setIsShopHovered(true)}
                     onMouseLeave={() => setIsShopHovered(false)}
                   >
                     {categories.map((category: any) => (
-                      <div key={category.slug} className="space-y-4">
+                      <div key={category.slug} className="break-inside-avoid mb-8">
                         <Link
                           href={`/shop?category=${category.slug}`}
-                          className="block text-base font-serif font-bold text-black border-b border-gray-100 pb-2 hover:text-accent-gold transition-colors"
+                          className="block text-sm font-serif font-bold text-black border-b border-gray-100 pb-2 mb-3 hover:text-accent-gold transition-colors uppercase tracking-widest"
                         >
                           {category.name}
                         </Link>
-                        <ul className="space-y-2">
+                        <ul className="space-y-1.5">
                           {category.subCategories?.map((sub: string) => (
                             <li key={sub}>
                               <Link
                                 href={`/shop?category=${category.slug}&sub=${sub}`}
-                                className="text-xs text-gray-500 hover:text-accent-gold transition-colors tracking-wide capitalize"
+                                className="text-[11px] text-gray-500 hover:text-accent-gold transition-colors tracking-wide capitalize block"
                               >
                                 {sub}
                               </Link>
@@ -123,7 +155,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-0">
             <Link href="/" className="flex items-center justify-center group">
               <Image
-                src="/vishwalogo-v2.png"
+                src={logoSrc}
                 alt="Vishwa Lifestyle"
                 width={120}
                 height={40}
@@ -186,19 +218,19 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
         </div>
       </header>
 
-      {/* Search Autocomplete */}
+      {/* Search Autocomplete Overlay */}
       <SearchAutocomplete
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         onSelect={(product) => {
           setIsSearchOpen(false);
-          window.location.href = `/product/${product.slug}`;
+          // Handle navigation to product
         }}
       />
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
-        {isMobileMenuOpen && (
+        {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0, x: "-100%" }}
             animate={{ opacity: 1, x: 0 }}
@@ -208,14 +240,14 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
           >
             <div className="p-6 flex justify-between items-center border-b border-gray-100">
               <span className="font-serif text-xl font-bold">Menu</span>
-              <button onClick={() => setIsMobileMenuOpen(false)} aria-label="Close menu">
+              <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
                 <X size={24} />
               </button>
             </div>
             <nav className="flex-1 flex flex-col p-8 space-y-6 text-2xl font-serif">
               <Link
                 href="/"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => setIsMenuOpen(false)}
                 className="hover:text-accent-gold transition-colors"
               >
                 Home
@@ -224,7 +256,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
               <div className="space-y-4">
                 <Link
                   href="/shop"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => setIsMenuOpen(false)}
                   className="hover:text-accent-gold transition-colors block"
                 >
                   Shop
@@ -235,7 +267,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
                     <div key={cat.slug} className="space-y-2">
                       <Link
                         href={`/shop?category=${cat.slug}`}
-                        onClick={() => setIsMobileMenuOpen(false)}
+                        onClick={() => setIsMenuOpen(false)}
                         className="block text-base font-medium text-gray-800"
                       >
                         {cat.name}
@@ -245,7 +277,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
                           <Link
                             key={sub}
                             href={`/shop?category=${cat.slug}&sub=${sub}`}
-                            onClick={() => setIsMobileMenuOpen(false)}
+                            onClick={() => setIsMenuOpen(false)}
                             className="block text-sm text-gray-500 font-sans"
                           >
                             - {sub}
@@ -259,21 +291,21 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
 
               <Link
                 href="/story"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => setIsMenuOpen(false)}
                 className="hover:text-accent-gold transition-colors"
               >
                 Our Story
               </Link>
               <Link
                 href="/philosophy"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => setIsMenuOpen(false)}
                 className="hover:text-accent-gold transition-colors"
               >
                 Philosophy
               </Link>
               <Link
                 href="/contact"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => setIsMenuOpen(false)}
                 className="hover:text-accent-gold transition-colors"
               >
                 Contact
@@ -281,14 +313,14 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
               <div className="pt-8 border-t border-gray-100 space-y-4">
                 <Link
                   href="/account"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => setIsMenuOpen(false)}
                   className="text-base font-sans uppercase tracking-widest flex items-center gap-3"
                 >
                   <User size={20} /> My Account
                 </Link>
                 <Link
                   href="/account/wishlist"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => setIsMenuOpen(false)}
                   className="text-base font-sans uppercase tracking-widest flex items-center gap-3"
                 >
                   <Heart size={20} /> Wishlist ({wishlistCount})
@@ -298,6 +330,6 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }

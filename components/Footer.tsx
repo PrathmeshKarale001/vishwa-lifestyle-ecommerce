@@ -3,11 +3,36 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Instagram, Facebook, Twitter } from "lucide-react";
+import { Instagram, Facebook, Twitter, Youtube } from "lucide-react";
 import { fadeInUp } from "@/utils/animations";
-import { SHOP_CATEGORIES } from "@/lib/shop-categories";
 
-export default function Footer() {
+interface FooterProps {
+    settings?: any;
+}
+
+export default function Footer({ settings }: FooterProps) {
+    const brandDescription = settings?.brandDescription || "A Modern Vedic Lifestyle Brand. Bringing the purity of ancient rituals into your everyday living.";
+    const logoSrc = settings?.logo || "/vishwalogo-v2.png";
+    const social = settings?.socialLinks || {};
+    const contact = settings?.contactInfo || {};
+    const navigation = settings?.footerNavigation || [
+        {
+            title: "Shop",
+            links: [
+                { label: "All Products", url: "/shop" },
+                { label: "New Arrivals", url: "/shop?sort=newest" },
+            ]
+        },
+        {
+            title: "About",
+            links: [
+                { label: "Our Story", url: "/story" },
+                { label: "Philosophy", url: "/philosophy" },
+                { label: "Contact Us", url: "/contact" },
+            ]
+        }
+    ];
+
     return (
         <footer className="bg-background text-foreground pt-12 sm:pt-16 md:pt-20 pb-10 sm:pb-12 md:pb-16 border-t border-gray-100">
             <div className="container mx-auto px-4 sm:px-6">
@@ -22,7 +47,7 @@ export default function Footer() {
                     <div className="sm:col-span-2 md:col-span-1">
                         <Link href="/" className="inline-block mb-3 sm:mb-4">
                             <Image
-                                src="/vishwalogo-v2.png"
+                                src={logoSrc}
                                 alt="Vishwa Lifestyle"
                                 width={120}
                                 height={40}
@@ -30,42 +55,49 @@ export default function Footer() {
                             />
                         </Link>
                         <p className="text-foreground-muted text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
-                            A Modern Vedic Lifestyle Brand. Bringing the purity of ancient rituals into your everyday living.
+                            {brandDescription}
                         </p>
                         <div className="flex space-x-3 sm:space-x-4">
-                            <a href="#" className="text-foreground-muted hover:text-accent-gold transition-colors" aria-label="Instagram">
-                                <Instagram size={18} className="sm:w-5 sm:h-5" />
-                            </a>
-                            <a href="#" className="text-foreground-muted hover:text-accent-gold transition-colors" aria-label="Facebook">
-                                <Facebook size={18} className="sm:w-5 sm:h-5" />
-                            </a>
-                            <a href="#" className="text-foreground-muted hover:text-accent-gold transition-colors" aria-label="Twitter">
-                                <Twitter size={18} className="sm:w-5 sm:h-5" />
-                            </a>
+                            {social.instagram && (
+                                <a href={social.instagram} className="text-foreground-muted hover:text-accent-gold transition-colors" aria-label="Instagram">
+                                    <Instagram size={18} className="sm:w-5 sm:h-5" />
+                                </a>
+                            )}
+                            {social.facebook && (
+                                <a href={social.facebook} className="text-foreground-muted hover:text-accent-gold transition-colors" aria-label="Facebook">
+                                    <Facebook size={18} className="sm:w-5 sm:h-5" />
+                                </a>
+                            )}
+                            {social.twitter && (
+                                <a href={social.twitter} className="text-foreground-muted hover:text-accent-gold transition-colors" aria-label="Twitter">
+                                    <Twitter size={18} className="sm:w-5 sm:h-5" />
+                                </a>
+                            )}
+                            {social.youtube && (
+                                <a href={social.youtube} className="text-foreground-muted hover:text-accent-gold transition-colors" aria-label="Youtube">
+                                    <Youtube size={18} className="sm:w-5 sm:h-5" />
+                                </a>
+                            )}
                         </div>
                     </div>
 
-                    {/* Links */}
-                    <div>
-                        <h3 className="text-xs sm:text-sm uppercase tracking-widest font-medium mb-4 sm:mb-6">Shop</h3>
-                        <ul className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-foreground-muted">
-                            <li><Link href="/shop?category=ritual" className="hover:text-accent-gold transition-colors">Other</Link></li>
-                            <li><Link href="/shop" className="hover:text-accent-gold transition-colors">All Products</Link></li>
-                        </ul>
-                    </div>
+                    {/* Dynamic Navigation Columns */}
+                    {navigation.map((column: any, idx: number) => (
+                        <div key={idx}>
+                            <h3 className="text-xs sm:text-sm uppercase tracking-widest font-medium mb-4 sm:mb-6">{column.title}</h3>
+                            <ul className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-foreground-muted">
+                                {column.links?.map((link: any, lIdx: number) => (
+                                    <li key={lIdx}>
+                                        <Link href={link.url} className="hover:text-accent-gold transition-colors">
+                                            {link.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
 
-                    <div>
-                        <h3 className="text-xs sm:text-sm uppercase tracking-widest font-medium mb-4 sm:mb-6">About</h3>
-                        <ul className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-foreground-muted">
-                            <li><Link href="/story" className="hover:text-accent-gold transition-colors">Our Story</Link></li>
-                            <li><Link href="/philosophy" className="hover:text-accent-gold transition-colors">Philosophy</Link></li>
-                            <li><Link href="/ingredients" className="hover:text-accent-gold transition-colors">Ingredients</Link></li>
-                            <li><Link href="/contact" className="hover:text-accent-gold transition-colors">Contact Us</Link></li>
-                            <li><Link href="/faq" className="hover:text-accent-gold transition-colors">FAQ</Link></li>
-                        </ul>
-                    </div>
-
-                    {/* Newsletter */}
+                    {/* Newsletter (Keep static for now or add to settings if needed) */}
                     <div>
                         <h3 className="text-xs sm:text-sm uppercase tracking-widest font-medium mb-4 sm:mb-6">Newsletter</h3>
                         <p className="text-foreground-muted text-xs sm:text-sm mb-3 sm:mb-4">

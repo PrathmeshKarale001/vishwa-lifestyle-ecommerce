@@ -96,7 +96,7 @@ export default function ProductGrid({
                         ? "Best Seller"
                         : product.isNew
                             ? "New"
-                            : product.tags?.[0] || undefined;
+                            : undefined;
 
                     return (
                         <ProductCard

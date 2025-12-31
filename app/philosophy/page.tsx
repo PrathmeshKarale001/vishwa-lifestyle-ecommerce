@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 
 export default function PhilosophyPage() {
   return (
-    <main className="bg-white min-h-screen pt-24 pb-16">
-      <div className="container mx-auto px-6">
+    <div className="bg-white pb-16">
+      <div className="container mx-auto px-6 py-12 sm:py-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -67,6 +67,6 @@ export default function PhilosophyPage() {
           </motion.div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

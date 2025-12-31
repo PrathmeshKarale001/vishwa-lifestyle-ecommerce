@@ -28,6 +28,7 @@ export const queries = {
     compareAtPrice,
     description,
     "category": category->slug.current,
+    "categoryName": category->name,
     "image": images[0].asset->url,
     "lqip": images[0].asset->metadata.lqip,
     "inventory": coalesce(inventory, 10),
@@ -69,7 +70,15 @@ export const queries = {
     hsnCode,
     variants,
     metaTitle,
-    metaDescription
+    metaDescription,
+    "sizeChart": sizeChart-> {
+      title,
+      type,
+      gender,
+      headers,
+      rows,
+      "image": image.asset->url
+    }
   }`,
 
 
@@ -82,7 +91,9 @@ export const queries = {
     compareAtPrice,
     description,
     "category": category->slug.current,
+    "categoryName": category->name,
     "image": images[0].asset->url,
+    "lqip": images[0].asset->metadata.lqip,
     "inventory": coalesce(inventory, 10),
     tags,
     isNew,
@@ -99,6 +110,7 @@ export const queries = {
     "image": images[0].asset->url,
     "lqip": images[0].asset->metadata.lqip,
     "category": category->slug.current,
+    "categoryName": category->name,
     "inventory": coalesce(inventory, 10),
     tags,
     isNew,
@@ -127,6 +139,7 @@ export const queries = {
     "image": images[0].asset->url,
     "lqip": images[0].asset->metadata.lqip,
     "category": category->slug.current,
+    "categoryName": category->name,
     "inventory": coalesce(inventory, 10)
   }`,
 
@@ -209,9 +222,17 @@ export const queries = {
     title,
     description,
     "logo": logo.asset->url,
+    brandDescription,
+    footerNavigation,
     socialLinks,
     contactInfo,
-    announcementBar
+    announcementBar {
+      show,
+      text,
+      link,
+      backgroundColor,
+      textColor
+    }
   }`
 };
 
@@ -324,14 +345,7 @@ export async function getPostBySlug(slug: string) {
 }
 
 export async function getCategories() {
-  const categories = await sanityClient.fetch(queries.allCategories);
-  return categories.map((c: any) => {
-    // Optional: Handle any dynamic renaming if still needed, otherwise just return c
-    if (c.slug === 'ritual') {
-      return { ...c, name: 'Other' };
-    }
-    return c;
-  });
+  return await sanityClient.fetch(queries.allCategories);
 }
 
 export async function getHomePage() {

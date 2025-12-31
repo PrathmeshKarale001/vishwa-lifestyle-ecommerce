@@ -4,6 +4,7 @@ import post from './documents/post'
 import author from './documents/author'
 import homePage from './singletons/homePage'
 import siteSettings from './singletons/siteSettings'
+import sizeChart from './documents/sizeChart'
 
 export const schemaTypes = [
     product,
@@ -12,6 +13,7 @@ export const schemaTypes = [
     author,
     homePage,
     siteSettings,
+    sizeChart,
 ]
 
 export const schema = {

@@ -1,4 +1,5 @@
 import { type SchemaTypeDefinition } from 'sanity';
+import { SubCategorySelect } from '../../components/SubCategorySelect';
 
 const product: SchemaTypeDefinition = {
     name: 'product',
@@ -61,6 +62,17 @@ const product: SchemaTypeDefinition = {
             name: 'subCategory',
             title: 'Sub-Category',
             type: 'string',
+            description: 'Select a Category first to see available Sub-Categories',
+            components: {
+                input: SubCategorySelect
+            },
+            validation: (Rule) => Rule.custom((value, context) => {
+                const parent: any = context.parent;
+                if (parent?.category && !value) {
+                    return 'Sub-Category is required when Category is selected';
+                }
+                return true;
+            })
         },
         {
             name: 'brand',
@@ -83,14 +95,48 @@ const product: SchemaTypeDefinition = {
             type: 'string',
         },
         {
+            name: 'dimensions',
+            title: 'Dimensions',
+            type: 'string',
+        },
+        {
             name: 'weight',
             title: 'Weight',
             type: 'string',
         },
         {
-            name: 'dimensions',
-            title: 'Dimensions',
+            name: 'packaging',
+            title: 'Packaging',
             type: 'string',
+        },
+        {
+            name: 'department',
+            title: 'Department',
+            type: 'string',
+        },
+        {
+            name: 'gtin',
+            title: 'GTIN / Barcode',
+            type: 'string',
+        },
+        {
+            name: 'productType',
+            title: 'Product Type',
+            type: 'string',
+        },
+        {
+            name: 'segments',
+            title: 'Segments',
+            type: 'string',
+        },
+        {
+            name: 'tags',
+            title: 'Tags',
+            type: 'array',
+            of: [{ type: 'string' }],
+            options: {
+                layout: 'tags'
+            }
         },
         {
             name: 'inventory',
@@ -132,6 +178,36 @@ const product: SchemaTypeDefinition = {
             type: 'text',
             rows: 3,
             validation: (Rule) => Rule.max(160),
+        },
+        {
+            name: 'additionalDetails',
+            title: 'Additional Description (Grid Sections)',
+            type: 'array',
+            description: 'Add up to 4 highlights like Material, Care, Size Info etc.',
+            of: [
+                {
+                    type: 'object',
+                    name: 'detail',
+                    fields: [
+                        { name: 'title', title: 'Section Title', type: 'string', validation: (Rule) => Rule.required() },
+                        {
+                            name: 'content',
+                            title: 'Content',
+                            type: 'array',
+                            of: [{ type: 'block' }],
+                            validation: (Rule) => Rule.required()
+                        },
+                    ],
+                },
+            ],
+            validation: (Rule) => Rule.max(4),
+        },
+        {
+            name: 'sizeChart',
+            title: 'Size Chart',
+            description: 'Link a size chart for this product',
+            type: 'reference',
+            to: [{ type: 'sizeChart' }]
         },
         {
             name: 'isNew',

@@ -12,13 +12,15 @@ import Footer from "@/components/Footer";
 interface ConditionalWrapperProps {
   children: ReactNode;
   categories?: any[];
+  settings?: any;
 }
 
-export default function ConditionalWrapper({ children, categories = [] }: ConditionalWrapperProps) {
+export default function ConditionalWrapper({ children, categories = [], settings }: ConditionalWrapperProps) {
   const pathname = usePathname();
 
   // Check if we're in the studio
   const isStudio = pathname?.startsWith('/studio');
+  const isHomePage = pathname === '/';
 
   if (isStudio) {
     // For studio pages, return only the children without any layout components
@@ -29,14 +31,17 @@ export default function ConditionalWrapper({ children, categories = [] }: Condit
   return (
     <>
       <SkipLink />
-      <Header categories={categories} />
+      <Header categories={categories} settings={settings} />
       <CartDrawer />
       <ScrollToTop />
       <MobileBottomNav />
-      <div id="main-content">
+      <main
+        id="main-content"
+        className={`${!isHomePage ? (settings?.announcementBar?.show ? 'pt-32 sm:pt-40' : 'pt-24 sm:pt-28') : ''} min-h-screen`}
+      >
         {children}
-      </div>
-      <Footer />
+      </main>
+      <Footer settings={settings} />
     </>
   );
 }

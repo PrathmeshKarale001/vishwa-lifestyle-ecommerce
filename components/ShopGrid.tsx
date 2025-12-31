@@ -10,7 +10,7 @@ interface Product {
   price: number;
   compareAtPrice?: number;
   image: string;
-  category?: string | null;
+  categoryName?: string;
   inventory?: number;
   isNew?: boolean;
   isBestSeller?: boolean;
@@ -18,7 +18,7 @@ interface Product {
 }
 
 export default async function ShopGrid() {
-  let products: Product[] = [];
+  let products: any[] = []; // Using any for simplicity with dynamic data
 
   try {
     const data = await getFeaturedProducts();
@@ -28,15 +28,9 @@ export default async function ShopGrid() {
     console.error("Error fetching featured products:", error);
   }
 
-  const getCategoryLabel = (cat: string | null | undefined) => {
-    if (!cat) return "";
-    const labels: Record<string, string> = {
-      ritual: "Other",
-      lifestyle: "Other",
-      apparel: "Other",
-      combos: "Other",
-    };
-    return labels[cat] || cat;
+  const getCategoryLabel = (product: any) => {
+    if (!product.category) return "";
+    return product.categoryName || product.category.charAt(0).toUpperCase() + product.category.slice(1);
   };
 
   return (
@@ -66,9 +60,7 @@ export default async function ShopGrid() {
                 ? "Best Seller"
                 : product.isNew
                   ? "New"
-                  : product.tags?.[0]
-                    ? product.tags[0].charAt(0).toUpperCase() + product.tags[0].slice(1)
-                    : undefined;
+                  : undefined;
 
               return (
                 <ProductCard
@@ -80,7 +72,7 @@ export default async function ShopGrid() {
                   compareAtPrice={product.compareAtPrice}
                   image={product.image || "/placeholder-product.svg"}
                   tag={tag}
-                  category={getCategoryLabel(product.category)}
+                  category={getCategoryLabel(product)}
                   inventory={product.inventory}
                 />
               );

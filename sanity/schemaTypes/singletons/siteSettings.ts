@@ -21,6 +21,41 @@ const siteSettings: SchemaTypeDefinition = {
             type: 'image',
         },
         {
+            name: 'brandDescription',
+            title: 'Footer Brand Description',
+            type: 'text',
+            rows: 2,
+            description: 'Short description shown in the footer footer'
+        },
+        {
+            name: 'footerNavigation',
+            title: 'Footer Navigation Columns',
+            type: 'array',
+            of: [
+                {
+                    type: 'object',
+                    fields: [
+                        { name: 'title', title: 'Column Title', type: 'string' },
+                        {
+                            name: 'links',
+                            title: 'Links',
+                            type: 'array',
+                            of: [
+                                {
+                                    type: 'object',
+                                    fields: [
+                                        { name: 'label', title: 'Label', type: 'string' },
+                                        { name: 'url', title: 'URL', type: 'string' },
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            validation: (Rule) => Rule.max(3)
+        },
+        {
             name: 'socialLinks',
             title: 'Social Links',
             type: 'object',
@@ -49,6 +84,8 @@ const siteSettings: SchemaTypeDefinition = {
                 { name: 'show', title: 'Show Announcement', type: 'boolean' },
                 { name: 'text', title: 'Announcement Text', type: 'string' },
                 { name: 'link', title: 'Announcement Link', type: 'string' },
+                { name: 'backgroundColor', title: 'Background Color (Hex)', type: 'string', description: 'e.g. #D4AF37' },
+                { name: 'textColor', title: 'Text Color (Hex)', type: 'string', description: 'e.g. #FFFFFF' },
             ]
         }
     ],

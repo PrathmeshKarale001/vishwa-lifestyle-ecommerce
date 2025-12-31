@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Minus, Plus, ShoppingBag, Heart, Share2, Truck, Shield, RotateCcw, AlertCircle, Copy, Check } from "lucide-react";
+import { Star, Minus, Plus, ShoppingBag, Heart, Share2, Truck, Shield, RotateCcw, AlertCircle, Copy, Check, Ruler, ChevronRight } from "lucide-react";
+import { PortableText } from "@portabletext/react";
+import SizeChartModal from "./SizeChartModal";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
 import toast from "react-hot-toast";
@@ -28,6 +30,7 @@ interface Product {
     price: number;
     compareAtPrice?: number;
     category?: string | null;
+    categoryName?: string;
     description: string;
     features?: string[];
     images?: string[];
@@ -52,8 +55,16 @@ interface Product {
     shelfLife?: string;
     additionalDetails?: {
         title: string;
-        content: string;
+        content: any[];
     }[];
+    sizeChart?: {
+        title: string;
+        type: string;
+        gender: string;
+        headers: string[];
+        rows: { cells: string[] }[];
+        image?: string;
+    };
 }
 
 interface Review {
@@ -83,6 +94,7 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
     const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
         product.variants && product.variants.length > 0 ? product.variants[0] : null
     );
+    const [isSizeModalOpen, setIsSizeModalOpen] = useState(false);
 
     // Fetch reviews from Supabase
     useEffect(() => {
@@ -192,13 +204,7 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
 
     const getCategoryLabel = (cat: string | null | undefined) => {
         if (!cat) return "";
-        const labels: Record<string, string> = {
-            ritual: "Other",
-            lifestyle: "Other",
-            apparel: "Other",
-            combos: "Other",
-        };
-        return labels[cat] || cat;
+        return product.categoryName || cat.charAt(0).toUpperCase() + cat.slice(1);
     };
 
     const formatDate = (dateString: string) => {
@@ -230,6 +236,35 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
         ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
         : product.rating || 0;
 
+    const portableTextComponents = {
+        list: {
+            bullet: ({ children }: any) => (
+                <ul className="space-y-1.5 list-none">
+                    {children}
+                </ul>
+            ),
+        },
+        listItem: {
+            bullet: ({ children }: any) => (
+                <li className="flex items-start gap-2">
+                    <span className="text-accent-gold mt-1 text-[10px]">•</span>
+                    <span>{children}</span>
+                </li>
+            ),
+        },
+        block: {
+            normal: ({ children }: any) => (
+                <p className="text-sm text-foreground-muted font-light leading-relaxed mb-3 last:mb-0">
+                    {children}
+                </p>
+            ),
+        },
+        marks: {
+            strong: ({ children }: any) => <strong className="font-semibold text-foreground">{children}</strong>,
+            em: ({ children }: any) => <em className="italic">{children}</em>,
+        }
+    };
+
     return (
         <main className="min-h-screen bg-white pt-24">
             {/* Breadcrumb */}
@@ -237,6 +272,7 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                 <Breadcrumbs
                     items={[
                         { label: "Shop", href: "/shop" },
+                        ...(product.category ? [{ label: product.categoryName || "Category", href: `/shop?category=${product.category}` }] : []),
                         { label: product.name },
                     ]}
                 />
@@ -320,7 +356,19 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                         {/* Size Selector */}
                         {product.variants && product.variants.length > 0 && (
                             <div className="mb-8">
-                                <h3 className="text-xs uppercase tracking-widest text-foreground-muted mb-4">Select Size</h3>
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-xs uppercase tracking-widest text-foreground-muted">Select Size</h3>
+                                    {product.sizeChart && (
+                                        <button
+                                            onClick={() => setIsSizeModalOpen(true)}
+                                            className="text-[10px] uppercase tracking-widest text-accent-gold hover:text-accent-gold/80 transition-colors flex items-center gap-1.5 font-medium"
+                                        >
+                                            <Ruler size={12} />
+                                            View Size Guide
+                                            <ChevronRight size={10} />
+                                        </button>
+                                    )}
+                                </div>
                                 <div className="flex flex-wrap gap-3">
                                     {product.variants.map((v: ProductVariant) => (
                                         <button
@@ -481,13 +529,19 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                     <div className="mt-20 border-t border-gray-100 pt-16 mb-20">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                             {product.additionalDetails.map((detail, index) => (
-                                <div key={index} className="space-y-4">
-                                    <h3 className="font-serif text-xl text-foreground relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-px after:bg-accent-gold">
+                                <div key={index} className="space-y-5">
+                                    <h3 className="font-serif text-lg md:text-xl text-foreground relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-px after:bg-accent-gold uppercase tracking-wider">
                                         {detail.title}
                                     </h3>
-                                    <p className="text-sm text-foreground-muted font-light leading-relaxed">
-                                        {detail.content}
-                                    </p>
+                                    <div className="prose prose-sm max-w-none prose-vishwa">
+                                        {Array.isArray(detail.content) ? (
+                                            <PortableText value={detail.content} components={portableTextComponents} />
+                                        ) : (
+                                            <p className="text-sm text-foreground-muted font-light leading-relaxed">
+                                                {detail.content}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -576,6 +630,14 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                         })}
                     </div>
                 </section>
+            )}
+            {/* Size Chart Modal */}
+            {product.sizeChart && (
+                <SizeChartModal
+                    isOpen={isSizeModalOpen}
+                    onClose={() => setIsSizeModalOpen(false)}
+                    sizeChart={product.sizeChart}
+                />
             )}
         </main>
     );

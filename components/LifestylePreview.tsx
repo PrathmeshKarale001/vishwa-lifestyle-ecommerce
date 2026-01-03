@@ -8,38 +8,38 @@ import Image from "next/image";
 const defaultCategories = [
     {
         id: 1,
-        title: "Vishwa Kurta",
+        title: "Apparel",
         image: "/products/home-productgrid/Kurta.png",
         link: "/shop?category=apparel",
-        imgAlt: "Vishwa Kurta",
+        imgAlt: "Apparel",
     },
     {
         id: 2,
-        title: "Sacred Candles",
+        title: "Aromas",
         image: "/products/home-productgrid/Candle.jpeg",
         link: "/shop?category=aromas&sub=Candles",
-        imgAlt: "Sacred Candles",
+        imgAlt: "Aromas",
     },
     {
         id: 3,
-        title: "Artifacts & Decor",
+        title: "Crafts",
         image: "/products/home-productgrid/artifacts.jpeg",
         link: "/shop?category=crafts",
-        imgAlt: "Artifacts & Decor",
+        imgAlt: "Crafts",
     },
     {
         id: 4,
-        title: "Bags",
+        title: "Bags & Accessories",
         image: "/products/home-productgrid/Bags.jpeg",
         link: "/shop?category=bags-accessories",
-        imgAlt: "Bags",
+        imgAlt: "Bags & Accessories",
     },
     {
         id: 5,
-        title: "Other",
+        title: "Footwear",
         image: "/products/home-productgrid/juti.png",
         link: "/shop?category=footwear",
-        imgAlt: "Other Essentials",
+        imgAlt: "Footwear",
     },
 ];
 

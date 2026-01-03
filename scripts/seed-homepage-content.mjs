@@ -99,11 +99,11 @@ async function seedHomepage() {
 
     // 3. Lifestyle Grid
     const gridItemsData = [
-        { title: "Vishwa Kurta", path: "/products/home-productgrid/Kurta.png", link: "/shop?category=apparel" },
-        { title: "Sacred Candles", path: "/products/home-productgrid/Candle.jpeg", link: "/shop?category=aromas&sub=Candles" },
-        { title: "Artifacts & Decor", path: "/products/home-productgrid/artifacts.jpeg", link: "/shop?category=crafts" },
-        { title: "Bags", path: "/products/home-productgrid/Bags.jpeg", link: "/shop?category=bags-accessories" },
-        { title: "Other", path: "/products/home-productgrid/juti.png", link: "/shop?category=footwear" },
+        { title: "Apparel", path: "/products/home-productgrid/Kurta.png", link: "/shop?category=apparel" },
+        { title: "Aromas", path: "/products/home-productgrid/Candle.jpeg", link: "/shop?category=aromas&sub=Candles" },
+        { title: "Crafts", path: "/products/home-productgrid/artifacts.jpeg", link: "/shop?category=crafts" },
+        { title: "Bags & Accessories", path: "/products/home-productgrid/Bags.jpeg", link: "/shop?category=bags-accessories" },
+        { title: "Footwear", path: "/products/home-productgrid/juti.png", link: "/shop?category=footwear" },
     ];
 
     const lifestyleGrid = [];

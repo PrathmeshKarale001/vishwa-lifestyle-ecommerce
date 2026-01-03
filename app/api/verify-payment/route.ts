@@ -36,12 +36,32 @@ export async function POST(request: NextRequest) {
 
         // Update order status in database
         try {
-            await updateOrderStatus(
+            const updatedOrder = await updateOrderStatus(
                 orderNumber,
                 'processing',
                 'paid',
                 razorpay_payment_id
             );
+
+            // Deduct inventory
+            if (updatedOrder && updatedOrder.items) {
+                const { deductInventory } = await import('@/lib/inventory');
+
+                // Process items concurrently
+                await Promise.all(updatedOrder.items.map(async (item: any) => {
+                    // Item ID usually stores "productId" or "productId-variantSku"
+                    // If we stored productId separately in item object, use it.
+                    // Assuming item structure has product_id based on typical implementation
+                    // If not, we might need to parse item.id if it's composite.
+                    // Let's assume item object has product_id.
+                    if (item.product_id) {
+                        const success = await deductInventory(item.product_id, item.quantity || 1);
+                        if (!success) {
+                            log.warn(`Failed to deduct inventory for product ${item.product_id}`, { orderNumber });
+                        }
+                    }
+                }));
+            }
 
             log.info('Payment verified and order updated', { orderNumber, paymentId: razorpay_payment_id });
 

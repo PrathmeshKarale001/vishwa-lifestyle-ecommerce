@@ -34,6 +34,8 @@
     "@supabase/supabase-js": "^2.47.12",
     "@tailwindcss/postcss": "^4.1.17",
     "@vercel/analytics": "^1.5.0",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.24",
     "html2canvas": "^1.4.1",
     "isomorphic-dompurify": "^2.33.0",

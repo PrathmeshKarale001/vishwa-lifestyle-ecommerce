@@ -115,6 +115,7 @@ export const queries = {
     tags,
     isNew,
     isBestSeller,
+    isOnSale,
     _createdAt
   } | order(
     select(
@@ -125,6 +126,25 @@ export const queries = {
     ),
     _createdAt desc
   )[0...12]`,
+
+  // Get sale products
+  saleProducts: `*[_type == "product" && (isOnSale == true || compareAtPrice > price)] {
+    _id,
+    name,
+    "slug": slug.current,
+    price,
+    compareAtPrice,
+    "image": images[0].asset->url,
+    "lqip": images[0].asset->metadata.lqip,
+    "category": category->slug.current,
+    "categoryName": category->name,
+    "inventory": coalesce(inventory, 10),
+    tags,
+    isNew,
+    isBestSeller,
+    isOnSale,
+    _createdAt
+  } | order(_createdAt desc)[0...12]`,
 
   // Search products
   searchProducts: `*[_type == "product" && (name match $query || tags[] match $query || description match $query)]
@@ -330,6 +350,10 @@ export async function getProductsByCategory(category: string) {
 
 export async function getFeaturedProducts() {
   return await sanityClient.fetch(queries.featuredProducts);
+}
+
+export async function getSaleProducts() {
+  return await sanityClient.fetch(queries.saleProducts);
 }
 
 export async function searchProducts(searchQuery: string) {

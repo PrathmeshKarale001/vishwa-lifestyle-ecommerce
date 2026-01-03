@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProductCard from "./ProductCard";
 import { getFeaturedProducts } from "@/lib/sanity";
+import ProductSlider from "./ProductSlider";
 
 interface Product {
   _id: string;
@@ -22,16 +23,11 @@ export default async function ShopGrid() {
 
   try {
     const data = await getFeaturedProducts();
-    // Take first 4 products
-    products = data.slice(0, 4);
+    // Fetch more products for a better slider experience
+    products = data.slice(0, 8);
   } catch (error) {
     console.error("Error fetching featured products:", error);
   }
-
-  const getCategoryLabel = (product: any) => {
-    if (!product.category) return "";
-    return product.categoryName || product.category.charAt(0).toUpperCase() + product.category.slice(1);
-  };
 
   return (
     <section className="py-12 sm:py-16 md:py-24 bg-background-alt">
@@ -54,30 +50,7 @@ export default async function ShopGrid() {
         </div>
 
         {products.length > 0 ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
-            {products.map((product) => {
-              const tag = product.isBestSeller
-                ? "Best Seller"
-                : product.isNew
-                  ? "New"
-                  : undefined;
-
-              return (
-                <ProductCard
-                  key={product._id}
-                  id={product._id}
-                  slug={product.slug}
-                  name={product.name}
-                  price={product.price}
-                  compareAtPrice={product.compareAtPrice}
-                  image={product.image || "/placeholder-product.svg"}
-                  tag={tag}
-                  category={getCategoryLabel(product)}
-                  inventory={product.inventory}
-                />
-              );
-            })}
-          </div>
+          <ProductSlider products={products} />
         ) : (
           <div className="text-center py-12">
             <p className="text-foreground-muted">No featured products available yet.</p>

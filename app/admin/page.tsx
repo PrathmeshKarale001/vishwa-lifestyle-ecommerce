@@ -77,7 +77,7 @@ export default function AdminDashboard() {
     try {
       // First check: Is user logged in?
       const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
+
       if (authError || !user) {
         toast.error("Please log in to access admin panel");
         router.push("/auth/login?redirect=" + encodeURIComponent("/admin"));
@@ -86,7 +86,7 @@ export default function AdminDashboard() {
 
       // Second check: Is user an admin?
       const userIsAdmin = await isAdmin();
-      
+
       if (!userIsAdmin) {
         toast.error("Access denied. Admin privileges required.");
         router.push("/");
@@ -100,11 +100,11 @@ export default function AdminDashboard() {
 
       setIsAuthorized(true);
       await fetchDashboardData();
-      } catch (error) {
-        log.error("Admin access verification error", error);
-        toast.error("Unable to verify access. Please try again.");
-        router.push("/");
-      } finally {
+    } catch (error) {
+      log.error("Admin access verification error", error);
+      toast.error("Unable to verify access. Please try again.");
+      router.push("/");
+    } finally {
       setLoading(false);
     }
   };
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
         .from("inventory")
         .select("id, quantity, low_stock_threshold")
         .eq("is_tracked", true);
-      
+
       const lowStockData = allInventory?.filter(
         (item) => item.quantity <= item.low_stock_threshold
       ) || [];
@@ -182,8 +182,8 @@ export default function AdminDashboard() {
 
       // Calculate conversion rate (orders / (orders + abandoned carts))
       const totalCarts = (allOrders?.length || 0) + (abandonedCartsData?.length || 0);
-      const conversionRate = totalCarts > 0 
-        ? ((allOrders?.length || 0) / totalCarts) * 100 
+      const conversionRate = totalCarts > 0
+        ? ((allOrders?.length || 0) / totalCarts) * 100
         : 0;
 
       setStats({
@@ -587,6 +587,14 @@ export default function AdminDashboard() {
               >
                 View Guide <ArrowRight size={14} />
               </Link>
+              <div className="mt-4 pt-4 border-t border-accent-gold/20">
+                <Link
+                  href="/admin/reviews"
+                  className="text-sm text-foreground hover:underline flex items-center gap-1 font-medium"
+                >
+                  Review Moderation <ArrowRight size={14} />
+                </Link>
+              </div>
             </div>
           </div>
         </div>

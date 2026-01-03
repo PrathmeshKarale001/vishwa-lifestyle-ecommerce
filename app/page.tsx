@@ -2,9 +2,9 @@ import Hero from "@/components/Hero";
 import LifestylePreview from "@/components/LifestylePreview";
 import StorySection from "@/components/StorySection";
 import ShopGrid from "@/components/ShopGrid";
+import SaleProducts from "@/components/SaleProducts";
 import PhilosophySection from "@/components/PhilosophySection";
 import BenefitStrip from "@/components/BenefitStrip";
-
 
 
 
@@ -19,6 +19,7 @@ export default async function Home() {
       <LifestylePreview items={homeData?.lifestyleGrid} />
       <StorySection data={homeData?.story} />
       <ShopGrid />
+      <SaleProducts />
       <PhilosophySection data={homeData?.philosophy} />
       <BenefitStrip benefits={homeData?.benefits} />
     </main>

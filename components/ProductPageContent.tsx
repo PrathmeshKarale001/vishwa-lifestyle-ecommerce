@@ -7,6 +7,7 @@ import { PortableText } from "@portabletext/react";
 import SizeChartModal from "./SizeChartModal";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
+import ReviewsSection from "./ReviewsSection";
 import toast from "react-hot-toast";
 import ImageZoom from "@/components/ImageZoom";
 import ProductCard from "@/components/ProductCard";

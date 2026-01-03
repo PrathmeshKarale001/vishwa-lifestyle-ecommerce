@@ -120,13 +120,39 @@ const product: SchemaTypeDefinition = {
             type: 'string',
         },
         {
+            name: 'unitType',
+            title: 'Unit Type',
+            type: 'string',
+            description: 'E.g., Pieces, Grams, etc.',
+        },
+        {
             name: 'productType',
             title: 'Product Type',
             type: 'string',
         },
         {
+            name: 'supplierName',
+            title: 'Supplier Name',
+            type: 'string',
+        },
+        {
+            name: 'supplierCode',
+            title: 'Supplier Code',
+            type: 'string',
+        },
+        {
+            name: 'supplierContact',
+            title: 'Supplier Contact',
+            type: 'string',
+        },
+        {
             name: 'segments',
             title: 'Segments',
+            type: 'string',
+        },
+        {
+            name: 'subSegments',
+            title: 'Sub Segments',
             type: 'string',
         },
         {
@@ -218,6 +244,12 @@ const product: SchemaTypeDefinition = {
         {
             name: 'isBestSeller',
             title: 'Is Best Seller',
+            type: 'boolean',
+            initialValue: false,
+        },
+        {
+            name: 'isOnSale',
+            title: 'Is On Sale',
             type: 'boolean',
             initialValue: false,
         },

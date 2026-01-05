@@ -35,11 +35,21 @@ export async function POST(request: NextRequest) {
         }
 
         const hasPurchased = orders?.some((order: any) =>
-            order.items?.some((item: any) => item.product_id === productId || item.id === productId) &&
-            (order.payment_status === 'paid' || order.status === 'delivered')
+            order.items?.some((item: any) =>
+                item.product_id === productId ||
+                item.productId === productId ||
+                item.id === productId
+            ) &&
+            (
+                order.payment_status === 'paid' ||
+                order.status?.toLowerCase() === 'delivered' ||
+                order.status?.toLowerCase() === 'processing' ||
+                order.status?.toLowerCase() === 'confirmed'
+            )
         );
 
         if (!hasPurchased) {
+            console.log('Purchase validation failed for user:', user.id, 'productId:', productId);
             return NextResponse.json({ error: 'You must have purchased this product to leave a review.' }, { status: 403 });
         }
 

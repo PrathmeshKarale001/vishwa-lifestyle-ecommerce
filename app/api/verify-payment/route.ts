@@ -35,13 +35,28 @@ export async function POST(request: NextRequest) {
         }
 
         // Update order status in database
+        let updatedOrder;
         try {
-            const updatedOrder = await updateOrderStatus(
-                orderNumber,
-                'processing',
-                'paid',
-                razorpay_payment_id
-            );
+            const { createServerClient } = await import('@/lib/supabase');
+            const supabaseAdmin = createServerClient();
+
+            if (!supabaseAdmin) {
+                throw new Error('Failed to initialize admin client');
+            }
+
+            const { data, error } = await supabaseAdmin
+                .from('orders')
+                .update({
+                    status: 'processing',
+                    payment_status: 'paid',
+                    payment_id: razorpay_payment_id
+                })
+                .eq('order_number', orderNumber)
+                .select()
+                .single();
+
+            if (error) throw error;
+            updatedOrder = data;
 
             // Deduct inventory
             if (updatedOrder && updatedOrder.items) {

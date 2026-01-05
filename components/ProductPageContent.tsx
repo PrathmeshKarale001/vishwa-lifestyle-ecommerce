@@ -388,7 +388,7 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                         )}
 
                         {/* Description */}
-                        <p className="text-foreground-muted leading-relaxed font-light mb-8">
+                        <p className="text-foreground-muted leading-relaxed font-light mb-8 whitespace-pre-wrap">
                             {product.description}
                         </p>
 

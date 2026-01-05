@@ -71,6 +71,34 @@ const sizeCharts = [
             { _key: 'row5', cells: ["10", "29.0"] },
             { _key: 'row6', cells: ["11", "30.0"] },
         ]
+    },
+    {
+        _id: 'size-chart-womens-long-kurta',
+        _type: 'sizeChart',
+        title: "Women's Long Kurta",
+        type: 'kurta',
+        gender: 'women',
+        headers: ["Size", "Bust (in)", "Shoulder (in)", "Kurta Length (in)", "3/4 Sleeve (in)", "Full Sleeve (in)"],
+        rows: [
+            { _key: 'row1', cells: ["S", "36", "14.5 - 15", "42", "16 - 17", "22 - 23"] },
+            { _key: 'row2', cells: ["M", "38", "15 - 15.5", "42", "17 - 18", "23 - 24"] },
+            { _key: 'row3', cells: ["L", "40", "15.5 - 16", "43", "18 - 19", "24 - 25"] },
+            { _key: 'row4', cells: ["XL", "42", "16 - 16.5", "43", "19 - 20", "25 - 26"] },
+        ]
+    },
+    {
+        _id: 'size-chart-womens-short-kurta',
+        _type: 'sizeChart',
+        title: "Women's Short Kurta",
+        type: 'kurta',
+        gender: 'women',
+        headers: ["Size", "Bust (in)", "Shoulder (in)", "Kurta Length (in)", "3/4 Sleeve (in)", "Full Sleeve (in)"],
+        rows: [
+            { _key: 'row1', cells: ["S", "36", "14.5 - 15", "30", "16 - 17", "20 - 21"] },
+            { _key: 'row2', cells: ["M", "38", "15 - 15.5", "30", "17 - 18", "21 - 22"] },
+            { _key: 'row3', cells: ["L", "40", "15.5 - 16", "31", "18 - 19", "22 - 23"] },
+            { _key: 'row4', cells: ["XL", "42", "16 - 16.5", "31", "19 - 20", "23 - 24"] },
+        ]
     }
 ];
 

@@ -10,6 +10,7 @@ import { useWishlistStore } from "@/store/wishlist";
 import toast from "react-hot-toast";
 import { getBlurPlaceholder } from "@/lib/image-utils";
 import { getProductBySlug } from "@/lib/sanity";
+import { createPortal } from "react-dom";
 
 interface ProductQuickViewProps {
   productSlug: string;
@@ -44,9 +45,14 @@ export default function ProductQuickView({
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
   const addItem = useCartStore((state) => state.addItem);
   const { isInWishlist, toggleItem } = useWishlistStore();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (isOpen && productSlug) {
@@ -117,6 +123,8 @@ export default function ProductQuickView({
     }).format(amount);
   };
 
+  if (!isOpen || !mounted) return null;
+
   const productImages = product?.images?.filter(Boolean) ||
     (product?.mainImage ? [product.mainImage] : []) ||
     [];
@@ -128,15 +136,13 @@ export default function ProductQuickView({
   const isOutOfStock = effectiveInventory <= 0;
   const isWishlisted = product ? isInWishlist(product._id) : false;
 
-  if (!isOpen) return null;
-
-  return (
+  return createPortal(
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/50 z-[70] flex items-center justify-center p-4"
+        className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4"
         onClick={onClose}
       >
         <motion.div
@@ -232,7 +238,7 @@ export default function ProductQuickView({
                         </div>
                       )}
                     </div>
-                    <p className="text-foreground-muted leading-relaxed mb-6">
+                    <p className="text-foreground-muted leading-relaxed mb-6 whitespace-pre-wrap">
                       {product.description}
                     </p>
                   </div>
@@ -272,8 +278,7 @@ export default function ProductQuickView({
                     <button
                       onClick={handleAddToCart}
                       disabled={isOutOfStock}
-                      className={`flex-1 flex items-center justify-center gap-2 bg-foreground text-white py-3 px-6 uppercase tracking-widest text-sm hover:bg-accent-gold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${isOutOfStock ? "" : ""
-                        }`}
+                      className={`flex-1 flex items-center justify-center gap-2 bg-foreground text-white py-3 px-6 uppercase tracking-widest text-sm hover:bg-accent-gold transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
                       <ShoppingBag size={16} />
                       {isOutOfStock ? "Out of Stock" : "Add to Cart"}
@@ -308,7 +313,7 @@ export default function ProductQuickView({
           </div>
         </motion.div>
       </motion.div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
-

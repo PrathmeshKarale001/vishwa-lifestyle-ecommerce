@@ -1,7 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     let response = NextResponse.next({
         request: {
             headers: request.headers,
@@ -54,20 +54,24 @@ export async function proxy(request: NextRequest) {
         }
     )
 
-    await supabase.auth.getUser()
+    // 4. Refresh session
+    try {
+        await supabase.auth.getUser()
+    } catch (e) {
+        console.error('Middleware auth error:', e)
+    }
 
-    // Add CSP headers
-    const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+    // 5. Add CSP Headers (from proxy.ts) - Updated with missing domains from console
     const cspHeader = `
         default-src 'self';
-        script-src 'self' 'unsafe-eval' 'unsafe-inline' https://checkout.razorpay.com https://cdn.sanity.io https://www.google-analytics.com https://www.googletagmanager.com;
+        script-src 'self' 'unsafe-eval' 'unsafe-inline' https://checkout.razorpay.com https://checkout.ccavenue.com https://cdn.sanity.io https://www.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com;
         style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-        img-src 'self' blob: data: https://*.supabase.co https://cdn.sanity.io https://images.unsplash.com https://razorpay.com;
+        img-src 'self' blob: data: https://*.supabase.co https://cdn.sanity.io https://images.unsplash.com https://*.ccavenue.com https://razorpay.com https://lh3.googleusercontent.com;
         font-src 'self' https://fonts.gstatic.com;
         object-src 'none';
         base-uri 'self';
-        form-action 'self';
-        frame-src 'self' https://api.razorpay.com;
+        form-action 'self' https://secure.ccavenue.com;
+        frame-src 'self' https://api.razorpay.com https://secure.ccavenue.com;
         connect-src 'self' https://*.supabase.co https://*.sanity.io https://api.razorpay.com https://www.google-analytics.com;
         upgrade-insecure-requests;
     `.replace(/\s{2,}/g, ' ').trim()

@@ -106,7 +106,7 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white pt-24">
+    <div className="bg-white">
       {/* Hero */}
       <section className="bg-background-alt py-20">
         <div className="container mx-auto px-6 text-center">
@@ -149,10 +149,10 @@ export default function ContactPage() {
                         type="text"
                         {...register("name")}
                         className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${errors.name
-                            ? "border-red-500 bg-red-50"
-                            : touchedFields.name && !errors.name
-                              ? "border-green-500 bg-green-50"
-                              : "border-gray-200"
+                          ? "border-red-500 bg-red-50"
+                          : touchedFields.name && !errors.name
+                            ? "border-green-500 bg-green-50"
+                            : "border-gray-200"
                           }`}
                         placeholder="Your name"
                       />
@@ -181,10 +181,10 @@ export default function ContactPage() {
                         type="email"
                         {...register("email")}
                         className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${errors.email
-                            ? "border-red-500 bg-red-50"
-                            : touchedFields.email && !errors.email
-                              ? "border-green-500 bg-green-50"
-                              : "border-gray-200"
+                          ? "border-red-500 bg-red-50"
+                          : touchedFields.email && !errors.email
+                            ? "border-green-500 bg-green-50"
+                            : "border-gray-200"
                           }`}
                         placeholder="your@email.com"
                       />
@@ -225,10 +225,10 @@ export default function ContactPage() {
                       type="text"
                       {...register("subject")}
                       className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold transition-colors ${errors.subject
-                          ? "border-red-500 bg-red-50"
-                          : touchedFields.subject && !errors.subject
-                            ? "border-green-500 bg-green-50"
-                            : "border-gray-200"
+                        ? "border-red-500 bg-red-50"
+                        : touchedFields.subject && !errors.subject
+                          ? "border-green-500 bg-green-50"
+                          : "border-gray-200"
                         }`}
                       placeholder="How can we help?"
                     />
@@ -258,10 +258,10 @@ export default function ContactPage() {
                       {...register("message")}
                       rows={5}
                       className={`w-full border px-4 py-3 pr-10 focus:outline-none focus:border-accent-gold resize-none transition-colors ${errors.message
-                          ? "border-red-500 bg-red-50"
-                          : touchedFields.message && !errors.message
-                            ? "border-green-500 bg-green-50"
-                            : "border-gray-200"
+                        ? "border-red-500 bg-red-50"
+                        : touchedFields.message && !errors.message
+                          ? "border-green-500 bg-green-50"
+                          : "border-gray-200"
                         }`}
                       placeholder="Tell us more..."
                     />
@@ -349,7 +349,7 @@ export default function ContactPage() {
       </section>
 
 
-    </main>
+    </div>
   );
 }
 

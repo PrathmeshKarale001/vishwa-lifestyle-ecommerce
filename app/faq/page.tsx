@@ -150,7 +150,7 @@ export default function FAQPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <main className="min-h-screen bg-white pt-24">
+      <div className="bg-white">
         {/* Hero */}
         <section className="bg-background-alt py-16">
           <div className="container mx-auto px-6 text-center">
@@ -190,8 +190,8 @@ export default function FAQPage() {
                     }}
                     aria-selected={activeCategory === idx}
                     className={`px-4 py-2 text-sm transition-colors ${activeCategory === idx
-                        ? "bg-foreground text-white"
-                        : "bg-background-alt hover:bg-gray-200"
+                      ? "bg-foreground text-white"
+                      : "bg-background-alt hover:bg-gray-200"
                       }`}
                   >
                     {category.name}
@@ -285,7 +285,7 @@ export default function FAQPage() {
         </section>
 
 
-      </main>
+      </div>
     </>
   );
 }

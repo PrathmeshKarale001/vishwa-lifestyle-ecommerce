@@ -141,25 +141,47 @@ export async function POST(request: NextRequest) {
 
     // Create order in database (pending status)
     try {
-      await createOrder({
-        order_number: orderNumber,
-        user_id: userId || undefined,
-        email,
-        phone,
-        items,
-        subtotal,
-        discount,
-        shipping,
-        tax,
-        total,
-        shipping_address: shippingAddress,
-        promo_code: promoCode,
-        razorpay_order_id: razorpayOrderId,
-        status: 'pending',
-        payment_status: 'unpaid',
-      });
+      const { createServerClient } = await import('@/lib/supabase');
+      const supabaseAdmin = createServerClient();
+
+      if (!supabaseAdmin) {
+        throw new Error('Failed to initialize admin client');
+      }
+
+      const { error: dbError } = await supabaseAdmin
+        .from('orders')
+        .insert({
+          order_number: orderNumber,
+          user_id: userId || undefined,
+          email,
+          phone,
+          items,
+          subtotal,
+          discount,
+          shipping,
+          tax,
+          total,
+          shipping_address: shippingAddress,
+          promo_code: promoCode,
+          razorpay_order_id: razorpayOrderId,
+          status: 'pending',
+          payment_status: 'pending',
+        });
+
+      if (dbError) throw dbError;
+
     } catch (dbError: any) {
+      console.error('Checkout DB Error:', dbError); // Explicit console log
       log.error('Database error creating order', dbError, { orderNumber, email });
+      // If DB insert fails, we MUST fail the request so user doesn't pay for ghost order
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'System error: Could not create order record.',
+          details: dbError.message || JSON.stringify(dbError) // Expose error for debugging
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({

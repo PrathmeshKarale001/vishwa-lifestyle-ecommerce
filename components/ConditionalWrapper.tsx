@@ -37,7 +37,7 @@ export default function ConditionalWrapper({ children, categories = [], settings
       <MobileBottomNav />
       <main
         id="main-content"
-        className={`${!isHomePage ? (settings?.announcementBar?.show ? 'pt-32 sm:pt-40' : 'pt-24 sm:pt-28') : ''} min-h-screen`}
+        className={`${!isHomePage ? (settings?.announcementBar?.show ? 'pt-[86px] sm:pt-[104px]' : 'pt-[56px] sm:pt-[72px]') : ''} min-h-screen`}
       >
         {children}
       </main>

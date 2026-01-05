@@ -70,7 +70,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <main className="min-h-screen bg-white pt-16 sm:pt-20">
+    <div className="min-h-screen bg-white">
       {/* Shop Banner */}
       <section className="relative h-[40vh] sm:h-[50vh] flex items-center justify-center text-center px-4 sm:px-6 overflow-hidden">
         {/* Background Image */}
@@ -130,6 +130,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       </section>
 
 
-    </main>
+    </div>
   );
 }

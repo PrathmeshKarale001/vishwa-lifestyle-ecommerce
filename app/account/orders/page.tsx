@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Package, ChevronRight, Search, Loader2 } from "lucide-react";
 
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import toast from "react-hot-toast";
 import { log } from "@/lib/logger";
 import EmptyState from "@/components/EmptyState";
@@ -26,6 +26,7 @@ interface Order {
 }
 
 export default function OrdersPage() {
+  const supabase = createClient();
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,10 +42,19 @@ export default function OrdersPage() {
       }
 
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        // Try to get session instead of user directly, which is more reliable for client-side timing
+        const { data: { session } } = await supabase.auth.getSession();
+        let user = session?.user;
+
+        // If no user, wait a tiny bit and try one more time (Supabase rehydration can be slow)
+        if (!user) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          const { data: { user: retryUser } } = await supabase.auth.getUser();
+          if (retryUser) user = retryUser;
+        }
 
         if (!user) {
-          router.push("/auth/login");
+          router.push("/auth/login?next=/account/orders");
           return;
         }
 
@@ -224,12 +234,22 @@ export default function OrdersPage() {
 
                       {/* Order Actions */}
                       <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
-                        <Link
-                          href={`/account/orders/${order.id}`}
-                          className="text-sm text-accent-gold hover:underline flex items-center gap-1"
-                        >
-                          View Details <ChevronRight size={14} />
-                        </Link>
+                        <div className="flex gap-4">
+                          <Link
+                            href={`/account/orders/${order.id}`}
+                            className="text-sm text-accent-gold hover:underline flex items-center gap-1"
+                          >
+                            View Details <ChevronRight size={14} />
+                          </Link>
+                          {/* Quick Invoice Link - redirects to details which has the functionality */}
+                          <Link
+                            href={`/account/orders/${order.id}`}
+                            className="text-sm text-foreground-muted hover:text-foreground hidden md:block"
+                          >
+                            Invoice
+                          </Link>
+                        </div>
+
                         {order.status === "Delivered" && (
                           <button className="text-sm border border-gray-200 px-4 py-2 hover:bg-white transition-colors">
                             Buy Again

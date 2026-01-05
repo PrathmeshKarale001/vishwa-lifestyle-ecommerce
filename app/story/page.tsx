@@ -67,7 +67,7 @@ export default function StoryPage() {
     }, []);
 
     return (
-        <main className="min-h-screen bg-white">
+        <div className="bg-white">
             {/* Hero Section */}
             <section className="relative h-[80vh] flex items-center justify-center bg-black text-white overflow-hidden">
                 <div
@@ -304,7 +304,7 @@ export default function StoryPage() {
             </section>
 
 
-        </main>
+        </div>
     );
 }
 

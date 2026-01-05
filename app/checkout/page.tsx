@@ -1,5 +1,6 @@
 "use client";
 
+import { createClient } from "@/lib/supabase/client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -48,19 +49,12 @@ const shippingMethods = [
     id: "standard",
     name: "Standard Shipping",
     description: "5-7 business days",
-    price: 0,
-  },
-  {
-    id: "express",
-    name: "Express Shipping",
-    description: "2-3 business days",
-    price: 0,
+    price: 0, // Fallback price if under threshold
   },
 ];
 
 // Free shipping threshold
-const FREE_SHIPPING_THRESHOLD = 1000;
-
+const FREE_SHIPPING_THRESHOLD = 499;
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -70,6 +64,19 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [shippingData, setShippingData] = useState<ShippingFormData | null>(null);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+        // Optional: Pre-fill email/name if available and not already filled
+      }
+    };
+    fetchUser();
+  }, []);
 
   const {
     register,
@@ -150,13 +157,17 @@ export default function CheckoutPage() {
           email: shippingData.email,
           phone: shippingData.phone,
           promoCode,
+          userId: userId || undefined,
         }),
       });
 
       const data = await response.json();
 
       if (!data.success) {
-        throw new Error(data.error || "Failed to initiate payment");
+        const errorMsg = data.details
+          ? `${data.error} Details: ${data.details}`
+          : data.error || "Failed to initiate payment";
+        throw new Error(errorMsg);
       }
 
 

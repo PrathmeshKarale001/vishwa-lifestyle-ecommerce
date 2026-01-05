@@ -48,9 +48,10 @@ export default function ProductSlider({ products, className = "" }: ProductSlide
     };
 
     return (
-        <div className={`relative group ${className}`}>
+        <div className={`relative group/slider ${className}`}>
             <div className="overflow-hidden" ref={emblaRef}>
                 <div className="flex -ml-4 py-4">
+                    {/* ... products map ... */}
                     {products.map((product) => {
                         const tag = product.tag || (product.isBestSeller
                             ? "Best Seller"
@@ -83,7 +84,7 @@ export default function ProductSlider({ products, className = "" }: ProductSlide
             {/* Navigation Buttons */}
             <button
                 onClick={scrollPrev}
-                className="absolute left-0 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm shadow-lg rounded-full opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-4 transition-all duration-300 z-10 hover:bg-white text-gray-800"
+                className="absolute left-0 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm shadow-lg rounded-full opacity-0 -translate-x-4 group-hover/slider:opacity-100 group-hover/slider:translate-x-4 transition-all duration-300 z-10 hover:bg-white text-gray-800"
                 aria-label="Previous slide"
             >
                 <ChevronLeft size={20} />
@@ -91,7 +92,7 @@ export default function ProductSlider({ products, className = "" }: ProductSlide
 
             <button
                 onClick={scrollNext}
-                className="absolute right-0 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm shadow-lg rounded-full opacity-0 translate-x-4 group-hover:opacity-100 group-hover:-translate-x-4 transition-all duration-300 z-10 hover:bg-white text-gray-800"
+                className="absolute right-0 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm shadow-lg rounded-full opacity-0 translate-x-4 group-hover/slider:opacity-100 group-hover/slider:-translate-x-4 transition-all duration-300 z-10 hover:bg-white text-gray-800"
                 aria-label="Next slide"
             >
                 <ChevronRight size={20} />

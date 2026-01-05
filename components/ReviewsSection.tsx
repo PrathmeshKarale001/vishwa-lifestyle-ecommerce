@@ -17,10 +17,10 @@ interface Review {
     created_at: string;
 }
 
-export default function ReviewsSection({ productId }: { productId: string }) {
+export default function ReviewsSection({ productId, initialShowForm = false }: { productId: string; initialShowForm?: boolean }) {
     const [reviews, setReviews] = useState<Review[]>([]);
     const [loading, setLoading] = useState(true);
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(initialShowForm);
 
     // Form state
     const [rating, setRating] = useState(5);

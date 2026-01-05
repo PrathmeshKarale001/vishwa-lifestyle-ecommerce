@@ -136,6 +136,7 @@ export default function CheckoutPage() {
             price: item.price,
             quantity: item.quantity,
             image: item.image,
+            slug: item.slug,
             size: item.size,
             sku: item.variantSku || item.productId, // Use variantSku if available
           })),

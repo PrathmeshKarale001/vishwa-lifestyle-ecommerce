@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Package, ChevronRight, Search, Loader2 } from "lucide-react";
+import { Package, ChevronRight, Search, Loader2, MessageSquare, ExternalLink } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
 import toast from "react-hot-toast";
@@ -209,22 +209,40 @@ export default function OrdersPage() {
                       {order.items && Array.isArray(order.items) && order.items.length > 0 ? (
                         <div className="space-y-4">
                           {order.items.map((item: any, idx: number) => (
-                            <div key={idx} className="flex items-center gap-4">
-                              {item.image && (
-                                <div className="w-16 h-16 bg-white overflow-hidden">
-                                  <img
-                                    src={item.image}
-                                    alt={item.name || "Product"}
-                                    className="w-full h-full object-cover"
-                                  />
+                            <div key={idx} className="flex items-center justify-between group">
+                              <Link
+                                href={item.slug ? `/shop/product/${item.slug}` : "/shop"}
+                                className="flex items-center gap-4 flex-1 hover:opacity-80 transition-opacity"
+                              >
+                                {item.image && (
+                                  <div className="w-16 h-16 bg-white overflow-hidden border border-gray-100">
+                                    <img
+                                      src={item.image}
+                                      alt={item.name || "Product"}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                )}
+                                <div className="flex-1">
+                                  <p className="font-medium text-sm group-hover:text-accent-gold transition-colors">
+                                    {item.name || "Product"}
+                                  </p>
+                                  <p className="text-xs text-foreground-muted">
+                                    Qty: {item.quantity || 1} × {formatPrice(item.price || 0)}
+                                    {item.size && <span className="ml-2 px-1 bg-gray-100 rounded">Size: {item.size}</span>}
+                                  </p>
                                 </div>
+                              </Link>
+
+                              {(order.status?.toLowerCase() === 'delivered' || order.status?.toLowerCase() === 'confirmed' || order.status?.toLowerCase() === 'processing') && (
+                                <Link
+                                  href={item.slug ? `/shop/product/${item.slug}?writeReview=true#reviews` : "/shop"}
+                                  className="flex items-center gap-1.5 text-xs text-accent-gold hover:text-accent-gold/80 font-medium px-3 py-1.5 bg-accent-gold/5 rounded-full transition-colors"
+                                >
+                                  <MessageSquare size={14} />
+                                  Review
+                                </Link>
                               )}
-                              <div className="flex-1">
-                                <p className="font-medium text-sm">{item.name || "Product"}</p>
-                                <p className="text-xs text-foreground-muted">
-                                  Qty: {item.quantity || 1} × {formatPrice(item.price || 0)}
-                                </p>
-                              </div>
                             </div>
                           ))}
                         </div>
@@ -234,19 +252,18 @@ export default function OrdersPage() {
 
                       {/* Order Actions */}
                       <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
-                        <div className="flex gap-4">
+                        <div className="flex items-center gap-6">
                           <Link
                             href={`/account/orders/${order.id}`}
-                            className="text-sm text-accent-gold hover:underline flex items-center gap-1"
+                            className="text-sm font-medium text-foreground hover:text-accent-gold flex items-center gap-1 transition-colors"
                           >
-                            View Details <ChevronRight size={14} />
+                            View Order <ChevronRight size={14} />
                           </Link>
-                          {/* Quick Invoice Link - redirects to details which has the functionality */}
                           <Link
                             href={`/account/orders/${order.id}`}
-                            className="text-sm text-foreground-muted hover:text-foreground hidden md:block"
+                            className="text-sm text-foreground-muted hover:text-foreground hidden md:flex items-center gap-1.5"
                           >
-                            Invoice
+                            Download Invoice
                           </Link>
                         </div>
 

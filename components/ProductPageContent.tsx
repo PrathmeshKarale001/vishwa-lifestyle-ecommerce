@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Minus, Plus, ShoppingBag, Heart, Share2, Truck, Shield, RotateCcw, AlertCircle, Copy, Check, Ruler, ChevronRight } from "lucide-react";
+import { Star, Minus, Plus, ShoppingBag, Heart, Share2, Truck, Shield, RotateCcw, AlertCircle, Copy, Check, Ruler, ChevronRight, MessageSquare } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import SizeChartModal from "./SizeChartModal";
 import { useCartStore } from "@/store/cart";
@@ -87,8 +88,9 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
     // Enable keyboard shortcuts
     useAppKeyboardShortcuts();
 
-    const [reviews, setReviews] = useState<Review[]>([]);
-    const [reviewsLoading, setReviewsLoading] = useState(true);
+    const searchParams = useSearchParams();
+    const writeReviewInitial = searchParams.get("writeReview") === "true";
+
     const [quantity, setQuantity] = useState(1);
     const [selectedImage, setSelectedImage] = useState(0);
     const [copied, setCopied] = useState(false);
@@ -96,35 +98,6 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
         product.variants && product.variants.length > 0 ? product.variants[0] : null
     );
     const [isSizeModalOpen, setIsSizeModalOpen] = useState(false);
-
-    // Fetch reviews from Supabase
-    useEffect(() => {
-        const fetchReviews = async () => {
-            if (!product || !supabase) {
-                setReviewsLoading(false);
-                return;
-            }
-
-            try {
-                const { data } = await supabase
-                    .from("reviews")
-                    .select("*")
-                    .eq("product_id", product._id)
-                    .order("created_at", { ascending: false })
-                    .limit(6);
-
-                if (data) {
-                    setReviews(data);
-                }
-            } catch {
-                setReviews([]);
-            } finally {
-                setReviewsLoading(false);
-            }
-        };
-
-        fetchReviews();
-    }, [product]);
 
     const addItem = useCartStore((state) => state.addItem);
     const { isInWishlist, toggleItem } = useWishlistStore();
@@ -233,9 +206,7 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
     const effectiveInventory = currentInventory ?? 10;
     const isOutOfStock = effectiveInventory <= 0;
     const isLowStock = effectiveInventory > 0 && effectiveInventory <= 5;
-    const averageRating = reviews.length > 0
-        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-        : product.rating || 0;
+    const averageRating = product.rating || 0;
 
     const portableTextComponents = {
         list: {
@@ -335,7 +306,7 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                                     />
                                 ))}
                                 <span className="text-foreground-muted ml-2">
-                                    ({reviews.length || product.reviewCount || 0} Reviews)
+                                    ({product.reviewCount || 0} Reviews)
                                 </span>
                             </div>
                         </div>
@@ -551,56 +522,12 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
             </section>
 
             {/* Reviews Section */}
-            <section className="py-20 bg-background-alt">
-                <div className="container mx-auto px-6">
-                    <h2 className="text-3xl font-serif mb-12 text-center">Customer Reviews</h2>
-
-                    {reviewsLoading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                            {[1, 2, 3].map((i) => (
-                                <div key={i} className="bg-white p-8 animate-pulse">
-                                    <div className="flex justify-center gap-1 mb-4">
-                                        {[1, 2, 3, 4, 5].map((j) => (
-                                            <div key={j} className="w-4 h-4 bg-gray-200 rounded" />
-                                        ))}
-                                    </div>
-                                    <div className="h-20 bg-gray-200 rounded mb-4" />
-                                    <div className="h-4 w-24 bg-gray-200 rounded mx-auto" />
-                                </div>
-                            ))}
-                        </div>
-                    ) : reviews.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                            {reviews.map((review) => (
-                                <article key={review.id} className="bg-white p-8">
-                                    <div className="flex justify-center text-accent-gold mb-4" aria-label={`Rating: ${review.rating} out of 5`}>
-                                        {[...Array(5)].map((_, i) => (
-                                            <Star
-                                                key={i}
-                                                size={16}
-                                                fill={i < review.rating ? "currentColor" : "none"}
-                                                aria-hidden="true"
-                                            />
-                                        ))}
-                                    </div>
-                                    <blockquote className="text-foreground font-serif italic mb-4">
-                                        "{review.content}"
-                                    </blockquote>
-                                    <footer className="text-center">
-                                        <cite className="text-sm font-medium not-italic">{review.user_name}</cite>
-                                        {review.is_verified && (
-                                            <span className="text-xs text-accent-gold ml-2">✓ Verified</span>
-                                        )}
-                                        <p className="text-xs text-foreground-muted mt-1">{formatDate(review.created_at)}</p>
-                                    </footer>
-                                </article>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-center py-8">
-                            <p className="text-foreground-muted mb-4">No reviews yet. Be the first to review this product!</p>
-                        </div>
-                    )}
+            <section className="py-20 bg-background-alt" id="reviews">
+                <div className="container mx-auto px-6 max-w-5xl">
+                    <ReviewsSection
+                        productId={product._id}
+                        initialShowForm={writeReviewInitial}
+                    />
                 </div>
             </section>
 

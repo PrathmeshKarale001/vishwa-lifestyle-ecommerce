@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCurrentUser, getOrdersByUser, addReview } from '@/lib/supabase';
-import { log } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
     try {
-        const user = await getCurrentUser();
+        const { createClient } = await import('@/lib/supabase/server');
+        const supabase = await createClient();
+
+        const { data: { user } } = await supabase.auth.getUser();
 
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -17,44 +18,52 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        // specific validation for 1-5 rating
+        // Specific validation for 1-5 rating
         if (rating < 1 || rating > 5) {
             return NextResponse.json({ error: 'Rating must be between 1 and 5' }, { status: 400 });
         }
 
         // Validate verified purchase
-        // We fetch all orders for the user and check if any contains the product
-        const orders = await getOrdersByUser(user.id);
+        // Fetch all orders for the user and check if any contains the product
+        const { data: orders, error: ordersError } = await supabase
+            .from('orders')
+            .select('*')
+            .eq('user_id', user.id);
+
+        if (ordersError) {
+            console.error('Error fetching orders for review validation:', ordersError);
+        }
+
         const hasPurchased = orders?.some((order: any) =>
-            // Check if items array contains the product. Assuming items have product_id or id matching Sanity ID
-            // Commonly items are stored as { product_id: "...", ... }
             order.items?.some((item: any) => item.product_id === productId || item.id === productId) &&
             (order.payment_status === 'paid' || order.status === 'delivered')
         );
 
         if (!hasPurchased) {
-            return NextResponse.json({ error: 'You verify that you have purchased this product to leave a review.' }, { status: 403 });
+            return NextResponse.json({ error: 'You must have purchased this product to leave a review.' }, { status: 403 });
         }
 
-        const { data, error } = await addReview({
-            product_id: productId,
-            user_id: user.id,
-            user_name: user.user_metadata?.name || 'Anonymous',
-            rating,
-            title,
-            content,
-            // status: 'pending' // Let Supabase default handle this or trigger
-        });
+        const { data, error } = await supabase
+            .from('reviews')
+            .insert({
+                product_id: productId,
+                user_id: user.id,
+                user_name: user.user_metadata?.name || user.user_metadata?.full_name || 'Anonymous',
+                rating,
+                title,
+                content,
+                status: 'pending'
+            });
 
         if (error) {
-            log.error('Error submitting review', error);
+            console.error('Error submitting review:', error);
             return NextResponse.json({ error: 'Failed to submit review' }, { status: 500 });
         }
 
         return NextResponse.json({ success: true, message: 'Review submitted successfully pending approval.' });
 
     } catch (error) {
-        log.error('Review submission error', error);
+        console.error('Review submission error:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }
@@ -110,11 +119,33 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
     try {
-        const { isAdmin } = await import('@/lib/admin');
-        const isUserAdmin = await isAdmin();
+        const { createClient } = await import('@/lib/supabase/server');
+        const supabase = await createClient();
 
-        if (!isUserAdmin) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        // Check if user is admin
+        const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map(e => e.trim()) || [];
+        const isEmailAdmin = adminEmails.includes(user.email || '');
+
+        let isDbAdmin = false;
+        try {
+            const { data: adminUser } = await supabase
+                .from('admin_users')
+                .select('is_active')
+                .eq('user_id', user.id)
+                .eq('is_active', true)
+                .single();
+            if (adminUser) isDbAdmin = true;
+        } catch (e) {
+            // Ignore if table doesn't exist
+        }
+
+        if (!isEmailAdmin && !isDbAdmin) {
+            return NextResponse.json({ error: 'Unauthorized. Admin access required.' }, { status: 403 });
         }
 
         const { id, status } = await request.json();
@@ -123,14 +154,15 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: 'Review ID and status required' }, { status: 400 });
         }
 
-        const { createServerClient } = await import('@/lib/supabase');
-        const supabase = createServerClient();
+        // Use service role for the actual update to ensure it bypasses any restrictive RLS
+        const { createServerClient: createAdminClient } = await import('@/lib/supabase');
+        const supabaseAdmin = createAdminClient();
 
-        if (!supabase) {
+        if (!supabaseAdmin) {
             return NextResponse.json({ error: 'Database connection failed' }, { status: 500 });
         }
 
-        const { error } = await supabase
+        const { error } = await supabaseAdmin
             .from('reviews')
             .update({ status })
             .eq('id', id);
@@ -140,7 +172,7 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ success: true });
 
     } catch (error) {
-        console.error('Error updating review', error);
+        console.error('Error updating review:', error);
         return NextResponse.json({ error: 'Failed to update review' }, { status: 500 });
     }
 }

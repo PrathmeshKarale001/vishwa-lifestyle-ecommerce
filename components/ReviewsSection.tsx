@@ -62,6 +62,12 @@ export default function ReviewsSection({ productId, initialShowForm = false }: {
                 }),
             });
 
+            if (res.status === 401) {
+                toast.error("Please sign in to submit a review.");
+                setSubmitting(false);
+                return;
+            }
+
             const data = await res.json();
 
             if (!res.ok) {

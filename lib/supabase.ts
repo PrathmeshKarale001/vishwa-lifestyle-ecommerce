@@ -25,9 +25,15 @@ export const supabase: SupabaseClient = hasValidCredentials
 export function createServerClient() {
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!supabaseServiceKey || !hasValidCredentials) {
+    if (!supabaseServiceKey) console.warn("createServerClient: SUPABASE_SERVICE_ROLE_KEY is missing!");
     return null;
   }
-  return createClient(supabaseUrl, supabaseServiceKey);
+  return createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    }
+  });
 }
 
 // ==========================================

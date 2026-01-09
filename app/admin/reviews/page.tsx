@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Star, CheckCircle, XCircle, Loader2, ArrowLeft } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { isAdmin } from "@/lib/admin";
 import toast from "react-hot-toast";
 
@@ -19,16 +19,37 @@ interface Review {
     created_at: string;
 }
 
+import { sanityClient } from "@/lib/sanity";
+
+// ... existing imports
+
 export default function AdminReviews() {
     const router = useRouter();
     const [reviews, setReviews] = useState<Review[]>([]);
+    const [productNames, setProductNames] = useState<Record<string, string>>({});
     const [loading, setLoading] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(false);
+    const supabase = createClient();
 
     useEffect(() => {
         checkAdminAndFetchReviews();
+        fetchProductNames();
     }, []);
 
+    const fetchProductNames = async () => {
+        try {
+            const products = await sanityClient.fetch(`*[_type == "product"]{_id, name}`);
+            const nameMap: Record<string, string> = {};
+            products.forEach((p: any) => {
+                nameMap[p._id] = p.name;
+            });
+            setProductNames(nameMap);
+        } catch (error) {
+            console.error("Error fetching product names:", error);
+        }
+    };
+
+    // ... existing checkAdminAndFetchReviews ...
     const checkAdminAndFetchReviews = async () => {
         if (!supabase) {
             setLoading(false);
@@ -112,16 +133,26 @@ export default function AdminReviews() {
                             {reviews.map((review) => (
                                 <div key={review.id} className="p-6 hover:bg-gray-50 transition-colors">
                                     <div className="flex flex-col md:flex-row justify-between gap-4">
-                                        <div>
+                                        <div className="flex-1">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <span className={`px-2 py-0.5 rounded text-xs font-medium uppercase tracking-wider ${review.status === 'approved' ? 'bg-green-100 text-green-700' :
-                                                        review.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                                                            'bg-yellow-100 text-yellow-700'
+                                                    review.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                                                        'bg-yellow-100 text-yellow-700'
                                                     }`}>
                                                     {review.status || 'pending'}
                                                 </span>
-                                                <span className="text-xs text-foreground-muted">{new Date(review.created_at).toLocaleDateString()}</span>
+                                                <span className="text-xs text-foreground-muted">
+                                                    {new Date(review.created_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
+                                                </span>
                                             </div>
+
+                                            {/* Product Name Badge */}
+                                            <div className="mb-2">
+                                                <span className="text-xs font-semibold bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                                                    Product: {productNames[review.product_id] || 'Unknown Product'}
+                                                </span>
+                                            </div>
+
                                             <h3 className="font-medium text-lg mb-1">{review.title}</h3>
                                             <div className="flex text-accent-gold mb-2">
                                                 {[...Array(5)].map((_, i) => (
@@ -132,7 +163,7 @@ export default function AdminReviews() {
                                             <p className="text-xs font-medium">By: {review.user_name}</p>
                                         </div>
 
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-2 self-start mt-2 md:mt-0">
                                             {review.status !== 'approved' && (
                                                 <button
                                                     onClick={() => handeStatusUpdate(review.id, 'approved')}

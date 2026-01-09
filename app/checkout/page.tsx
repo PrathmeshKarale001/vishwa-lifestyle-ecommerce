@@ -17,12 +17,13 @@ import {
   CheckCircle,
   Lock,
   ShoppingBag,
+  Tag,
+  XCircle,
 } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import toast from "react-hot-toast";
 import { log } from "@/lib/logger";
 
-// Form validation schemas
 const shippingSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   firstName: z.string().min(2, "First name is required"),
@@ -58,13 +59,41 @@ const FREE_SHIPPING_THRESHOLD = 499;
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, subtotal, discount, tax, total, clearCart, promoCode } = useCartStore();
+  /* ... */
+  const { items, subtotal, discount, tax, total, clearCart, promoCode, applyPromoCode, removePromoCode } = useCartStore();
   const [currentStep, setCurrentStep] = useState(0);
   const [shippingMethod, setShippingMethod] = useState("standard");
   const [isProcessing, setIsProcessing] = useState(false);
   const [shippingData, setShippingData] = useState<ShippingFormData | null>(null);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+
+  // Promo code state
+  const [promoInput, setPromoInput] = useState("");
+  const [promoLoading, setPromoLoading] = useState(false);
+
+  const handleApplyPromo = async () => {
+    if (!promoInput.trim()) return;
+    setPromoLoading(true);
+    try {
+      const result = await applyPromoCode(promoInput);
+      if (result.success) {
+        toast.success("Coupon applied successfully!");
+        setPromoInput("");
+      } else {
+        toast.error(result.message || "Invalid coupon code");
+      }
+    } catch (error) {
+      toast.error("Failed to apply coupon");
+    } finally {
+      setPromoLoading(false);
+    }
+  };
+
+  const handleRemovePromo = () => {
+    removePromoCode();
+    toast.success("Coupon removed");
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -659,6 +688,42 @@ export default function CheckoutPage() {
                   <span className="text-sm">{formatPrice(item.price * item.quantity)}</span>
                 </div>
               ))}
+            </div>
+
+            {/* Promo Code Section */}
+            <div className="py-6 border-t border-gray-200">
+              {promoCode ? (
+                <div className="flex items-center justify-between bg-green-50 px-4 py-3 rounded-md border border-green-100">
+                  <div className="flex items-center gap-2 text-green-700">
+                    <Tag size={16} />
+                    <span className="font-medium text-sm">Code: {promoCode}</span>
+                  </div>
+                  <button
+                    onClick={handleRemovePromo}
+                    className="text-gray-400 hover:text-red-500 transition-colors"
+                    title="Remove Coupon"
+                  >
+                    <XCircle size={18} />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={promoInput}
+                    onChange={(e) => setPromoInput(e.target.value)}
+                    placeholder="Promo Code"
+                    className="flex-1 bg-white border border-gray-200 rounded-md px-4 py-2 text-sm focus:outline-none focus:border-accent-gold uppercase"
+                  />
+                  <button
+                    onClick={handleApplyPromo}
+                    disabled={promoLoading || !promoInput.trim()}
+                    className="bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {promoLoading ? "..." : "Apply"}
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Totals */}

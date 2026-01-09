@@ -34,14 +34,14 @@ export default function CartDrawer() {
     if (!promoInput.trim()) return;
 
     setIsApplyingPromo(true);
-    const success = await applyPromoCode(promoInput);
+    const result = await applyPromoCode(promoInput);
     setIsApplyingPromo(false);
 
-    if (success) {
+    if (result.success) {
       toast.success(`Promo code "${promoInput.toUpperCase()}" applied!`);
       setPromoInput("");
     } else {
-      toast.error("Invalid promo code or minimum order not met");
+      toast.error(result.message || "Invalid promo code");
     }
   };
 

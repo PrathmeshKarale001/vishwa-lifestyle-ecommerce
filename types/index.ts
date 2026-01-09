@@ -82,6 +82,7 @@ export interface CartItem {
   maxQuantity: number;
   size?: string;
   variantSku?: string;
+  category?: string;
 }
 
 export interface Cart {

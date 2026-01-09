@@ -124,10 +124,14 @@ CREATE TABLE public.reviews (
   rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
   title TEXT,
   content TEXT NOT NULL,
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
   is_verified BOOLEAN DEFAULT FALSE,
   helpful_count INTEGER DEFAULT 0,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- Index for reviews status
+CREATE INDEX IF NOT EXISTS idx_reviews_status ON public.reviews(status);
 
 -- Newsletter subscribers
 CREATE TABLE public.newsletter_subscribers (

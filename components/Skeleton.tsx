@@ -21,7 +21,7 @@ export function Skeleton({ className = "" }: SkeletonProps) {
 export function ProductCardSkeleton() {
   return (
     <div className="group">
-      <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 mb-4">
+      <div className="relative aspect-square overflow-hidden bg-gray-100 mb-4">
         <Skeleton className="w-full h-full rounded-none" />
       </div>
       <div className="text-center space-y-2">

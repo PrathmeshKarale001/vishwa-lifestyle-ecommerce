@@ -18,8 +18,8 @@ export default async function Home() {
       <Hero slides={homeData?.heroSlides} />
       <LifestylePreview items={homeData?.lifestyleGrid} />
       <StorySection data={homeData?.story} />
-      <ShopGrid />
       <SaleProducts />
+      <ShopGrid />
       <PhilosophySection data={homeData?.philosophy} />
       <BenefitStrip benefits={homeData?.benefits} />
     </main>

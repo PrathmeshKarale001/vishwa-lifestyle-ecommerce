@@ -186,7 +186,7 @@ export default function OrderDetailPage() {
             if (el instanceof HTMLElement) el.style.display = 'block';
           });
         }
-      });
+      } as any);
 
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({

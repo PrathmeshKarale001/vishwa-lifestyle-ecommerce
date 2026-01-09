@@ -39,7 +39,7 @@ const contactInfo = [
   {
     icon: MapPin,
     title: "Address",
-    content: "Sacred Valley, Rishikesh, Uttarakhand, India",
+    content: "Shivpuri, Akkalkot Station Road, Akkalkot 413216",
   },
   {
     icon: Clock,

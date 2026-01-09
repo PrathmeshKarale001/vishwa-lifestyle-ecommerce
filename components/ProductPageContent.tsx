@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Minus, Plus, ShoppingBag, Heart, Share2, Truck, Shield, RotateCcw, AlertCircle, Copy, Check, Ruler, ChevronRight, MessageSquare } from "lucide-react";
+import { Star, Minus, Plus, ShoppingBag, Heart, Share2, Truck, Shield, RotateCcw, AlertCircle, Copy, Check, Ruler, ChevronRight, MessageSquare, Tag } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import SizeChartModal from "./SizeChartModal";
 import { useCartStore } from "@/store/cart";
@@ -98,6 +98,20 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
         product.variants && product.variants.length > 0 ? product.variants[0] : null
     );
     const [isSizeModalOpen, setIsSizeModalOpen] = useState(false);
+    const [activeCoupons, setActiveCoupons] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchCoupons = async () => {
+            try {
+                const res = await fetch('/api/coupons/public');
+                const data = await res.json();
+                if (data.coupons) setActiveCoupons(data.coupons);
+            } catch (e) {
+                console.error("Failed to fetch coupons", e);
+            }
+        };
+        fetchCoupons();
+    }, []);
 
     const addItem = useCartStore((state) => state.addItem);
     const { isInWishlist, toggleItem } = useWishlistStore();
@@ -134,6 +148,7 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
             quantity,
             size: selectedVariant?.size,
             variantSku: currentSku,
+            category: product.category || undefined,
         });
         toast.success(`${product.name}${selectedVariant ? ` (${selectedVariant.size})` : ''} added to cart`);
     }, [product, quantity, slug, addItem, selectedVariant]);
@@ -310,6 +325,40 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                                 </span>
                             </div>
                         </div>
+
+                        {/* Available Offers */}
+                        {activeCoupons.length > 0 && (
+                            <div className="mb-6 p-4 bg-accent-gold/5 border border-accent-gold/20 rounded-lg">
+                                <h3 className="flex items-center gap-2 text-sm font-semibold text-accent-gold mb-3">
+                                    <Tag size={16} /> Available Offers
+                                </h3>
+                                <div className="space-y-2">
+                                    {activeCoupons.map((coupon, idx) => (
+                                        <div key={idx} className="flex items-center justify-between text-sm bg-white p-2 rounded border border-dashed border-gray-300">
+                                            <div>
+                                                <span className="font-bold text-gray-800">{coupon.code}</span>
+                                                <span className="mx-2 text-gray-400">|</span>
+                                                <span className="text-gray-600">
+                                                    {coupon.discount_type === 'percentage'
+                                                        ? `${coupon.discount_value}% OFF`
+                                                        : `₹${coupon.discount_value} OFF`}
+                                                    {coupon.min_order_amount > 0 && ` on orders above ₹${coupon.min_order_amount}`}
+                                                </span>
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(coupon.code);
+                                                    toast.success("Coupon code copied!");
+                                                }}
+                                                className="text-xs text-accent-gold hover:underline font-medium uppercase tracking-wide ml-4"
+                                            >
+                                                Copy
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Stock Status */}
                         {isOutOfStock && (
@@ -550,6 +599,7 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                                     compareAtPrice={relatedProduct.compareAtPrice}
                                     image={relatedProduct.image || "/placeholder-product.svg"}
                                     category={getCategoryLabel(relatedProduct.category || "")}
+                                    categorySlug={relatedProduct.category || undefined}
                                     tag={tag}
                                     inventory={relatedProduct.inventory}
                                     lqip={relatedProduct.lqip}

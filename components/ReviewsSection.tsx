@@ -36,11 +36,14 @@ export default function ReviewsSection({ productId, initialShowForm = false }: {
         try {
             const res = await fetch(`/api/reviews?productId=${productId}`);
             const data = await res.json();
-            if (data.reviews) {
-                setReviews(data.reviews);
+            if (res.ok && data.reviews) {
+                setReviews(Array.isArray(data.reviews) ? data.reviews : []);
+            } else {
+                setReviews([]);
             }
         } catch (error) {
-            console.error("Failed to fetch reviews");
+            console.error("Failed to fetch reviews:", error);
+            setReviews([]);
         } finally {
             setLoading(false);
         }
@@ -74,7 +77,7 @@ export default function ReviewsSection({ productId, initialShowForm = false }: {
                 throw new Error(data.error || "Failed to submit review");
             }
 
-            toast.success("Review submitted! It will appear after approval.");
+            toast.success("Review submitted. It will appear after moderation.");
             setShowForm(false);
             setTitle("");
             setContent("");
@@ -97,7 +100,7 @@ export default function ReviewsSection({ productId, initialShowForm = false }: {
                                 <Star key={star} size={16} fill={star <= 4 ? "currentColor" : "none"} className={star <= 4 ? "" : "text-gray-300"} />
                             ))}
                         </div>
-                        <span className="text-sm text-foreground-muted">{reviews.length} Review{reviews.length !== 1 && 's'}</span>
+                        <span className="text-sm text-foreground-muted">{(reviews || []).length} Review{((reviews || []).length) !== 1 && 's'}</span>
                     </div>
                 </div>
 
@@ -168,7 +171,7 @@ export default function ReviewsSection({ productId, initialShowForm = false }: {
 
             {loading ? (
                 <div className="text-center py-8">Loading reviews...</div>
-            ) : reviews.length > 0 ? (
+            ) : (reviews || []).length > 0 ? (
                 <div className="space-y-6">
                     {reviews.map((review) => (
                         <div key={review.id} className="border-b border-gray-100 pb-6 last:border-0">

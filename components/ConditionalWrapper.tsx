@@ -22,26 +22,25 @@ export default function ConditionalWrapper({ children, categories = [], settings
   const isStudio = pathname?.startsWith('/studio');
   const isHomePage = pathname === '/';
 
-  if (isStudio) {
-    // For studio pages, return only the children without any layout components
-    return <>{children}</>;
-  }
+  const mainClasses = isStudio
+    ? 'min-h-screen'
+    : `${!isHomePage ? (settings?.announcementBar?.show ? 'pt-[86px] sm:pt-[104px]' : 'pt-[56px] sm:pt-[72px]') : ''} min-h-screen`;
 
-  // For all other pages, render the full layout
   return (
     <>
-      <SkipLink />
-      <Header categories={categories} settings={settings} />
-      <CartDrawer />
-      <ScrollToTop />
-      <MobileBottomNav />
+      {!isStudio && <SkipLink />}
+      {!isStudio && <Header categories={categories} settings={settings} />}
+      {!isStudio && <CartDrawer />}
+      {!isStudio && <ScrollToTop />}
+      {!isStudio && <MobileBottomNav />}
       <main
         id="main-content"
-        className={`${!isHomePage ? (settings?.announcementBar?.show ? 'pt-[86px] sm:pt-[104px]' : 'pt-[56px] sm:pt-[72px]') : ''} min-h-screen`}
+        className={mainClasses}
+        suppressHydrationWarning
       >
         {children}
       </main>
-      <Footer settings={settings} />
+      {!isStudio && <Footer settings={settings} />}
     </>
   );
 }

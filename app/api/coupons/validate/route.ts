@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
   let couponCode = 'unknown';
   try {
     const body = await request.json();
-    let { code, subtotal, user_id } = body;
+    let { code, subtotal, user_id, items } = body;
     couponCode = code || 'unknown';
 
     // Sanitize coupon code
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await validateCoupon(code, subtotal, user_id);
+    const result = await validateCoupon(code, subtotal, user_id, items || []);
 
     if (!result.valid) {
       return NextResponse.json(

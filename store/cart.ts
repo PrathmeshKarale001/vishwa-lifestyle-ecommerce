@@ -14,7 +14,7 @@ interface CartState extends Cart {
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
-  applyPromoCode: (code: string) => Promise<boolean>;
+  applyPromoCode: (code: string) => Promise<{ success: boolean; message?: string }>;
   removePromoCode: () => void;
 
   // UI State
@@ -162,31 +162,46 @@ export const useCartStore = create<CartState>()(
           const { data: { user } } = await supabase?.auth.getUser() || { data: { user: null } };
 
           // Validate coupon via API
+          // Clean code: uppercase and remove all spaces
+          const cleanCode = code.toUpperCase().replace(/\s/g, '');
+
+          const payloadItems = state.items.map(item => ({
+            productId: item.productId,
+            category: item.category,
+            price: item.price,
+            quantity: item.quantity
+          }));
+
           const response = await fetch('/api/coupons/validate', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              code: code.toUpperCase(),
+              code: cleanCode,
               subtotal: state.subtotal,
               user_id: user?.id,
+              items: payloadItems,
             }),
           });
 
           const result = await response.json();
 
-          if (!result.success || !result.discount) {
-            return false;
+          if (!result.success) {
+            console.error('Promo code validation failed:', result);
+            return {
+              success: false,
+              message: result.error || `Debug: ${JSON.stringify(result)}`
+            };
           }
 
           const discount = result.discount;
           const totals = calculateTotals(state.items, discount);
           set({ discount, promoCode: code.toUpperCase(), ...totals });
-          return true;
-        } catch (error) {
+          return { success: true };
+        } catch (error: any) {
           console.error('Error applying promo code:', error);
-          return false;
+          return { success: false, message: error.message || 'Failed to apply promo code' };
         }
       },
 

@@ -1,4 +1,5 @@
-import { supabase, createServerClient } from './supabase';
+import { createServerClient } from './supabase';
+import { createClient } from './supabase/client';
 
 // ==========================================
 // ADMIN ACCESS CONTROL (Database-Based)
@@ -23,6 +24,7 @@ export interface AdminUser {
  * Falls back to email-based check if admin_users table doesn't exist
  */
 export async function isAdmin(userId?: string): Promise<boolean> {
+  const supabase = createClient();
   if (!supabase) return false;
 
   try {
@@ -32,14 +34,14 @@ export async function isAdmin(userId?: string): Promise<boolean> {
     const targetUserId = userId || user.id;
 
     // Try database-based check first
-    const { data: adminUser, error } = await supabase
+    const { data: adminUsers, error } = await supabase
       .from('admin_users')
       .select('is_active, role')
       .eq('user_id', targetUserId)
       .eq('is_active', true)
-      .single();
+      .limit(1);
 
-    if (!error && adminUser) {
+    if (!error && adminUsers && adminUsers.length > 0) {
       return true;
     }
 
@@ -60,6 +62,7 @@ export async function isAdmin(userId?: string): Promise<boolean> {
  * Get admin user details
  */
 export async function getAdminUser(userId?: string): Promise<AdminUser | null> {
+  const supabase = createClient();
   if (!supabase) return null;
 
   try {
@@ -110,6 +113,7 @@ export async function logAdminAction(
   resourceId?: string,
   details?: Record<string, any>
 ): Promise<void> {
+  const supabase = createClient();
   if (!supabase) return;
 
   try {
@@ -117,13 +121,13 @@ export async function logAdminAction(
     if (!user) return;
 
     // Get IP address and user agent from browser (if available)
-    const ipAddress = typeof window !== 'undefined' 
+    const ipAddress = typeof window !== 'undefined'
       ? (await fetch('https://api.ipify.org?format=json').then(r => r.json()).catch(() => ({ ip: null }))).ip
       : null;
-    
+
     const userAgent = typeof window !== 'undefined' ? navigator.userAgent : null;
 
-    await supabase.from('audit_logs').insert({
+    const { error: insertError } = await supabase.from('audit_logs').insert({
       user_id: user.id,
       action,
       resource_type: resourceType,
@@ -132,9 +136,15 @@ export async function logAdminAction(
       ip_address: ipAddress,
       user_agent: userAgent,
     });
+
+    if (insertError) {
+      // If 403, just ignore it, table might be service-role only
+      if (insertError.code !== '42501') {
+        console.warn('Audit log insert failed:', insertError.message);
+      }
+    }
   } catch (error) {
-    // Don't throw - audit logging should never break the app
-    console.error('Error logging admin action:', error);
+    // Completely silent catch for audit logging
   }
 }
 

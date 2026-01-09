@@ -19,6 +19,7 @@ interface ProductCardProps {
   compareAtPrice?: number;
   image: string;
   category?: string;
+  categorySlug?: string;
   tag?: string;
   inventory?: number;
   lqip?: string;
@@ -32,6 +33,7 @@ export default function ProductCard({
   compareAtPrice,
   image,
   category,
+  categorySlug,
   tag,
   inventory = 10,
   lqip,
@@ -62,6 +64,7 @@ export default function ProductCard({
       image,
       slug,
       maxQuantity: inventory,
+      category: categorySlug,
     });
 
     toast.success(`${name} added to cart`);
@@ -100,7 +103,7 @@ export default function ProductCard({
       className="group relative"
     >
       <Link href={`/product/${slug}`} aria-label={`View ${name}`}>
-        <div className="relative aspect-[3/4] overflow-hidden bg-background-alt mb-4 group-hover:shadow-lg transition-shadow duration-500">
+        <div className="relative aspect-square overflow-hidden bg-background-alt mb-4 group-hover:shadow-lg transition-shadow duration-500">
           {/* Tag */}
           {tag && (
             <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-[10px] uppercase tracking-widest px-3 py-1.5 z-10 shadow-sm">

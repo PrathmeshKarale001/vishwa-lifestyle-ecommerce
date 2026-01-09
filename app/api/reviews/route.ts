@@ -53,24 +53,46 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'You must have purchased this product to leave a review.' }, { status: 403 });
         }
 
-        const { data, error } = await supabase
+        let { data, error } = await supabase
             .from('reviews')
-            .insert({
+            .insert([{
                 product_id: productId,
                 user_id: user.id,
-                user_name: user.user_metadata?.name || user.user_metadata?.full_name || 'Anonymous',
+                user_name: user?.user_metadata?.name || user?.user_metadata?.full_name || 'Anonymous',
                 rating,
                 title,
                 content,
                 status: 'pending'
-            });
+            }])
+            .select();
 
-        if (error) {
-            console.error('Error submitting review:', error);
-            return NextResponse.json({ error: 'Failed to submit review' }, { status: 500 });
+        // If 'status' column missing, retry without it
+        if (error && (
+            error.message?.includes('column "status" of relation "reviews" does not exist') ||
+            error.message?.includes("Could not find the 'status' column")
+        )) {
+            console.log('Status column missing, retrying without it...');
+            const retry = await supabase
+                .from('reviews')
+                .insert([{
+                    product_id: productId,
+                    user_id: user.id,
+                    user_name: user?.user_metadata?.name || user?.user_metadata?.full_name || 'Anonymous',
+                    rating,
+                    title,
+                    content
+                }])
+                .select();
+            data = retry.data;
+            error = retry.error;
         }
 
-        return NextResponse.json({ success: true, message: 'Review submitted successfully pending approval.' });
+        if (error) {
+            console.error('DATABASE ERROR submitting review:', error);
+            return NextResponse.json({ error: `Database error: ${error.message}` }, { status: 500 });
+        }
+
+        return NextResponse.json({ success: true, message: 'Review submitted successfully.' });
 
     } catch (error) {
         console.error('Review submission error:', error);
@@ -108,12 +130,27 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ reviews: [] });
     }
 
-    const { data, error } = await supabase
+    let { data, error } = await supabase
         .from('reviews')
         .select('*')
         .eq('product_id', productId)
         .eq('status', 'approved') // Only fetching approved reviews
         .order('created_at', { ascending: false });
+
+    // If status column missing, fetch all reviews for this product
+    if (error && (
+        error.message?.includes('column "status" of relation "reviews" does not exist') ||
+        error.message?.includes("Could not find the 'status' column")
+    )) {
+        console.log('Status column missing in GET, fetching all reviews instead');
+        const retry = await supabase
+            .from('reviews')
+            .select('*')
+            .eq('product_id', productId)
+            .order('created_at', { ascending: false });
+        data = retry.data;
+        error = retry.error;
+    }
 
     if (error) {
         // If column doesn't exist, it might error. We assume schema update handles it.

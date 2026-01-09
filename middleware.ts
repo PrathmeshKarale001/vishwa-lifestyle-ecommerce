@@ -72,7 +72,7 @@ export async function middleware(request: NextRequest) {
         base-uri 'self';
         form-action 'self' https://secure.ccavenue.com;
         frame-src 'self' https://api.razorpay.com https://secure.ccavenue.com;
-        connect-src 'self' https://*.supabase.co https://*.sanity.io https://api.razorpay.com https://www.google-analytics.com;
+        connect-src 'self' https://*.supabase.co https://*.sanity.io https://api.razorpay.com https://www.google-analytics.com https://api.ipify.org;
         upgrade-insecure-requests;
     `.replace(/\s{2,}/g, ' ').trim()
 

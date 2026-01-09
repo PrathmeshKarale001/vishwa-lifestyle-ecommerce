@@ -1,4 +1,5 @@
-import { supabase, createServerClient } from './supabase';
+import { createServerClient, supabase } from "@/lib/supabase";
+import { log } from "@/lib/logger";
 
 export interface Coupon {
   id: string;
@@ -27,59 +28,141 @@ export interface Coupon {
 export async function validateCoupon(
   code: string,
   subtotal: number,
-  userId?: string
+  userId?: string,
+  items: any[] = []
 ): Promise<{
   valid: boolean;
   coupon?: Coupon;
   discount?: number;
   error?: string;
 }> {
-  if (!supabase) {
-    return { valid: false, error: 'Service not available' };
+  // Use Service Role client for validation to bypass RLS issues
+  const serverClient = createServerClient();
+
+  if (!serverClient) {
+    log.warn("validateCoupon: Service Role Client NOT created. Falling back to Anon client. Check SUPABASE_SERVICE_ROLE_KEY.");
+  }
+
+  // Fallback or error if service role not available (shouldn't happen on server)
+  const client = serverClient || supabase;
+  if (!client) {
+    log.error("validateCoupon: No Supabase client available.");
+    return { valid: false, error: 'System error: Database client not available' };
   }
 
   try {
-    // Use database function to validate
-    const { data, error } = await supabase.rpc('is_coupon_valid', {
-      coupon_code: code.toUpperCase(),
-      user_uuid: userId || null,
-      order_amount: subtotal,
-    });
+    // 1. Fetch Coupon
+    const { data: couponData, error: fetchError } = await client
+      .from('coupons')
+      .select('*')
+      .eq('code', code.toUpperCase())
+      .single();
 
-    if (error) throw error;
-
-    if (!data || !data.valid) {
-      return {
-        valid: false,
-        error: data?.error || 'Invalid coupon code',
-      };
+    if (fetchError) {
+      // Don't log "row not found" as error, it's a valid validation failure case
+      if (fetchError.code !== 'PGRST116') {
+        log.error("validateCoupon: Fetch Error", fetchError);
+        return { valid: false, error: `System Error: ${fetchError.message}` };
+      }
+      return { valid: false, error: `Invalid coupon code` };
     }
 
-    const coupon = data.coupon as Coupon;
+    if (!couponData) {
+      return { valid: false, error: `Invalid coupon code` };
+    }
 
-    // Calculate discount
-    const { data: discountData, error: discountError } = await supabase.rpc(
-      'calculate_discount',
-      {
-        coupon_code: code.toUpperCase(),
-        subtotal_amount: subtotal,
+    const coupon = couponData as Coupon;
+
+    // 2. Check Active Status
+    if (!coupon.is_active) {
+      return { valid: false, error: 'This coupon is no longer active' };
+    }
+
+    // 3. Check Dates
+    const now = new Date();
+    if (new Date(coupon.valid_from) > now) {
+      return { valid: false, error: 'This coupon is not yet valid' };
+    }
+    if (coupon.valid_until && new Date(coupon.valid_until) < now) {
+      return { valid: false, error: 'This coupon has expired' };
+    }
+
+    // 4. Check Global Usage Limit
+    if (coupon.usage_limit != null && coupon.usage_count >= coupon.usage_limit) {
+      return { valid: false, error: 'This coupon usage limit has been reached' };
+    }
+
+    // 5. Check User Limit
+    if (coupon.user_limit != null && userId) {
+      const { count, error: countError } = await client
+        .from('coupon_usage')
+        .select('*', { count: 'exact', head: true })
+        .eq('coupon_id', coupon.id)
+        .eq('user_id', userId);
+
+      if (!countError && count !== null && count >= coupon.user_limit) {
+        return { valid: false, error: 'You have already used this coupon' };
       }
-    );
+    }
 
-    if (discountError) throw discountError;
+    // 6. Check Min Order Amount
+    if (coupon.min_order_amount > 0 && subtotal < coupon.min_order_amount) {
+      return { valid: false, error: `Minimum order amount of ₹${coupon.min_order_amount} required` };
+    }
 
-    const discount = Number(discountData) || 0;
+    // 7. Check Applicability & Calculate Discount
+    let eligibleSubtotal = subtotal;
+
+    // Logic for filtering eligible items
+    if (coupon.applicable_to === 'categories') {
+      const applicableCategories = coupon.applicable_ids || [];
+      const eligibleItems = items.filter(item =>
+        item.category && applicableCategories.includes(item.category)
+      );
+
+      if (eligibleItems.length === 0) {
+        return { valid: false, error: 'This code is applied to specific categories but no matching items in cart.' };
+      }
+      eligibleSubtotal = eligibleItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    } else if (coupon.applicable_to === 'products') {
+      const applicableProducts = coupon.applicable_ids || [];
+      const eligibleItems = items.filter(item =>
+        applicableProducts.includes(item.productId)
+      );
+
+      if (eligibleItems.length === 0) {
+        return { valid: false, error: 'This code is applied to specific products but no matching items in cart.' };
+      }
+      eligibleSubtotal = eligibleItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    }
+
+    // Calculate Discount
+    let calculatedDiscount = 0;
+    if (coupon.type === 'percentage') {
+      calculatedDiscount = (eligibleSubtotal * coupon.value) / 100;
+    } else {
+      calculatedDiscount = Math.min(coupon.value, eligibleSubtotal);
+    }
+
+    // Max Discount Limit
+    if (coupon.max_discount_amount && coupon.max_discount_amount > 0) {
+      calculatedDiscount = Math.min(calculatedDiscount, coupon.max_discount_amount);
+    }
+
+    // Ensure discount doesn't exceed total
+    calculatedDiscount = Math.min(calculatedDiscount, subtotal);
 
     return {
       valid: true,
       coupon,
-      discount: Math.min(discount, subtotal), // Can't discount more than subtotal
+      discount: Math.round(calculatedDiscount),
     };
+
   } catch (error: any) {
     console.error('Error validating coupon:', error);
     return {
       valid: false,
-      error: error.message || 'Failed to validate coupon',
+      error: 'An unexpected error occurred during validation',
     };
   }
 }
@@ -107,13 +190,21 @@ export async function applyCouponToOrder(
       discount_amount: discountAmount,
     });
 
-    // Increment usage count
-    await serverClient
+    // Increment usage count (Read-Modify-Write pattern)
+    const { data: currentCoupon } = await serverClient
       .from('coupons')
-      .update({
-        usage_count: supabase.rpc('increment', { x: 1 }),
-      })
-      .eq('id', couponId);
+      .select('usage_count')
+      .eq('id', couponId)
+      .single();
+
+    if (currentCoupon) {
+      await serverClient
+        .from('coupons')
+        .update({
+          usage_count: (currentCoupon.usage_count || 0) + 1,
+        })
+        .eq('id', couponId);
+    }
 
     return true;
   } catch (error) {
@@ -148,7 +239,12 @@ export async function getAllCoupons(): Promise<Coupon[]> {
  */
 export async function createCoupon(coupon: Omit<Coupon, 'id' | 'created_at' | 'updated_at' | 'usage_count'>): Promise<Coupon | null> {
   const serverClient = createServerClient();
-  if (!serverClient) return null;
+  if (!serverClient) {
+    log.error("createCoupon: Service Role Client missing");
+    throw new Error("Server configuration error: Missing Service Role Key");
+  }
+
+  log.info("createCoupon: Received data", coupon);
 
   try {
     const { data, error } = await serverClient
@@ -160,11 +256,14 @@ export async function createCoupon(coupon: Omit<Coupon, 'id' | 'created_at' | 'u
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      log.error("createCoupon: DB Insert Error", error);
+      throw new Error(error.message);
+    }
     return data as Coupon;
-  } catch (error) {
-    console.error('Error creating coupon:', error);
-    return null;
+  } catch (error: any) {
+    log.error('Error creating coupon:', error);
+    throw error;
   }
 }
 

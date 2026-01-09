@@ -93,6 +93,7 @@ export default function ProductQuickView({
       image: product.images?.[0] || product.mainImage || "",
       slug: product.slug,
       maxQuantity: product.inventory ?? 10,
+      category: product.category,
     });
 
     toast.success(`${product.name} added to cart`);

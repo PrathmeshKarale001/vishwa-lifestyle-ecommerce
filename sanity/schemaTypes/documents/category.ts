@@ -1,4 +1,5 @@
 import { type SchemaTypeDefinition } from 'sanity';
+import { SubCategoryNameSelect } from '../../components/SubCategoryNameSelect';
 
 const category: SchemaTypeDefinition = {
     name: 'category',
@@ -45,6 +46,48 @@ const category: SchemaTypeDefinition = {
             description: 'Define sub-items for this category (e.g. Men, Women)',
             type: 'array',
             of: [{ type: 'string' }],
+        },
+        {
+            name: 'categorySegments',
+            title: 'Sub-Category Segments mapping',
+            description: 'Define segments for each sub-category here',
+            type: 'array',
+            of: [
+                {
+                    type: 'object',
+                    fields: [
+                        {
+                            name: 'subCategoryName',
+                            title: 'Sub-Category Name',
+                            type: 'string',
+                            components: {
+                                input: SubCategoryNameSelect
+                            },
+                            validation: (Rule) => Rule.required(),
+                        },
+                        {
+                            name: 'segments',
+                            title: 'Segments',
+                            type: 'array',
+                            of: [{ type: 'string' }],
+                            validation: (Rule) => Rule.required(),
+                        },
+                    ],
+                    preview: {
+                        select: {
+                            title: 'subCategoryName',
+                            subtitle: 'segments',
+                        },
+                        prepare(selection: any) {
+                            const { title, subtitle } = selection
+                            return {
+                                title,
+                                subtitle: subtitle ? subtitle.join(', ') : 'No segments defined'
+                            }
+                        }
+                    }
+                },
+            ],
         },
         {
             name: 'metaTitle',

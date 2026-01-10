@@ -1,5 +1,6 @@
 import { type SchemaTypeDefinition } from 'sanity';
 import { SubCategorySelect } from '../../components/SubCategorySelect';
+import { SegmentSelect } from '../../components/SegmentSelect';
 
 const product: SchemaTypeDefinition = {
     name: 'product',
@@ -75,6 +76,15 @@ const product: SchemaTypeDefinition = {
             })
         },
         {
+            name: 'segments',
+            title: 'Segments',
+            type: 'string',
+            description: 'Select a Sub-Category first to see available Segments',
+            components: {
+                input: SegmentSelect
+            },
+        },
+        {
             name: 'brand',
             title: 'Brand',
             type: 'string',
@@ -143,11 +153,6 @@ const product: SchemaTypeDefinition = {
         {
             name: 'supplierContact',
             title: 'Supplier Contact',
-            type: 'string',
-        },
-        {
-            name: 'segments',
-            title: 'Segments',
             type: 'string',
         },
         {

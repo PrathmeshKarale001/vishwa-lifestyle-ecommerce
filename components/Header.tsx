@@ -118,17 +118,40 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                         >
                           {category.name}
                         </Link>
-                        <ul className="space-y-1.5">
-                          {category.subCategories?.map((sub: string) => (
-                            <li key={sub}>
-                              <Link
-                                href={`/shop?category=${category.slug}&sub=${sub}`}
-                                className="text-[11px] text-gray-500 hover:text-accent-gold transition-colors tracking-wide capitalize block"
-                              >
-                                {sub}
-                              </Link>
-                            </li>
-                          ))}
+                        <ul className="space-y-4">
+                          {category.subCategories?.map((sub: string) => {
+                            // Find segments for this sub-category
+                            const segments = category.categorySegments?.find(
+                              (cs: any) => cs.subCategoryName === sub
+                            )?.segments;
+
+                            return (
+                              <li key={sub} className="space-y-1">
+                                <Link
+                                  href={`/shop?category=${category.slug}&sub=${sub}`}
+                                  className="text-[12px] font-semibold text-gray-800 hover:text-accent-gold transition-colors tracking-wide block uppercase"
+                                >
+                                  {sub}
+                                </Link>
+
+                                {/* Segments in Mega Menu */}
+                                {segments && segments.length > 0 && (
+                                  <ul className="pl-0 space-y-1 mt-1 border-l-2 border-gray-100 ml-0.5">
+                                    {segments.map((seg: string) => (
+                                      <li key={seg} className="pl-3">
+                                        <Link
+                                          href={`/shop?category=${category.slug}&sub=${sub}&segment=${seg}`}
+                                          className="text-[11px] text-gray-500 hover:text-accent-gold transition-colors block"
+                                        >
+                                          {seg}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </li>
+                            )
+                          })}
                         </ul>
                       </div>
                     ))}
@@ -272,17 +295,40 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                       >
                         {cat.name}
                       </Link>
-                      <div className="pl-2 space-y-1">
-                        {cat.subCategories?.map((sub: string) => (
-                          <Link
-                            key={sub}
-                            href={`/shop?category=${cat.slug}&sub=${sub}`}
-                            onClick={() => setIsMenuOpen(false)}
-                            className="block text-sm text-gray-500 font-sans"
-                          >
-                            - {sub}
-                          </Link>
-                        ))}
+                      <div className="pl-2 space-y-3">
+                        {cat.subCategories?.map((sub: string) => {
+                          const segments = cat.categorySegments?.find(
+                            (cs: any) => cs.subCategoryName === sub
+                          )?.segments;
+
+                          return (
+                            <div key={sub} className="space-y-1">
+                              <Link
+                                key={sub}
+                                href={`/shop?category=${cat.slug}&sub=${sub}`}
+                                onClick={() => setIsMenuOpen(false)}
+                                className="block text-sm text-gray-700 font-medium font-sans uppercase"
+                              >
+                                {sub}
+                              </Link>
+                              {/* Mobile Menu Segments */}
+                              {segments && segments.length > 0 && (
+                                <div className="pl-3 space-y-2 border-l border-gray-100 ml-1">
+                                  {segments.map((seg: string) => (
+                                    <Link
+                                      key={seg}
+                                      href={`/shop?category=${cat.slug}&sub=${sub}&segment=${seg}`}
+                                      onClick={() => setIsMenuOpen(false)}
+                                      className="text-sm text-gray-500 hover:text-accent-gold transition-colors block"
+                                    >
+                                      {seg}
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )
+                        })}
                       </div>
                     </div>
                   ))}

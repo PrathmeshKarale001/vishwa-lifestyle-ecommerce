@@ -12,6 +12,7 @@ interface Category {
     slug: string;
     description?: string;
     subCategories?: string[];
+    categorySegments?: { subCategoryName: string; segments: string[] }[];
 }
 
 interface CategorySidebarProps {
@@ -22,6 +23,7 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
     const searchParams = useSearchParams();
     const activeCategory = searchParams.get("category") || "all";
     const activeSubCategory = searchParams.get("sub");
+    const activeSegment = searchParams.get("segment");
     const activeSort = searchParams.get("sort") || "featured";
 
     // State for expanded categories in sidebar
@@ -43,17 +45,24 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
         { label: "Best Selling", value: "bestselling" },
     ];
 
-    const buildUrl = (category: string, sub?: string, sort?: string) => {
+    const buildUrl = (category: string, sub?: string, segment?: string, sort?: string) => {
         const params = new URLSearchParams(searchParams.toString());
         if (category === "all") {
             params.delete("category");
             params.delete("sub");
+            params.delete("segment");
         } else {
             params.set("category", category);
             if (sub) {
                 params.set("sub", sub);
+                if (segment) {
+                    params.set("segment", segment);
+                } else {
+                    params.delete("segment");
+                }
             } else {
                 params.delete("sub");
+                params.delete("segment");
             }
         }
 
@@ -104,7 +113,7 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                             {sortOptions.map((option) => (
                                 <Link
                                     key={option.value}
-                                    href={buildUrl(activeCategory, activeSubCategory || undefined, option.value)}
+                                    href={buildUrl(activeCategory, activeSubCategory || undefined, activeSegment || undefined, option.value)}
                                     className={`flex items-center gap-2 text-sm transition-colors ${activeSort === option.value
                                         ? "text-accent-gold font-medium"
                                         : "text-foreground-muted hover:text-foreground"
@@ -177,18 +186,45 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                                                     className="overflow-hidden"
                                                 >
                                                     <div className="pl-4 border-l-2 border-gray-100 ml-3 space-y-1 py-1">
-                                                        {category.subCategories?.map((sub) => (
-                                                            <Link
-                                                                key={sub}
-                                                                href={buildUrl(category.slug, sub)}
-                                                                className={`block py-1.5 px-2 text-xs rounded transition-colors ${activeSubCategory === sub && isActive
-                                                                    ? "text-accent-gold font-medium bg-accent-gold/5"
-                                                                    : "text-gray-500 hover:text-foreground"
-                                                                    }`}
-                                                            >
-                                                                {sub}
-                                                            </Link>
-                                                        ))}
+                                                        {category.subCategories?.map((sub) => {
+                                                            const isSubActive = activeSubCategory === sub;
+                                                            // Find segments for this sub-category
+                                                            const segments = category.categorySegments?.find(
+                                                                (cs: any) => cs.subCategoryName === sub
+                                                            )?.segments;
+
+                                                            return (
+                                                                <div key={sub} className="space-y-1">
+                                                                    <Link
+                                                                        href={buildUrl(category.slug, sub)}
+                                                                        className={`block py-1.5 px-2 text-xs rounded transition-colors ${isSubActive && !activeSegment
+                                                                            ? "text-accent-gold font-medium bg-accent-gold/5"
+                                                                            : "text-gray-500 hover:text-foreground"
+                                                                            }`}
+                                                                    >
+                                                                        {sub}
+                                                                    </Link>
+
+                                                                    {/* Segments List */}
+                                                                    {isSubActive && segments && segments.length > 0 && (
+                                                                        <div className="pl-3 space-y-0.5 border-l border-gray-100 ml-1">
+                                                                            {segments.map((seg: string) => (
+                                                                                <Link
+                                                                                    key={seg}
+                                                                                    href={buildUrl(category.slug, sub, seg)}
+                                                                                    className={`block py-1 px-2 text-[10px] rounded transition-colors ${activeSegment === seg
+                                                                                        ? "text-accent-gold font-medium"
+                                                                                        : "text-gray-400 hover:text-foreground"
+                                                                                        }`}
+                                                                                >
+                                                                                    {seg}
+                                                                                </Link>
+                                                                            ))}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })}
                                                     </div>
                                                 </motion.div>
                                             )}

@@ -171,6 +171,7 @@ export const queries = {
     description,
     "image": image.asset->url,
     subCategories,
+    categorySegments,
     metaTitle,
     metaDescription
   }`,
@@ -200,6 +201,7 @@ export const queries = {
   filteredProducts: `*[_type == "product" 
     && ($category == "all" || lower(category->slug.current) == lower($category))
     && ($sub == "" || subCategory match $sub)
+    && ($segment == "" || segments match $segment)
     && ($search == "" || name match $search || description match $search)
     && price >= $minPrice && price <= $maxPrice
   ]`,
@@ -267,6 +269,7 @@ export async function getProducts() {
 export async function getFilteredProducts({
   category = "all",
   sub = "",
+  segment = "",
   sort = "featured",
   search = "",
   minPrice = 0,
@@ -276,6 +279,7 @@ export async function getFilteredProducts({
 }: {
   category?: string;
   sub?: string;
+  segment?: string;
   sort?: string;
   search?: string;
   minPrice?: number;
@@ -289,6 +293,7 @@ export async function getFilteredProducts({
   const params = {
     category: category || "all",
     sub: sub || "",
+    segment: segment || "",
     search: search?.trim() ? `*${search.trim()}*` : "",
     minPrice: minPrice || 0,
     maxPrice: maxPrice || 1000000,
@@ -316,7 +321,8 @@ export async function getFilteredProducts({
           isNew,
           isBestSeller,
           "lqip": images[0].asset->metadata.lqip,
-          variants
+          variants,
+          segments
 } `;
 
 

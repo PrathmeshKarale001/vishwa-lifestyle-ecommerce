@@ -83,74 +83,25 @@ export default function AdminOrderDetailPage() {
   }, [orderId]);
 
   const checkAdminAccess = async () => {
-    if (!supabase) {
-      setLoading(false);
-      toast.error("Supabase not configured");
-      router.push("/");
-      return;
-    }
-
-    try {
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-      if (authError || !user) {
-        toast.error("Please log in to access admin panel");
-        router.push("/auth/login?redirect=" + encodeURIComponent(`/admin/orders/${orderId}`));
-        return;
-      }
-
-      // Check if user is admin (database-based, with email fallback)
-      const { isAdmin } = await import("@/lib/admin");
-      const userIsAdmin = await isAdmin();
-
-      if (!userIsAdmin) {
-        toast.error("Access denied. Admin privileges required.");
-        router.push("/");
-        return;
-      }
-
-      // Log admin access
-      const { logAdminAction } = await import("@/lib/admin");
-      await logAdminAction('view_order_detail', 'orders', orderId, {
-        page: 'order_detail',
-      });
-
-      setIsAuthorized(true);
-      await fetchOrderDetails();
-    } catch (error) {
-      log.error("Admin access verification error in order detail", error);
-      toast.error("Unable to verify access. Please try again.");
-      router.push("/");
-    } finally {
-      setLoading(false);
-    }
+    // Middleware handles strict auth/admin checks.
+    // Client-side, we just proceed.
+    setIsAuthorized(true);
+    await fetchOrderDetails();
+    setLoading(false);
   };
 
   const fetchOrderDetails = async () => {
-    if (!supabase || !orderId) return;
+    if (!orderId) return;
 
     try {
-      // Fetch order
-      const { data: orderData, error: orderError } = await supabase
-        .from("orders")
-        .select("*")
-        .eq("id", orderId)
-        .single();
+      const { getOrderDetailAction } = await import("@/app/actions/orders");
+      const result = await getOrderDetailAction(orderId);
 
-      if (orderError) throw orderError;
-      setOrder(orderData);
-      setTrackingNumber(orderData.tracking_number || "");
+      if (!result.success || !result.data) throw new Error(result.error || "Failed to load order data");
 
-      // Fetch user profile
-      if (orderData.user_id) {
-        const { data: userData } = await supabase
-          .from("profiles")
-          .select("email, name")
-          .eq("id", orderData.user_id)
-          .single();
-
-        setUser(userData);
-      }
+      setOrder(result.data.order);
+      setTrackingNumber(result.data.order.tracking_number || "");
+      setUser(result.data.userProfile);
     } catch (error) {
       log.error("Error fetching order details", error, { orderId });
       toast.error("Unable to load order details. Please refresh the page.");
@@ -160,16 +111,14 @@ export default function AdminOrderDetailPage() {
   };
 
   const updateOrderStatus = async (newStatus: string) => {
-    if (!supabase || !order) return;
+    if (!order) return;
 
     setUpdating(true);
     try {
-      const { error } = await supabase
-        .from("orders")
-        .update({ status: newStatus, updated_at: new Date().toISOString() })
-        .eq("id", order.id);
+      const { updateOrderStatusAction } = await import("@/app/actions/orders");
+      const result = await updateOrderStatusAction(order.id, newStatus);
 
-      if (error) throw error;
+      if (!result.success) throw new Error(result.error);
 
       setOrder({ ...order, status: newStatus });
       toast.success(`Order status updated to ${newStatus}!`);
@@ -182,20 +131,14 @@ export default function AdminOrderDetailPage() {
   };
 
   const updateTrackingNumber = async () => {
-    if (!supabase || !order) return;
+    if (!order) return;
 
     setUpdating(true);
     try {
-      const { error } = await supabase
-        .from("orders")
-        .update({
-          tracking_number: trackingNumber,
-          status: "shipped",
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", order.id);
+      const { updateOrderTrackingAction } = await import("@/app/actions/orders");
+      const result = await updateOrderTrackingAction(order.id, trackingNumber);
 
-      if (error) throw error;
+      if (!result.success) throw new Error(result.error);
 
       setOrder({ ...order, tracking_number: trackingNumber, status: "shipped" });
       setShowTrackingInput(false);

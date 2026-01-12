@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { Search, User, ShoppingBag, Menu, X, Heart, ChevronDown } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import { Search, User, ShoppingBag, Menu, X, Heart, ChevronDown, ArrowRight, Plus, Minus } from "lucide-react";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
@@ -17,10 +17,20 @@ interface HeaderProps {
 }
 
 export default function Header({ categories = [], settings }: HeaderProps) {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isShopHovered, setIsShopHovered] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (categories.length > 0 && !activeCategory) {
+      setActiveCategory(categories[0].slug);
+    }
+  }, [categories, activeCategory]);
+
+  const activeCategoryData = categories.find(c => c.slug === activeCategory) || categories[0];
 
   const announcement = settings?.announcementBar || { show: false, text: "", link: "", backgroundColor: "#D4AF37", textColor: "#FFFFFF" };
   const logoSrc = settings?.logo || "/vishwalogo-v2.png";
@@ -102,59 +112,129 @@ export default function Header({ categories = [], settings }: HeaderProps) {
               <AnimatePresence>
                 {isShopHovered && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-full left-0 w-[1000px] -ml-4 bg-white shadow-2xl rounded-xl p-8 text-left z-50 border border-gray-100 columns-4 gap-x-10 space-y-8"
+                    exit={{ opacity: 0, y: 15 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="absolute top-full left-1/2 -translate-x-1/2 w-[1100px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden z-50 border border-gray-100 flex h-[550px]"
                     onMouseEnter={() => setIsShopHovered(true)}
                     onMouseLeave={() => setIsShopHovered(false)}
                   >
-                    {categories.map((category: any) => (
-                      <div key={category.slug} className="break-inside-avoid mb-8">
-                        <Link
-                          href={`/shop?category=${category.slug}`}
-                          className="block text-sm font-serif font-bold text-black border-b border-gray-100 pb-2 mb-3 hover:text-accent-gold transition-colors uppercase tracking-widest"
+                    {/* Left Sidebar: First Only Categories */}
+                    <div className="w-[300px] bg-gray-50/50 border-r border-gray-100 p-6 flex flex-col justify-between">
+                      <div className="space-y-1">
+                        <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-6 pl-4 font-sans">
+                          Categories
+                        </p>
+                        {categories.map((category: any) => (
+                          <button
+                            key={category.slug}
+                            onMouseEnter={() => setActiveCategory(category.slug)}
+                            onClick={() => router.push(`/shop?category=${category.slug}`)}
+                            className={`w-full text-left px-4 py-4 rounded-xl transition-all duration-300 flex items-center justify-between group/cat ${activeCategory === category.slug
+                              ? "bg-white shadow-sm ring-1 ring-gray-100 text-accent-gold"
+                              : "text-gray-600 hover:bg-white hover:text-black"
+                              }`}
+                          >
+                            <span className="text-sm font-serif font-bold tracking-wider">
+                              {category.name}
+                            </span>
+                            <ArrowRight
+                              size={14}
+                              className={`transition-all duration-300 ${activeCategory === category.slug
+                                ? "opacity-100 translate-x-0"
+                                : "opacity-0 -translate-x-2 group-hover/cat:opacity-100 group-hover/cat:translate-x-0"
+                                }`}
+                            />
+                          </button>
+                        ))}
+                      </div>
+
+                      <Link
+                        href="/shop"
+                        className="mt-4 flex items-center justify-center gap-2 py-4 px-6 bg-accent-gold text-white rounded-xl text-xs uppercase tracking-widest font-bold hover:bg-black transition-all duration-300 shadow-md hover:shadow-lg"
+                      >
+                        Explore All Products
+                      </Link>
+                    </div>
+
+                    {/* Right Area: Dynamic Content (Subcategories & Segments) */}
+                    <div className="flex-1 p-10 bg-white overflow-y-auto custom-scrollbar">
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={activeCategoryData?.slug}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          transition={{ duration: 0.2 }}
+                          className="h-full"
                         >
-                          {category.name}
-                        </Link>
-                        <ul className="space-y-4">
-                          {category.subCategories?.map((sub: string) => {
-                            // Find segments for this sub-category
-                            const segments = category.categorySegments?.find(
-                              (cs: any) => cs.subCategoryName === sub
-                            )?.segments;
+                          <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
+                            <div>
+                              <h3 className="text-3xl font-serif font-bold text-black mb-1">
+                                {activeCategoryData?.name}
+                              </h3>
+                              <p className="text-sm text-gray-500 font-sans tracking-wide">
+                                Explore our curated {activeCategoryData?.name} collection.
+                              </p>
+                            </div>
+                            <Link
+                              href={`/shop?category=${activeCategoryData?.slug}`}
+                              className="text-xs uppercase tracking-[0.15em] font-bold text-accent-gold hover:text-black transition-colors flex items-center gap-2 group"
+                            >
+                              View All {activeCategoryData?.name}
+                              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                          </div>
 
-                            return (
-                              <li key={sub} className="space-y-1">
-                                <Link
-                                  href={`/shop?category=${category.slug}&sub=${sub}`}
-                                  className="text-[12px] font-semibold text-gray-800 hover:text-accent-gold transition-colors tracking-wide block uppercase"
-                                >
-                                  {sub}
-                                </Link>
+                          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12">
+                            {activeCategoryData?.subCategories?.map((sub: string) => {
+                              const segments = activeCategoryData.categorySegments?.find(
+                                (cs: any) => cs.subCategoryName === sub
+                              )?.segments;
 
-                                {/* Segments in Mega Menu */}
-                                {segments && segments.length > 0 && (
-                                  <ul className="pl-0 space-y-1 mt-1 border-l-2 border-gray-100 ml-0.5">
-                                    {segments.map((seg: string) => (
-                                      <li key={seg} className="pl-3">
+                              return (
+                                <div key={sub} className="space-y-6">
+                                  <Link
+                                    href={`/shop?category=${activeCategoryData.slug}&sub=${sub}`}
+                                    className="block relative group/sub"
+                                  >
+                                    <h4 className="text-sm font-bold text-black uppercase tracking-widest inline-block relative">
+                                      {sub}
+                                      <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent-gold transition-all duration-300 group-hover/sub:w-full"></span>
+                                    </h4>
+                                  </Link>
+
+                                  <ul className="space-y-3 pl-1">
+                                    {segments && segments.length > 0 ? (
+                                      segments.map((seg: string) => (
+                                        <li key={seg}>
+                                          <Link
+                                            href={`/shop?category=${activeCategoryData.slug}&sub=${sub}&segment=${seg}`}
+                                            className="text-[12px] text-gray-500 hover:text-accent-gold hover:translate-x-1 transition-all duration-200 block font-sans"
+                                          >
+                                            {seg}
+                                          </Link>
+                                        </li>
+                                      ))
+                                    ) : (
+                                      <li>
                                         <Link
-                                          href={`/shop?category=${category.slug}&sub=${sub}&segment=${seg}`}
-                                          className="text-[11px] text-gray-500 hover:text-accent-gold transition-colors block"
+                                          href={`/shop?category=${activeCategoryData.slug}&sub=${sub}`}
+                                          className="text-[12px] text-gray-400 italic hover:text-accent-gold transition-colors block font-sans"
                                         >
-                                          {seg}
+                                          Browse Selection
                                         </Link>
                                       </li>
-                                    ))}
+                                    )}
                                   </ul>
-                                )}
-                              </li>
-                            )
-                          })}
-                        </ul>
-                      </div>
-                    ))}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -284,53 +364,10 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                 >
                   Shop
                 </Link>
-                {/* Mobile Submenu */}
-                <div className="pl-4 space-y-4 border-l-2 border-gray-100/50">
+                {/* Mobile Submenu with Accordions */}
+                <div className="pl-2 space-y-4">
                   {categories.map((cat: any) => (
-                    <div key={cat.slug} className="space-y-2">
-                      <Link
-                        href={`/shop?category=${cat.slug}`}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="block text-base font-medium text-gray-800"
-                      >
-                        {cat.name}
-                      </Link>
-                      <div className="pl-2 space-y-3">
-                        {cat.subCategories?.map((sub: string) => {
-                          const segments = cat.categorySegments?.find(
-                            (cs: any) => cs.subCategoryName === sub
-                          )?.segments;
-
-                          return (
-                            <div key={sub} className="space-y-1">
-                              <Link
-                                key={sub}
-                                href={`/shop?category=${cat.slug}&sub=${sub}`}
-                                onClick={() => setIsMenuOpen(false)}
-                                className="block text-sm text-gray-700 font-medium font-sans uppercase"
-                              >
-                                {sub}
-                              </Link>
-                              {/* Mobile Menu Segments */}
-                              {segments && segments.length > 0 && (
-                                <div className="pl-3 space-y-2 border-l border-gray-100 ml-1">
-                                  {segments.map((seg: string) => (
-                                    <Link
-                                      key={seg}
-                                      href={`/shop?category=${cat.slug}&sub=${sub}&segment=${seg}`}
-                                      onClick={() => setIsMenuOpen(false)}
-                                      className="text-sm text-gray-500 hover:text-accent-gold transition-colors block"
-                                    >
-                                      {seg}
-                                    </Link>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
+                    <CategoryAccordion key={cat.slug} category={cat} onNavigate={() => setIsMenuOpen(false)} />
                   ))}
                 </div>
               </div>
@@ -373,6 +410,100 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                 </Link>
               </div>
             </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function CategoryAccordion({ category, onNavigate }: { category: any, onNavigate: () => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="space-y-4 py-2 border-b border-gray-50 last:border-0">
+      <div className="flex items-center justify-between group">
+        <Link
+          href={`/shop?category=${category.slug}`}
+          onClick={onNavigate}
+          className="text-lg font-serif font-bold text-gray-900 group-hover:text-accent-gold transition-colors"
+        >
+          {category.name}
+        </Link>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-2 text-gray-400 hover:text-accent-gold transition-colors"
+        >
+          {isOpen ? <Minus size={18} /> : <Plus size={18} />}
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden pl-4 space-y-4 border-l-2 border-gray-100/50"
+          >
+            {category.subCategories?.map((sub: string) => (
+              <SubCategoryAccordion
+                key={sub}
+                sub={sub}
+                categorySlug={category.slug}
+                segments={category.categorySegments?.find((cs: any) => cs.subCategoryName === sub)?.segments}
+                onNavigate={onNavigate}
+              />
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function SubCategoryAccordion({ sub, categorySlug, segments, onNavigate }: { sub: string, categorySlug: string, segments?: string[], onNavigate: () => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const hasSegments = segments && segments.length > 0;
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between group">
+        <Link
+          href={`/shop?category=${categorySlug}&sub=${sub}`}
+          onClick={onNavigate}
+          className="text-sm font-bold text-gray-700 uppercase tracking-widest group-hover:text-accent-gold transition-colors"
+        >
+          {sub}
+        </Link>
+        {hasSegments && (
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-1 text-gray-400 hover:text-accent-gold transition-colors"
+          >
+            <ChevronDown size={16} className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+          </button>
+        )}
+      </div>
+
+      <AnimatePresence>
+        {isOpen && hasSegments && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden pl-4 space-y-2"
+          >
+            {segments.map((seg: string) => (
+              <Link
+                key={seg}
+                href={`/shop?category=${categorySlug}&sub=${sub}&segment=${seg}`}
+                onClick={onNavigate}
+                className="block text-sm text-gray-500 hover:text-accent-gold transition-colors py-1"
+              >
+                {seg}
+              </Link>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>

@@ -27,14 +27,14 @@ const contactInfo = [
   {
     icon: Mail,
     title: "Email",
-    content: "hello@vishwalifestyle.com",
-    link: "mailto:hello@vishwalifestyle.com",
+    content: "crm@vishwaglobal.com",
+    link: "mailto:crm@vishwaglobal.com",
   },
   {
     icon: Phone,
     title: "Phone",
-    content: "+91 98765 43210",
-    link: "tel:+919876543210",
+    content: "+91 74474 89101",
+    link: "tel:+917447489101",
   },
   {
     icon: MapPin,
@@ -214,7 +214,7 @@ export default function ContactPage() {
                     type="tel"
                     {...register("phone")}
                     className="w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-accent-gold"
-                    placeholder="+91 98765 43210"
+                    placeholder="+91 74474 89101"
                   />
                 </div>
 

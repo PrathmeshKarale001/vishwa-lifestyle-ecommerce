@@ -51,31 +51,19 @@ export default function AdminReviews() {
 
     // ... existing checkAdminAndFetchReviews ...
     const checkAdminAndFetchReviews = async () => {
-        if (!supabase) {
-            setLoading(false);
-            return;
-        }
-
-        const userIsAdmin = await isAdmin();
-        if (!userIsAdmin) {
-            router.push("/");
-            return;
-        }
+        // Middleware handles strict auth/admin checks.
+        // Client-side, we just proceed.
         setIsAuthorized(true);
         fetchReviews();
     };
 
     const fetchReviews = async () => {
-        if (!supabase) return;
         try {
-            // Fetch all reviews, newest first
-            const { data, error } = await supabase
-                .from("reviews")
-                .select("*")
-                .order("created_at", { ascending: false });
+            const { getReviewsAction } = await import("@/app/actions/reviews");
+            const result = await getReviewsAction();
 
-            if (error) throw error;
-            setReviews(data || []);
+            if (!result.success) throw new Error(result.error);
+            setReviews(result.data || []);
         } catch (error) {
             console.error("Error fetching reviews:", error);
             toast.error("Failed to load reviews");
@@ -86,13 +74,10 @@ export default function AdminReviews() {
 
     const handeStatusUpdate = async (id: string, newStatus: string) => {
         try {
-            const res = await fetch("/api/reviews", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id, status: newStatus }),
-            });
+            const { updateReviewStatusAction } = await import("@/app/actions/reviews");
+            const result = await updateReviewStatusAction(id, newStatus);
 
-            if (!res.ok) throw new Error("Failed to update");
+            if (!result.success) throw new Error(result.error);
 
             toast.success(`Review ${newStatus}`);
             // Optimistic update

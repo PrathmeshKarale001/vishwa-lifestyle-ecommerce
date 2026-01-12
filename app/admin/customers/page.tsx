@@ -39,38 +39,25 @@ export default function CustomersPage() {
     }, []);
 
     const checkAdminAndLoad = async () => {
-        const userIsAdmin = await isAdmin();
-        if (!userIsAdmin) {
-            router.push("/");
-            return;
-        }
+        // Basic admin check (layout handles protection, but good for data safety)
+        // Middleware handles strict auth. We assume authorized if we get here.
+        // const userIsAdmin = await isAdmin();
+        // if (!userIsAdmin) {
+        //     router.push("/");
+        //     return;
+        // }
         await loadCustomers();
     };
 
     const loadCustomers = async () => {
         setLoading(true);
         try {
-            // Fetch profiles with orders
-            // Note: This relies on a foreign key relationship between profiles and orders
-            // If none exists, we might need manual aggregation
-            const { data, error } = await supabase
-                .from("profiles")
-                .select(`
-          id,
-          full_name,
-          created_at,
-          email,
-          orders (
-            id,
-            total,
-            status
-          )
-        `)
-                .order("created_at", { ascending: false });
+            const { getCustomersAction } = await import("@/app/actions/customers");
+            const result = await getCustomersAction();
 
-            if (error) throw error;
+            if (!result.success) throw new Error(result.error);
 
-            setCustomers(data || []);
+            setCustomers(result.data || []);
         } catch (error) {
             console.error("Error loading customers:", error);
             toast.error("Failed to load customers");

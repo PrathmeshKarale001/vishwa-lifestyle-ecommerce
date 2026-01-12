@@ -5,7 +5,6 @@ import Image from "next/image";
 import {
     Search,
     Filter,
-    Save,
     AlertTriangle,
     CheckCircle,
     XCircle,
@@ -13,10 +12,8 @@ import {
     RefreshCw,
     ShoppingBag
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 import { getProducts } from "@/lib/sanity";
 import toast from "react-hot-toast";
-import { isAdmin } from "@/lib/admin";
 import { useRouter } from "next/navigation";
 
 interface InventoryItem {
@@ -39,19 +36,13 @@ export default function InventoryPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState<"all" | "low_stock" | "out_of_stock">("all");
     const [savingId, setSavingId] = useState<string | null>(null);
-    const supabase = createClient();
 
     useEffect(() => {
         checkAdminAndLoad();
     }, []);
 
     const checkAdminAndLoad = async () => {
-        // Basic admin check (layout handles protection, but good for data safety)
-        const userIsAdmin = await isAdmin();
-        if (!userIsAdmin) {
-            router.push("/");
-            return;
-        }
+        // Middleware handles protection.
         await loadInventory();
     };
 
@@ -61,24 +52,26 @@ export default function InventoryPage() {
             // 1. Fetch all products from Sanity
             const sanityProducts = await getProducts();
 
-            // 2. Fetch inventory data from Supabase
-            const { data: inventoryData, error } = await supabase
-                .from("inventory")
-                .select("*");
+            // 2. Fetch inventory data from Supabase via server action
+            const { getInventoryAction } = await import("@/app/actions/inventory");
+            const result = await getInventoryAction();
 
-            if (error) throw error;
+            if (!result.success) throw new Error(result.error);
+            const inventoryData = result.data || [];
 
             // 3. Merge data
             const mergedItems: InventoryItem[] = sanityProducts.map((product: any) => {
-                const inventoryRecord = inventoryData?.find((r: any) => r.id === product._id);
+                const inventoryRecord = inventoryData.find((r: any) => r.product_id === product._id);
 
+                const isTracked = inventoryRecord?.is_tracked ?? false;
                 const currentStock = inventoryRecord?.quantity ?? 0;
                 const lowStockThreshold = inventoryRecord?.low_stock_threshold ?? 5;
-                const isTracked = inventoryRecord?.is_tracked ?? false; // Default to false if not in DB yet
 
                 let status: InventoryItem["status"] = "in_stock";
-                if (currentStock === 0) status = "out_of_stock";
-                else if (currentStock <= lowStockThreshold) status = "low_stock";
+                if (isTracked) {
+                    if (currentStock === 0) status = "out_of_stock";
+                    else if (currentStock <= lowStockThreshold) status = "low_stock";
+                }
 
                 return {
                     id: product._id,
@@ -90,7 +83,7 @@ export default function InventoryPage() {
                     isTracked,
                     status,
                     category: product.category,
-                    updatedAt: inventoryRecord?.updated_at
+                    updatedAt: inventoryRecord?.last_updated_at
                 };
             });
 
@@ -106,31 +99,28 @@ export default function InventoryPage() {
     const updateStock = async (id: string, newQuantity: number) => {
         setSavingId(id);
         try {
-            // Ensure local state updates immediately for UI responsiveness
+            // Optimistic local update
             setItems(prev => prev.map(item => {
                 if (item.id === id) {
-                    const status = newQuantity === 0 ? "out_of_stock" : (newQuantity <= item.lowStockThreshold ? "low_stock" : "in_stock");
-                    return { ...item, currentStock: newQuantity, status };
+                    let status: InventoryItem["status"] = "in_stock";
+                    if (newQuantity === 0) status = "out_of_stock";
+                    else if (newQuantity <= item.lowStockThreshold) status = "low_stock";
+                    return { ...item, currentStock: newQuantity, status, isTracked: true };
                 }
                 return item;
             }));
 
-            // Update Supabase
-            const { error } = await supabase
-                .from("inventory")
-                .upsert({
-                    id: id, // Sanity ID
-                    quantity: newQuantity,
-                    is_tracked: true, // Auto-enable tracking if we update stock
-                    updated_at: new Date().toISOString()
-                });
+            // Update via server action
+            const { updateInventoryAction } = await import("@/app/actions/inventory");
+            const result = await updateInventoryAction(id, newQuantity);
 
-            if (error) throw error;
+            if (!result.success) throw new Error(result.error);
             toast.success("Stock updated");
         } catch (error) {
             console.error("Error updating stock:", error);
             toast.error("Failed to update stock");
-            // Revert local change if needed (could re-fetch)
+            // Re-fetch to sync
+            loadInventory();
         } finally {
             setSavingId(null);
         }
@@ -190,7 +180,7 @@ export default function InventoryPage() {
             <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left font-mono text-sm">
-                        <thead className="bg-gray-50 border-b border-gray-100 uppercase text-xs text-gray-500 font-medium">
+                        <thead className="bg-gray-50 border-b border-gray-100 uppercase text-xs text-gray-500 font-medium font-mono">
                             <tr>
                                 <th className="px-6 py-4">Product</th>
                                 <th className="px-6 py-4">Status</th>
@@ -198,7 +188,7 @@ export default function InventoryPage() {
                                 <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
+                        <tbody className="divide-y divide-gray-100 font-sans">
                             {loading ? (
                                 <tr>
                                     <td colSpan={4} className="px-6 py-12 text-center text-gray-500">
@@ -238,24 +228,29 @@ export default function InventoryPage() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            {item.status === "in_stock" && (
+                                            {!item.isTracked && (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                                                    <CheckCircle size={12} /> Untracked (In Stock)
+                                                </span>
+                                            )}
+                                            {item.isTracked && item.status === "in_stock" && (
                                                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
                                                     <CheckCircle size={12} /> In Stock
                                                 </span>
                                             )}
-                                            {item.status === "low_stock" && (
+                                            {item.isTracked && item.status === "low_stock" && (
                                                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-orange-50 text-orange-700">
                                                     <AlertTriangle size={12} /> Low Stock
                                                 </span>
                                             )}
-                                            {item.status === "out_of_stock" && (
+                                            {item.isTracked && item.status === "out_of_stock" && (
                                                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700">
                                                     <XCircle size={12} /> Out of Stock
                                                 </span>
                                             )}
                                         </td>
                                         <td className="px-6 py-4">
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-2 font-mono">
                                                 <input
                                                     type="number"
                                                     min="0"

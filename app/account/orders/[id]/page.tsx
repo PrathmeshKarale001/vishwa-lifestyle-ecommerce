@@ -433,7 +433,7 @@ export default function OrderDetailPage() {
 
                   <div className="mt-8 pt-6 border-t border-gray-200 print:hidden text-center">
                     <p className="text-xs text-foreground-muted mb-2">Need help with this order?</p>
-                    <a href="mailto:support@vishwalifestyle.com" className="text-sm text-accent-gold font-medium hover:underline">Contact Support</a>
+                    <a href="mailto:crm@vishwaglobal.com" className="text-sm text-accent-gold font-medium hover:underline">Contact Support</a>
                   </div>
                 </div>
               </div>

@@ -104,7 +104,7 @@ export default function TermsPage() {
               <h2 className="text-2xl font-serif mb-4">10. Contact</h2>
               <p className="text-foreground-muted">
                 For questions about these Terms, contact us at:<br />
-                <strong>Email:</strong> legal@vishwalifestyle.com
+                <strong>Email:</strong> crm@vishwaglobal.com
               </p>
             </section>
           </div>

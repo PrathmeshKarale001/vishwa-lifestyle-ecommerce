@@ -55,10 +55,37 @@ export async function middleware(request: NextRequest) {
     )
 
     // 4. Refresh session
+    let user = null;
     try {
-        await supabase.auth.getUser()
+        const { data } = await supabase.auth.getUser()
+        user = data.user;
+        console.log('Middleware User Check:', {
+            email: user?.email,
+            isAdminRoute: request.nextUrl.pathname.startsWith('/admin'),
+            adminEmails: process.env.NEXT_PUBLIC_ADMIN_EMAILS
+        });
     } catch (e) {
         console.error('Middleware auth error:', e)
+    }
+
+    // --- PROTECTED ROUTES: Admin ---
+    if (request.nextUrl.pathname.startsWith('/admin')) {
+        // 1. Require Authenticated User
+        if (!user) {
+            const url = request.nextUrl.clone();
+            url.pathname = '/auth/login';
+            url.searchParams.set('redirect', request.nextUrl.pathname);
+            return NextResponse.redirect(url);
+        }
+
+        // 2. Require Admin Email
+        const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
+        const userEmail = user.email?.toLowerCase();
+
+        if (!userEmail || !adminEmails.includes(userEmail)) {
+            // Redirect to home if not admin
+            return NextResponse.redirect(new URL('/', request.url));
+        }
     }
 
     // 5. Add CSP Headers (from proxy.ts) - Updated with missing domains from console

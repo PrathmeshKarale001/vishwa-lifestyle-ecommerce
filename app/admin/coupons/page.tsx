@@ -31,7 +31,7 @@ interface Coupon {
     min_order_amount?: number;
     valid_until?: string;
     usage_limit?: number;
-    used_count: number;
+    usage_count: number;
     is_active: boolean;
     created_at: string;
     applicable_to: "all" | "products" | "categories";
@@ -80,24 +80,24 @@ export default function CouponsPage() {
     };
 
     const checkAdminAndLoad = async () => {
-        const userIsAdmin = await isAdmin();
-        if (!userIsAdmin) {
-            router.push("/");
-            return;
-        }
+        // Basic admin check (layout handles protection, but good for data safety)
+        // Middleware handles strict auth. We assume authorized if we get here.
+        // const userIsAdmin = await isAdmin();
+        // if (!userIsAdmin) {
+        //     router.push("/");
+        //     return;
+        // }
         await loadCoupons();
     };
 
     const loadCoupons = async () => {
         setLoading(true);
         try {
-            const { data, error } = await supabase
-                .from("coupons")
-                .select("*")
-                .order("created_at", { ascending: false });
+            const { getCouponsAction } = await import("@/app/actions/coupons");
+            const result = await getCouponsAction();
 
-            if (error) throw error;
-            setCoupons(data || []);
+            if (!result.success) throw new Error(result.error);
+            setCoupons(result.data || []);
         } catch (error) {
             console.error("Error loading coupons:", error);
             toast.error("Failed to load coupons");
@@ -458,7 +458,7 @@ export default function CouponsPage() {
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex flex-col">
-                                                <span className="font-medium">{coupon.used_count} used</span>
+                                                <span className="font-medium">{coupon.usage_count} used</span>
                                                 {coupon.usage_limit && (
                                                     <span className="text-xs text-gray-500">of {coupon.usage_limit} limit</span>
                                                 )}

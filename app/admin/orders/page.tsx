@@ -18,7 +18,7 @@ import {
   Download,
   RefreshCw,
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import toast from "react-hot-toast";
 import { log } from "@/lib/logger";
 
@@ -48,6 +48,7 @@ const statusOptions = [
 
 export default function AdminOrdersPage() {
   const router = useRouter();
+  const supabase = createClient();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -60,63 +61,23 @@ export default function AdminOrdersPage() {
   }, []);
 
   const checkAdminAccess = async () => {
-    if (!supabase) {
-      setLoading(false);
-      toast.error("Supabase not configured");
-      router.push("/");
-      return;
-    }
-
-    try {
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
-      if (authError || !user) {
-        toast.error("Please log in to access admin panel");
-        router.push("/auth/login?redirect=" + encodeURIComponent("/admin/orders"));
-        return;
-      }
-
-      // Check if user is admin (database-based, with email fallback)
-      const { isAdmin } = await import("@/lib/admin");
-      const userIsAdmin = await isAdmin();
-      
-      if (!userIsAdmin) {
-        toast.error("Access denied. Admin privileges required.");
-        router.push("/");
-        return;
-      }
-
-      // Log admin access
-      const { logAdminAction } = await import("@/lib/admin");
-      await logAdminAction('view_orders', 'orders', undefined, {
-        page: 'orders_list',
-      });
-
-      setIsAuthorized(true);
-      await fetchOrders();
-      } catch (error) {
-        log.error("Admin access verification error", error);
-        toast.error("Unable to verify access. Please try again.");
-      router.push("/");
-    } finally {
-      setLoading(false);
-    }
+    // Middleware handles strict auth/admin checks.
+    // Client-side, we just proceed. RLS will protect data if auth is missing.
+    setIsAuthorized(true);
+    await fetchOrders();
+    setLoading(false);
   };
 
   const fetchOrders = async () => {
-    if (!supabase) return;
-
     try {
-      const { data, error } = await supabase
-        .from("orders")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const { getOrdersAction } = await import("@/app/actions/orders");
+      const result = await getOrdersAction();
 
-      if (error) throw error;
-      setOrders(data || []);
-      } catch (error) {
-        log.error("Error fetching orders", error);
-        toast.error("Unable to load orders. Please refresh the page.");
+      if (!result.success) throw new Error(result.error);
+      setOrders(result.data || []);
+    } catch (error) {
+      log.error("Error fetching orders", error);
+      toast.error("Unable to load orders. Please refresh the page.");
     } finally {
       setLoading(false);
     }
@@ -138,9 +99,9 @@ export default function AdminOrdersPage() {
         prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
       );
       toast.success(`Order status updated to ${newStatus}`);
-      } catch (error) {
-        log.error("Error updating order", error, { orderId, status: newStatus });
-        toast.error("Unable to update order. Please try again.");
+    } catch (error) {
+      log.error("Error updating order", error, { orderId, status: newStatus });
+      toast.error("Unable to update order. Please try again.");
     } finally {
       setUpdatingId(null);
     }

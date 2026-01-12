@@ -65,39 +65,42 @@ export async function reserveInventory(
   if (!serverClient) return false;
 
   try {
-    // Check if inventory exists
-    const inventory = await getInventory(productId);
-    if (!inventory || !inventory.is_tracked) {
-      return true; // If not tracked, allow
+    // 1. Fetch current inventory state
+    const { data: current, error: fetchError } = await serverClient
+      .from('inventory')
+      .select('quantity, reserved_quantity, is_tracked')
+      .eq('product_id', productId)
+      .single();
+
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      console.error('Error checking inventory for reservation:', fetchError);
+      return false;
     }
 
-    // Reserve quantity
-    const { error } = await serverClient
+    // If not tracked or not found, allow (business logic choice: don't block)
+    if (!current || !current.is_tracked) {
+      return true;
+    }
+
+    // 2. Check Availability
+    if (current.quantity - current.reserved_quantity < quantity) {
+      return false; // Out of stock
+    }
+
+    // 3. Update with Optimistic Concurrency Control (OCC)
+    // We match on previous reserved_quantity to ensure no one else modified it in between
+    const { error: updateError, count } = await serverClient
       .from('inventory')
       .update({
-        // Note: Manual increment instead of RPC
-        // reserved_quantity will be updated in the fallback below
+        reserved_quantity: current.reserved_quantity + quantity,
         last_updated_at: new Date().toISOString(),
       })
-      .eq('product_id', productId);
+      .eq('product_id', productId)
+      .eq('reserved_quantity', current.reserved_quantity); // OCC Check
 
-    if (error) {
-      // Fallback: manual increment
-      const { data: current } = await serverClient
-        .from('inventory')
-        .select('reserved_quantity')
-        .eq('product_id', productId)
-        .single();
-
-      if (current) {
-        await serverClient
-          .from('inventory')
-          .update({
-            reserved_quantity: (current.reserved_quantity || 0) + quantity,
-            last_updated_at: new Date().toISOString(),
-          })
-          .eq('product_id', productId);
-      }
+    if (updateError || count === 0) {
+      // Update failed or race condition occurred
+      return false;
     }
 
     return true;
@@ -185,12 +188,12 @@ export async function getLowStockItems(): Promise<InventoryItem[]> {
       .order('quantity', { ascending: true });
 
     if (error) throw error;
-    
+
     // Filter low stock items in JavaScript
     const lowStockItems = (data || []).filter(
       (item: InventoryItem) => item.quantity <= (item.low_stock_threshold || 0)
     ) as InventoryItem[];
-    
+
     return lowStockItems;
   } catch (error) {
     console.error('Error fetching low stock items:', error);

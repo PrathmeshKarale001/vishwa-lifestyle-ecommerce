@@ -18,21 +18,23 @@ interface ConditionalWrapperProps {
 export default function ConditionalWrapper({ children, categories = [], settings }: ConditionalWrapperProps) {
   const pathname = usePathname();
 
-  // Check if we're in the studio
+  // Check if we're in the studio or admin panel
   const isStudio = pathname?.startsWith('/studio');
+  const isAdmin = pathname?.startsWith('/admin');
+  const isExcluded = isStudio || isAdmin;
   const isHomePage = pathname === '/';
 
-  const mainClasses = isStudio
+  const mainClasses = isExcluded
     ? 'min-h-screen'
     : `${!isHomePage ? (settings?.announcementBar?.show ? 'pt-[86px] sm:pt-[104px]' : 'pt-[56px] sm:pt-[72px]') : ''} min-h-screen`;
 
   return (
     <>
-      {!isStudio && <SkipLink />}
-      {!isStudio && <Header categories={categories} settings={settings} />}
-      {!isStudio && <CartDrawer />}
-      {!isStudio && <ScrollToTop />}
-      {!isStudio && <MobileBottomNav />}
+      {!isExcluded && <SkipLink />}
+      {!isExcluded && <Header categories={categories} settings={settings} />}
+      {!isExcluded && <CartDrawer />}
+      {!isExcluded && <ScrollToTop />}
+      {!isExcluded && <MobileBottomNav />}
       <main
         id="main-content"
         className={mainClasses}
@@ -40,7 +42,7 @@ export default function ConditionalWrapper({ children, categories = [], settings
       >
         {children}
       </main>
-      {!isStudio && <Footer settings={settings} />}
+      {!isExcluded && <Footer settings={settings} />}
     </>
   );
 }

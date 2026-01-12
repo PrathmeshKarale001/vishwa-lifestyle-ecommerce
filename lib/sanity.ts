@@ -382,6 +382,22 @@ export async function getHomePage() {
   return await sanityClient.fetch(queries.homePage, {}, { cache: 'no-store' });
 }
 
+
 export async function getSiteSettings() {
   return await sanityClient.fetch(queries.siteSettings, {}, { cache: 'no-store' });
+}
+
+export async function getProductsByIds(ids: string[]) {
+  return await sanityClient.fetch(
+    `*[_type == "product" && _id in $ids] {
+      _id,
+      name,
+      price,
+      "slug": slug.current,
+      "image": images[0].asset->url,
+      variants
+    }`,
+    { ids },
+    { cache: 'no-store' }
+  );
 }

@@ -67,7 +67,7 @@ const faqCategories = [
       },
       {
         q: "Do you offer wholesale pricing?",
-        a: "Yes, we offer special pricing for temples, ashrams, and bulk orders. Please contact us at wholesale@vishwalifestyle.com for more information.",
+        a: "Yes, we offer special pricing for temples, ashrams, and bulk orders. Please contact us at crm@vishwaglobal.com for more information.",
       },
     ],
   },

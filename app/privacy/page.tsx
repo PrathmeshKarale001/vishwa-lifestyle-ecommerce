@@ -98,7 +98,7 @@ export default function PrivacyPage() {
                 If you have questions about this Privacy Policy or your personal data, please contact us at:
               </p>
               <p className="text-foreground-muted mt-4">
-                <strong>Email:</strong> privacy@vishwalifestyle.com<br />
+                <strong>Email:</strong> crm@vishwaglobal.com<br />
                 <strong>Address:</strong> Sacred Valley, Rishikesh, Uttarakhand, India
               </p>
             </section>

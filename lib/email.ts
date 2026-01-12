@@ -5,8 +5,8 @@ import { log } from './logger';
 const resend = new Resend(process.env.RESEND_API_KEY || 're_123456789');
 
 // Email configuration
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Vishwa Lifestyle <noreply@vishwalifestyle.com>';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',')[0] || 'admin@vishwalifestyle.com';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Vishwa Lifestyle <noreply@vishwaglobal.com>';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',')[0] || 'crm@vishwaglobal.com';
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://vishwalifestyle.com';
 
 // Check if email is configured

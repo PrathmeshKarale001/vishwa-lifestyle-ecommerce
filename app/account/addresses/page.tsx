@@ -338,7 +338,7 @@ export default function AddressesPage() {
                         {...register("phone")}
                         className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.phone ? "border-red-500" : "border-gray-200"
                           }`}
-                        placeholder="+91 98765 43210"
+                        placeholder="+91 74474 89101"
                       />
                       {errors.phone && (
                         <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>

@@ -47,3 +47,13 @@ export async function toggleCouponStatusAction(id: string, isActive: boolean) {
         return { success: false, error: error.message };
     }
 }
+
+export async function getCouponsAction() {
+    try {
+        const { getAllCoupons } = await import("@/lib/coupons");
+        const result = await getAllCoupons();
+        return { success: true, data: result };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}

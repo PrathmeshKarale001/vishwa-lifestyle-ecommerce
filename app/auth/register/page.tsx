@@ -183,7 +183,7 @@ export default function RegisterPage() {
                   type="tel"
                   {...register("phone")}
                   className="w-full border border-gray-200 pl-12 pr-4 py-3 focus:outline-none focus:border-accent-gold"
-                  placeholder="+91 98765 43210"
+                  placeholder="+91 74474 89101"
                 />
               </div>
             </div>

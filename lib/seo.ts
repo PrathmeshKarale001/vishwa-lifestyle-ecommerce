@@ -163,7 +163,7 @@ export function generateOrganizationSchema() {
     ],
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+91-XXXXXXXXXX',
+      telephone: '+91-7447489101',
       contactType: 'customer service',
       availableLanguage: ['English', 'Hindi'],
     },

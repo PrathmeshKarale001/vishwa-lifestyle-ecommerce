@@ -9,8 +9,11 @@ import { verifyCsrfTokenServer } from '@/lib/csrf';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
-  // Rate limiting - 10 requests per minute
+  // Entry log for debugging
   const ip = getClientIP(request);
+  log.info(`Contact form submission started`, { ip });
+
+  // Rate limiting - 10 requests per minute
   const limit = rateLimit(`contact:${ip}`, { windowMs: 60000, maxRequests: 10 });
 
   if (!limit.allowed) {
@@ -41,19 +44,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let { name, email, phone, subject, message } = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch (e) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid request body' },
+        { status: 400 }
+      );
+    }
 
-    // Sanitize inputs
-    name = sanitizeText(name);
-    email = sanitizeEmail(email);
-    if (phone) phone = sanitizePhone(phone);
-    subject = sanitizeText(subject);
-    message = sanitizeText(message);
+    let { name, email, phone, subject, message } = body;
+
+    // Sanitize inputs safely
+    name = name ? sanitizeText(String(name)) : '';
+    email = email ? sanitizeEmail(String(email)) : '';
+    phone = phone ? sanitizePhone(String(phone)) : '';
+    subject = subject ? sanitizeText(String(subject)) : '';
+    message = message ? sanitizeText(String(message)) : '';
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields' },
+        { success: false, error: 'Missing required fields (Name, Email, Subject, and Message are required)' },
         { status: 400 }
       );
     }
@@ -67,14 +80,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if Supabase is configured
-    if (!supabase) {
-      // For development without Supabase, just log and return success
-      log.info('Contact form submission (dev mode)', { name, email, subject });
-      return NextResponse.json({ success: true, message: 'Message received (dev mode)' });
-    }
-
-    // Save to database
+    // Attempt to save to database
     try {
       await submitContactForm({
         name,
@@ -84,24 +90,31 @@ export async function POST(request: NextRequest) {
         message,
       });
 
-      // Send notification email to admin (non-blocking)
-      sendContactNotification({ name, email, phone, subject, message }).catch(err => {
-        log.error('Failed to send contact notification', err);
-      });
+      // Send emails (non-blocking, errors swallowed but logged)
+      try {
+        sendContactNotification({ name, email, phone, subject, message }).catch(err => {
+          log.error('Failed to send contact notification', err);
+        });
+        sendContactAutoReply({ name, email, subject }).catch(err => {
+          log.error('Failed to send contact auto-reply', err);
+        });
+      } catch (emailErr) {
+        log.error('Email trigger error', emailErr);
+      }
 
-      // Send auto-reply to customer (non-blocking)
-      sendContactAutoReply({ name, email, subject }).catch(err => {
-        log.error('Failed to send contact auto-reply', err);
-      });
-
-      return NextResponse.json({
-        success: true,
-        message: 'Your message has been sent successfully. We\'ll get back to you soon!'
-      });
+      return NextResponse.json(
+        {
+          success: true,
+          message: 'Your message has been sent successfully. We\'ll get back to you soon!'
+        },
+        {
+          headers: { 'X-Contact-Status': 'Success' }
+        }
+      );
     } catch (error: any) {
-      log.error('Contact form error', error, { email, subject });
+      log.error('Database submission error', error, { email, subject });
 
-      // Handle duplicate or other database errors gracefully
+      // Handle duplicate submission
       if (error.code === '23505') {
         return NextResponse.json(
           { success: false, error: 'You have already submitted this message. Please wait before submitting again.' },
@@ -110,16 +123,25 @@ export async function POST(request: NextRequest) {
       }
 
       return NextResponse.json(
-        { success: false, error: 'Failed to submit message. Please try again or contact us directly.' },
-        { status: 500 }
+        {
+          success: false,
+          error: `Submission failed: ${error.message || 'Unknown database error'}. Please contact us directly if this persists.`,
+          code: error.code
+        },
+        {
+          status: 500,
+          headers: { 'X-Contact-Status': 'DB-Error', 'X-Error-Code': error.code || 'None' }
+        }
       );
     }
   } catch (error: any) {
-    log.error('Contact API error', error);
+    log.error('Contact API Global error', error);
     return NextResponse.json(
-      { success: false, error: 'Unable to process your request. Please try again later.' },
-      { status: 500 }
+      { success: false, error: `Critical server error: ${error.message || 'Internal Failure'}` },
+      {
+        status: 500,
+        headers: { 'X-Contact-Status': 'Global-Error' }
+      }
     );
   }
 }
-

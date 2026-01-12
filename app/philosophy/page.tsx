@@ -27,9 +27,9 @@ export default function PhilosophyPage() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <h2 className="text-2xl font-serif text-foreground">Symbiosis with Nature</h2>
+            <h2 className="text-2xl font-serif text-foreground">Sustainable Vedic Living</h2>
             <p className="text-foreground-muted leading-relaxed">
-              We see ourselves not as conquerors of nature but as integral parts of it. Our products and practices, like Agnihotra, are designed to heal the atmosphere, which in turn heals the mind and body. This symbiotic relationship is the cornerstone of our existence.
+              Vishwa exists to support a complete Agnihotra-aligned lifestyle—not just ritual, but how one lives, eats, dresses, builds, farms, and thinks. We prioritize earth-friendly, sustainable, and nature-conscious products.
             </p>
           </motion.div>
           <motion.div
@@ -38,9 +38,9 @@ export default function PhilosophyPage() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <h2 className="text-2xl font-serif text-foreground">Holistic Wellness</h2>
+            <h2 className="text-2xl font-serif text-foreground">Artisan Supported</h2>
             <p className="text-foreground-muted leading-relaxed">
-              Wellness is not just the absence of disease; it is a state of vibrant health and inner balance. We advocate for a lifestyle that nourishes the soul through spiritual practices, the body through pure ingredients, and the mind through positive vibrations.
+              Every creation is a testament to fair-trade practices. We support artisans and farmers who share our core values, ensuring that the ancient arts are preserved through ethical and sustainable livelihood.
             </p>
           </motion.div>
           <motion.div
@@ -49,9 +49,9 @@ export default function PhilosophyPage() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <h2 className="text-2xl font-serif text-foreground">Authenticity & Tradition</h2>
+            <h2 className="text-2xl font-serif text-foreground">Pure Formulations</h2>
             <p className="text-foreground-muted leading-relaxed">
-              In a world of fast-paced changes, we hold onto the timeless truths. Our commitment to authenticity ensures that every product, from our copper pyramids to our herbal supplements, is crafted with strict adherence to traditional methods and purity.
+              Our products are rooted in Ayurveda-based, herbal, and natural formulations. We strictly avoid commercial dilution, ensuring that every essential you bring into your home is pure, potent, and traditionally crafted.
             </p>
           </motion.div>
           <motion.div
@@ -60,9 +60,9 @@ export default function PhilosophyPage() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <h2 className="text-2xl font-serif text-foreground">Universal Oneness</h2>
+            <h2 className="text-2xl font-serif text-foreground">Rhythm & Intention</h2>
             <p className="text-foreground-muted leading-relaxed">
-              Vasudhaiva Kutumbakam — The World is One Family. Our philosophy extends beyond boundaries of caste, creed, or nation. We aim to share the gift of Vedic wisdom with every human being, fostering a global community united by peace and love.
+              We believe in lifestyle essentials aligned with the rhythm of nature. Every product is curated with a specific intention—to facilitate the transition from low-energy living to a high-energy, Agnihotra-aligned lifestyle.
             </p>
           </motion.div>
         </div>

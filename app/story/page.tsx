@@ -7,52 +7,52 @@ import { Heart, Users, Sprout, Home } from "lucide-react";
 
 const timeline = [
     {
+        year: "1978",
+        title: "The Foundation",
+        description: "The work begins with Agnihotra materials and Vedic fire infused products under the guidance of Shree Shreekantji Maharaj.",
+    },
+    {
+        year: "1980's–2000's",
+        title: "Living the Practice",
+        description: "Agnihotra and Vishwa Agnihotra lifestyle quietly spread through homes, farms, and communities, guided by lineage and discipline.",
+    },
+    {
+        year: "2010's",
+        title: "Growing Awareness",
+        description: "As interest in conscious living rises globally, Vishwa Agnihotra lifestyle begins reaching seekers beyond geography and culture.",
+    },
+    {
         year: "2018",
-        title: "The Beginning",
-        description: "Founded by a group of Agnihotra practitioners seeking to make Vedic rituals accessible to modern households.",
+        title: "Structuring the Mission",
+        description: "Vishwa Lifestyle takes formal shape to make authentic, earth-friendly, fair-trade Vedic lifestyle products accessible without compromise.",
     },
     {
-        year: "2019",
-        title: "First Products",
-        description: "Launched our first Agnihotra starter kits, handcrafting each copper pyramid with traditional methods.",
-    },
-    {
-        year: "2021",
-        title: "Expanding the Vision",
-        description: "Introduced lifestyle products—candles, decor, and apparel—bringing Vedic philosophy beyond rituals.",
-    },
-    {
-        year: "2023",
-        title: "Community Growth",
-        description: "Reached 10,000+ homes across India, creating a network of conscious living practitioners.",
-    },
-    {
-        year: "2025",
-        title: "Vishwa Lifestyle Today",
-        description: "A complete ecosystem of Vedic living products, workshops, and a thriving community.",
+        year: "Today",
+        title: "A Global Movement",
+        description: "Vishwa serves Pan-India and reaches 45+ countries worldwide, supported by practitioners, farmers, and conscious consumers.",
     },
 ];
 
 const values = [
     {
-        icon: Heart,
-        title: "Authenticity",
-        description: "Every product is rooted in genuine Vedic knowledge, not trends or aesthetics alone.",
-    },
-    {
         icon: Sprout,
-        title: "Sustainability",
-        description: "We honor the earth through ethical sourcing, minimal waste, and supporting local artisans.",
+        title: "Earth-Friendly",
+        description: "Sustainable and nature-conscious products created with deep respect for the planet's rhythm.",
     },
     {
         icon: Users,
-        title: "Community",
-        description: "We're building a family of conscious individuals who believe in intentional, mindful living.",
+        title: "Fair-Trade",
+        description: "Supporting artisans and farmers through ethical partnerships and fair-trade creations.",
+    },
+    {
+        icon: Heart,
+        title: "Ayurveda-Based",
+        description: "Herbal and natural formulations rooted in ancient wisdom for holistic well-being.",
     },
     {
         icon: Home,
-        title: "Sacred Spaces",
-        description: "Our mission is to help you transform your home into a sanctuary of peace and purity.",
+        title: "Intentional Living",
+        description: "Lifestyle essentials aligned with purity and intention, helping transform homes into sanctuaries.",
     },
 ];
 
@@ -87,10 +87,10 @@ export default function StoryPage() {
                         Our Journey
                     </span>
                     <h1 className="text-5xl md:text-7xl font-serif mb-8 leading-tight">
-                        Reviving Ancient Wisdom<br />for Modern Homes
+                        From a Sacred Fire<br />to a Global Movement
                     </h1>
                     <p className="text-lg md:text-xl text-white/90 font-light leading-relaxed">
-                        A story of tradition, community, and the mission to bring Vedic purity into everyday life
+                        A mission born in 1978 to protect a conscious, earth-friendly way of living
                     </p>
                 </motion.div>
             </section>
@@ -126,18 +126,18 @@ export default function StoryPage() {
                                 How It Started
                             </span>
                             <h2 className="text-4xl md:text-5xl font-serif mb-6 leading-tight">
-                                From a Small Fire<br />
-                                <span className="text-accent-sage italic">to a Movement</span>
+                                More Than a Brand<br />
+                                <span className="text-accent-sage italic">It Is a Mission</span>
                             </h2>
                             <div className="space-y-6 text-foreground-muted text-lg leading-relaxed">
                                 <p>
-                                    In 2018, a small group of us gathered around an Agnihotra fire at sunrise. We had all experienced the profound calm, the mental clarity, and the subtle shift in energy that this ancient Vedic ritual brought into our lives.
+                                    Vishwa did not begin as a brand. It began as a mission. In 1978, under the guidance of <strong>Shree Shreekantji Maharaj</strong>, a quiet yet powerful effort was initiated—to make authentic Agnihotra kits and essentials available worldwide in its purest form.
                                 </p>
                                 <p>
-                                    But we noticed a problem: sourcing authentic materials was nearly impossible. Copper pyramids were expensive or poorly made. Organic cow dung cakes were hard to find. Pure cow ghee from indigenous breeds was a rarity.
+                                    This work was blessed with grace by <strong>Param Sadguru Shree Gajanan Maharaj</strong>, whose vision was never limited to ritual, but rooted in human transformation and planetary healing.
                                 </p>
                                 <p>
-                                    And so, <strong>Vishwa Lifestyle</strong> was born—not as a business, but as a mission to make Vedic living accessible, authentic, and beautiful.
+                                    Vishwa was born from a constant challenge: authentic materials were disappearing. True copper pyramids, indigenous cow-based products, pure ghee—everything essential to Vedic living was becoming rare. We exist to protect a way of living that is conscious, earth-friendly, and sustainable.
                                 </p>
                             </div>
                         </motion.div>

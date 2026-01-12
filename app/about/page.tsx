@@ -21,7 +21,7 @@ export default function AboutPage() {
                         transition={{ duration: 0.8 }}
                         className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground mb-6"
                     >
-                        Elevating Everyday Life Through Teachings from the 5 Fold Path
+                        Facilitating the Transition to a High Energy Lifestyle
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -29,7 +29,7 @@ export default function AboutPage() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-lg md:text-xl text-foreground-muted font-light"
                     >
-                        Enhancing Modern Living and Rebuilding the Planet by blending Timeless Wisdom with Modern Scientific Knowledge.
+                        Blending Timeless Vedic Wisdom with Modern Conscious Living to Heal the Planet and Transform Human Life.
                     </motion.p>
                 </div>
             </section>
@@ -56,7 +56,7 @@ export default function AboutPage() {
                         <h2 className="text-3xl font-serif text-foreground mb-4">Our Vision</h2>
                         <div className="w-16 h-1 bg-accent-gold mb-6 mx-auto md:mx-0"></div>
                         <p className="text-foreground-muted leading-relaxed">
-                            Vishwa envisions a world of universal oneness and profound inner peace. Our vision is to create a global community where the timeless wisdom of the Vedas guides individuals to channel their spiritual energy to manifest a new life.
+                            Our vision is rooted in human transformation and planetary healing. We envision a world where every household adopts a lifestyle of light, rhythm, and responsibility, aligned with the ancient science of Agnihotra to manifest a more conscious future.
                         </p>
                     </motion.div>
 
@@ -72,7 +72,7 @@ export default function AboutPage() {
                         <h2 className="text-3xl font-serif text-foreground mb-4">Our Mission</h2>
                         <div className="w-16 h-1 bg-accent-gold mb-6 mx-auto md:mx-0"></div>
                         <p className="text-foreground-muted leading-relaxed">
-                            Our mission at Vishwa is to disseminate the profound teachings of the 170+ year old Guru Lineage, enabling individuals to embark on a transformative journey and learn to heal themselves. Vishwa is committed to cultivating individuals who are spiritually awakened, environmentally aware and driven to create a better future through mindful living.
+                            Initiated in 1978, our mission is to make authentic earth-friendly essentials accessible worldwide. We are dedicated to facilitating the transition from low-energy living to a high-energy Agnihotra lifestyle, ensuring the purity of Vedic materials for the next generation.
                         </p>
                     </motion.div>
                 </motion.div>

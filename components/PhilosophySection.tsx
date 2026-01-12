@@ -3,10 +3,10 @@
 import { motion } from "framer-motion";
 
 export default function PhilosophySection({ data }: { data?: any }) {
-    const essence = data?.essence || "Our Essence";
-    const heading = data?.heading || "The Philosophy Behind Vedic Lifestyle";
-    const body = data?.body || "In Vedic culture, objects weren't just material - they carried energy, purity, and intention. A jar wasn't just storage, it was sanctity. A candle wasn't decor, it was light for the soul. A kurta wasn't clothing, it was a second skin of purity.";
-    const quote = data?.quote || "Vishwa's lifestyle collection brings this philosophy to your modern home.";
+    const essence = data?.essence || "What We Stand For";
+    const heading = data?.heading || "Vedic Living for the New Age";
+    const body = data?.body || "Vishwa exists to support a complete Agnihotra-aligned lifestyle—not just ritual, but how ones lives, eats, dresses, builds, farms, and thinks. We create and curate essentials aligned with rhythm, purity, and intention.";
+    const quote = data?.quote || "Bringing earth-friendly, sustainable, and nature-conscious living to your modern home.";
 
     return (
         <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white text-center">

@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 export default function StorySection({ data }: { data?: any }) {
-    const heading = data?.heading || "Not Just Products. \nA Way of Living.";
-    const content = data?.content || "In Vedic India, everything inside the home carried intention - from the clothes one wore, to the lamp one lit, to the jar that stored grains.\n\nVishwa revives this sacred philosophy for today's world - through products that add meaning, purity, and serenity to everyday life.";
-    const image = data?.image || "/products/philosophy/1.jpg";
+    const heading = data?.heading || "From a Sacred Fire \nto a Global Movement";
+    const content = data?.content || "Initiated in 1978, Vishwa began as a mission to make authentic Agnihotra materials available worldwide. \n\nBlessed by Param Sadguru Shree Gajanan Maharaj, we facilitate the transition to a high-energy Agnihotra lifestyle - rooted in human transformation and planetary healing.";
+    const image = data?.image || "/hero-images/VISHWA WORLD.png";
 
     return (
         <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white overflow-hidden">

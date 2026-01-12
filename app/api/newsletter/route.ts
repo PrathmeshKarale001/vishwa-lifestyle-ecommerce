@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { subscribeToNewsletter, supabase } from '@/lib/supabase';
+import { subscribeToNewsletter, supabase, createServerClient } from '@/lib/supabase';
 import { sendNewsletterConfirmation } from '@/lib/email';
 import { rateLimit, getClientIP } from '@/lib/rate-limit';
 import { sanitizeEmail, sanitizeText } from '@/lib/sanitize';
@@ -48,12 +48,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true });
     }
 
-    // Check if already subscribed
-    const { data: existing } = await supabase
-      .from('newsletter_subscribers')
-      .select('id, is_active')
-      .eq('email', email)
-      .single();
+    // Check if already subscribed - use server client to bypass RLS
+    const serverClient = createServerClient();
+    const { data: existing } = serverClient
+      ? await serverClient
+        .from('newsletter_subscribers')
+        .select('id, is_active')
+        .eq('email', email)
+        .single()
+      : { data: null };
 
     if (existing) {
       if (existing.is_active) {

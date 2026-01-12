@@ -55,12 +55,31 @@ export async function updateOrderStatusAction(orderId: string, status: string) {
     if (!supabase) return { success: false, error: "Supabase not configured" };
 
     try {
-        const { error } = await supabase
+        const { data: order, error: updateError } = await supabase
             .from("orders")
             .update({ status, updated_at: new Date().toISOString() })
-            .eq("id", orderId);
+            .eq("id", orderId)
+            .select(`
+                *,
+                profiles:user_id (email, name)
+            `)
+            .single();
 
-        if (error) throw error;
+        if (updateError) throw updateError;
+
+        // If status is delivered, send email
+        if (status === "delivered" && order) {
+            const { sendOrderDeliveredEmail } = await import("@/lib/email");
+            const customerEmail = order.profiles?.email || order.email;
+            const customerName = order.profiles?.name || order.shipping_address?.name || "Customer";
+
+            await sendOrderDeliveredEmail({
+                order_number: order.order_number || order.id.slice(0, 8),
+                customer_email: customerEmail,
+                customer_name: customerName
+            });
+        }
+
         return { success: true };
     } catch (error: any) {
         console.error("updateOrderStatusAction Error:", error);

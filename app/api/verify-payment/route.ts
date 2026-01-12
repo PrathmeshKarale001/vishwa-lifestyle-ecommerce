@@ -80,6 +80,42 @@ export async function POST(request: NextRequest) {
 
             log.info('Payment verified and order updated', { orderNumber, paymentId: razorpay_payment_id });
 
+            // Send email notifications (non-blocking)
+            try {
+                const { sendOrderConfirmationEmail, sendOrderNotificationToAdmin } = await import('@/lib/email');
+
+                // 1. Send confirmation email to customer
+                sendOrderConfirmationEmail({
+                    order_number: updatedOrder.order_number,
+                    customer_email: updatedOrder.email,
+                    customer_name: updatedOrder.shipping_address?.name || updatedOrder.email,
+                    items: updatedOrder.items,
+                    shipping_address: updatedOrder.shipping_address,
+                    subtotal: updatedOrder.subtotal,
+                    shipping: updatedOrder.shipping,
+                    tax: updatedOrder.tax,
+                    discount: updatedOrder.discount,
+                    total: updatedOrder.total,
+                    payment_method: 'Razorpay',
+                }).catch(err => log.error('Failed to send order confirmation email', err, { orderNumber }));
+
+                // 2. Send notification to admin
+                sendOrderNotificationToAdmin({
+                    order_number: updatedOrder.order_number,
+                    customer_name: updatedOrder.shipping_address?.name || updatedOrder.email,
+                    customer_email: updatedOrder.email,
+                    items: updatedOrder.items,
+                    total: updatedOrder.total,
+                    shipping_address: {
+                        name: updatedOrder.shipping_address?.name || 'Customer',
+                        city: updatedOrder.shipping_address?.city || 'N/A',
+                        state: updatedOrder.shipping_address?.state || 'N/A',
+                    },
+                }).catch(err => log.error('Failed to send admin order notification', err, { orderNumber }));
+            } catch (emailError) {
+                log.error('Error importing email functions', emailError);
+            }
+
             return NextResponse.json({ success: true });
         } catch (dbError: any) {
             log.error('Database error updating order status after payment', dbError, { orderNumber });

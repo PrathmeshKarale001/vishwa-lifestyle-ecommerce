@@ -1,11 +1,12 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // Environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 // Check if we have valid credentials
-const hasValidCredentials = supabaseUrl &&
+const hasValidCredentials =
+  supabaseUrl &&
   supabaseAnonKey &&
   !supabaseUrl.includes('placeholder') &&
   supabaseUrl.startsWith('https://');
@@ -488,16 +489,18 @@ export async function addReview(review: {
 // ==========================================
 
 export async function subscribeToNewsletter(email: string, name?: string) {
-  if (!supabase) throw new Error('Supabase not configured');
+  // Use createServerClient (service role) for reliable newsletter signups
+  const serverClient = createServerClient();
+  const client = serverClient || supabase;
 
-  const { data, error } = await supabase
+  if (!client) throw new Error('Supabase not configured');
+
+  const { error } = await client
     .from('newsletter_subscribers')
-    .insert([{ email, name }])
-    .select()
-    .single();
+    .insert([{ email, name }]);
 
-  if (error && error.code !== '23505') throw error; // Ignore duplicate
-  return data;
+  if (error && error.code !== '23505') throw error;
+  return true;
 }
 
 // ==========================================
@@ -511,16 +514,18 @@ export async function submitContactForm(submission: {
   subject: string;
   message: string;
 }) {
-  if (!supabase) throw new Error('Supabase not configured');
+  // Use createServerClient (service role) for guaranteed delivery of contact messages
+  const serverClient = createServerClient();
+  const client = serverClient || supabase;
 
-  const { data, error } = await supabase
+  if (!client) throw new Error('Supabase not configured');
+
+  const { error } = await client
     .from('contact_submissions')
-    .insert([submission])
-    .select()
-    .single();
+    .insert([submission]);
 
   if (error) throw error;
-  return data;
+  return true;
 }
 
 // ==========================================

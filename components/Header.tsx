@@ -116,21 +116,24 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 15 }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 w-[1100px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden z-50 border border-gray-100 flex h-[550px]"
+                    className="absolute top-full left-1/2 -translate-x-1/2 w-[1100px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden z-50 border border-gray-100 flex h-[550px] max-h-[80vh]"
                     onMouseEnter={() => setIsShopHovered(true)}
                     onMouseLeave={() => setIsShopHovered(false)}
                   >
                     {/* Left Sidebar: First Only Categories */}
-                    <div className="w-[300px] bg-gray-50/50 border-r border-gray-100 p-6 flex flex-col justify-between">
-                      <div className="space-y-1">
-                        <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-6 pl-4 font-sans">
+                    <div className="w-[300px] bg-gray-50/50 border-r border-gray-100 p-6 flex flex-col h-full">
+                      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-1">
+                        <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-4 pl-4 font-sans">
                           Categories
                         </p>
                         {categories.map((category: any) => (
                           <button
                             key={category.slug}
                             onMouseEnter={() => setActiveCategory(category.slug)}
-                            onClick={() => router.push(`/shop?category=${category.slug}`)}
+                            onClick={() => {
+                              setIsShopHovered(false);
+                              router.push(`/shop?category=${category.slug}`);
+                            }}
                             className={`w-full text-left px-4 py-4 rounded-xl transition-all duration-300 flex items-center justify-between group/cat ${activeCategory === category.slug
                               ? "bg-white shadow-sm ring-1 ring-gray-100 text-accent-gold"
                               : "text-gray-600 hover:bg-white hover:text-black"
@@ -150,12 +153,15 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                         ))}
                       </div>
 
-                      <Link
-                        href="/shop"
-                        className="mt-4 flex items-center justify-center gap-2 py-4 px-6 bg-accent-gold text-white rounded-xl text-xs uppercase tracking-widest font-bold hover:bg-black transition-all duration-300 shadow-md hover:shadow-lg"
-                      >
-                        Explore All Products
-                      </Link>
+                      <div className="pt-4 border-t border-gray-100 mt-2">
+                        <Link
+                          href="/shop"
+                          onClick={() => setIsShopHovered(false)}
+                          className="flex items-center justify-center gap-2 py-4 px-6 bg-accent-gold text-white rounded-xl text-xs uppercase tracking-widest font-bold hover:bg-black transition-all duration-300 shadow-md hover:shadow-lg"
+                        >
+                          Explore All Products
+                        </Link>
+                      </div>
                     </div>
 
                     {/* Right Area: Dynamic Content (Subcategories & Segments) */}
@@ -171,15 +177,16 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                         >
                           <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
                             <div>
-                              <h3 className="text-3xl font-serif font-bold text-black mb-1">
+                              <h3 className="text-xl md:text-2xl font-serif font-bold text-black mb-1 uppercase tracking-tight">
                                 {activeCategoryData?.name}
                               </h3>
-                              <p className="text-sm text-gray-500 font-sans tracking-wide">
+                              <p className="text-xs text-gray-500 font-sans tracking-wide">
                                 Explore our curated {activeCategoryData?.name} collection.
                               </p>
                             </div>
                             <Link
                               href={`/shop?category=${activeCategoryData?.slug}`}
+                              onClick={() => setIsShopHovered(false)}
                               className="text-xs uppercase tracking-[0.15em] font-bold text-accent-gold hover:text-black transition-colors flex items-center gap-2 group"
                             >
                               View All {activeCategoryData?.name}
@@ -187,7 +194,7 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                             </Link>
                           </div>
 
-                          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12">
+                          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12 pb-10">
                             {activeCategoryData?.subCategories?.map((sub: string) => {
                               const segments = activeCategoryData.categorySegments?.find(
                                 (cs: any) => cs.subCategoryName === sub
@@ -197,6 +204,7 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                                 <div key={sub} className="space-y-6">
                                   <Link
                                     href={`/shop?category=${activeCategoryData.slug}&sub=${sub}`}
+                                    onClick={() => setIsShopHovered(false)}
                                     className="block relative group/sub"
                                   >
                                     <h4 className="text-sm font-bold text-black uppercase tracking-widest inline-block relative">
@@ -211,6 +219,7 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                                         <li key={seg}>
                                           <Link
                                             href={`/shop?category=${activeCategoryData.slug}&sub=${sub}&segment=${seg}`}
+                                            onClick={() => setIsShopHovered(false)}
                                             className="text-[12px] text-gray-500 hover:text-accent-gold hover:translate-x-1 transition-all duration-200 block font-sans"
                                           >
                                             {seg}
@@ -221,6 +230,7 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                                       <li>
                                         <Link
                                           href={`/shop?category=${activeCategoryData.slug}&sub=${sub}`}
+                                          onClick={() => setIsShopHovered(false)}
                                           className="text-[12px] text-gray-400 italic hover:text-accent-gold transition-colors block font-sans"
                                         >
                                           Browse Selection

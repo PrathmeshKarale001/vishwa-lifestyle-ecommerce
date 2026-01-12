@@ -82,10 +82,25 @@ export default function CustomersPage() {
         }).format(price);
     };
 
-    const filteredCustomers = customers.filter(customer =>
-        (customer.full_name?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
-        (customer.email?.toLowerCase() || "").includes(searchTerm.toLowerCase())
-    );
+    const [activeSegment, setActiveSegment] = useState<"all" | "vip" | "repeat" | "new">("all");
+
+    const filteredCustomers = customers.filter(customer => {
+        const matchesSearch = (customer.full_name?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+            (customer.email?.toLowerCase() || "").includes(searchTerm.toLowerCase());
+
+        if (!matchesSearch) return false;
+
+        const totalSpent = customer.orders?.reduce((sum, order) => sum + (order.total || 0), 0) || 0;
+        const validOrders = customer.orders?.length || 0;
+        const joinDate = new Date(customer.created_at);
+        const daysSinceJoin = (new Date().getTime() - joinDate.getTime()) / (1000 * 3600 * 24);
+
+        if (activeSegment === "vip") return totalSpent > 10000;
+        if (activeSegment === "repeat") return validOrders > 1;
+        if (activeSegment === "new") return daysSinceJoin < 30;
+
+        return true;
+    });
 
     return (
         <div className="space-y-6">
@@ -95,8 +110,8 @@ export default function CustomersPage() {
             </div>
 
             {/* Filter */}
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                <div className="relative max-w-md">
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div className="relative max-w-md w-full">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                     <input
                         type="text"
@@ -105,6 +120,26 @@ export default function CustomersPage() {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-gold/50"
                     />
+                </div>
+
+                <div className="flex gap-2">
+                    {[
+                        { id: "all", label: "All Customers" },
+                        { id: "vip", label: "VIP (> ₹10k)" },
+                        { id: "repeat", label: "Repeat Buyers" },
+                        { id: "new", label: "New (< 30 Days)" },
+                    ].map((segment) => (
+                        <button
+                            key={segment.id}
+                            onClick={() => setActiveSegment(segment.id as any)}
+                            className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${activeSegment === segment.id
+                                ? "bg-accent-gold text-white"
+                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                }`}
+                        >
+                            {segment.label}
+                        </button>
+                    ))}
                 </div>
             </div>
 
@@ -131,13 +166,18 @@ export default function CustomersPage() {
                             ) : filteredCustomers.length === 0 ? (
                                 <tr>
                                     <td colSpan={4} className="px-6 py-12 text-center text-gray-500">
-                                        No customers found.
+                                        No customers found matching criteria.
                                     </td>
                                 </tr>
                             ) : (
                                 filteredCustomers.map((customer) => {
                                     const totalSpent = customer.orders?.reduce((sum, order) => sum + (order.total || 0), 0) || 0;
                                     const validOrders = customer.orders?.length || 0;
+                                    const joinDate = new Date(customer.created_at);
+                                    const daysSinceJoin = (new Date().getTime() - joinDate.getTime()) / (1000 * 3600 * 24);
+
+                                    const isVip = totalSpent > 10000;
+                                    const isNew = daysSinceJoin < 30;
 
                                     return (
                                         <tr key={customer.id} className="hover:bg-gray-50 transition-colors">
@@ -147,7 +187,11 @@ export default function CustomersPage() {
                                                         {(customer.full_name?.[0] || "U").toUpperCase()}
                                                     </div>
                                                     <div>
-                                                        <p className="font-medium text-gray-900">{customer.full_name || "Unknown User"}</p>
+                                                        <p className="font-medium text-gray-900 flex items-center gap-2">
+                                                            {customer.full_name || "Unknown User"}
+                                                            {isVip && <span className="px-1.5 py-0.5 bg-accent-gold text-white text-[10px] rounded-full uppercase tracking-wider font-bold">VIP</span>}
+                                                            {isNew && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] rounded-full uppercase tracking-wider font-bold">NEW</span>}
+                                                        </p>
                                                         <div className="flex items-center gap-1.5 text-xs text-gray-500">
                                                             <Mail size={12} />
                                                             {customer.email || "No email"}

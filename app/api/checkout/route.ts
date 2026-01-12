@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
       const couponResult = await validateCoupon(promoCode, calculatedSubtotal, userId, validatedItems);
 
       if (couponResult.valid) {
-        calculatedDiscount = couponResult.discount;
+        calculatedDiscount = couponResult.discount ?? 0;
       } else {
         // If user sent a code but it's invalid, should we fail?
         // Yes, to prevent confusion.

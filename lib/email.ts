@@ -376,6 +376,253 @@ export async function sendOrderConfirmationEmail(order: {
   }
 }
 
+// Order Cancelled - Customer Email
+export async function sendOrderCancelledEmail(order: {
+  order_number: string;
+  customer_email: string;
+  customer_name: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+  }>;
+  total: number;
+}) {
+  if (!isEmailConfigured()) {
+    return { success: false, error: 'Email not configured' };
+  }
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+    }).format(price);
+  };
+
+  try {
+    const { data: result, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: order.customer_email,
+      subject: `Order Cancelled - ${order.order_number}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f5f5f5; margin: 0; padding: 0; }
+              .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+              .header { background: #1A1A1A; color: #D4AF37; padding: 30px; text-align: center; }
+              .header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase; }
+              .content { padding: 40px; }
+              .order-summary { background: #f9f9f9; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0; }
+              .item-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+              .item-row:last-child { border-bottom: none; }
+              .footer { background: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #eee; }
+              .button { display: inline-block; padding: 12px 24px; background-color: #D4AF37; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 20px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>Order Cancelled</h1>
+              </div>
+              <div class="content">
+                <p>Dear ${order.customer_name},</p>
+                <p>Your order <strong>#${order.order_number}</strong> has been cancelled as per your request or due to unforeseen circumstances.</p>
+                
+                <p>If you have already paid for this order, a refund has been initiated to your original payment method and should reflect within 5-7 business days.</p>
+
+                <div class="order-summary">
+                  <h3 style="margin-top: 0; color: #1A1A1A;">Cancelled Items</h3>
+                  ${order.items.map(item => `
+                    <div class="item-row">
+                      <span>${item.name} × ${item.quantity}</span>
+                      <span>${formatPrice(item.price * item.quantity)}</span>
+                    </div>
+                  `).join('')}
+                  <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #ddd; display: flex; justify-content: space-between; font-weight: bold;">
+                    <span>Total Refund Amount:</span>
+                    <span>${formatPrice(order.total)}</span>
+                  </div>
+                </div>
+
+                <p>We apologize for any inconvenience. If you have any questions, simply reply to this email.</p>
+                
+                <div style="text-align: center;">
+                  <a href="${APP_URL}/shop" class="button">Visit Store</a>
+                </div>
+              </div>
+              <div class="footer">
+                &copy; ${new Date().getFullYear()} Vishwa Lifestyle. All rights reserved.
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+
+    if (error) {
+      log.error('Resend error', error, { type: 'order_cancelled' });
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, id: result?.id };
+  } catch (error: any) {
+    log.error('Email send error', error, { type: 'order_cancelled' });
+    return { success: false, error: error.message };
+  }
+}
+
+// Order Shipped - Customer Email
+export async function sendOrderShippedEmail(order: {
+  order_number: string;
+  customer_email: string;
+  customer_name: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+  }>;
+  tracking_number: string;
+  carrier_name?: string;
+  tracking_url?: string;
+}) {
+  if (!isEmailConfigured()) {
+    return { success: false, error: 'Email not configured' };
+  }
+
+  try {
+    const { data: result, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: order.customer_email,
+      subject: `Order Shipped - ${order.order_number}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f5f5f5; margin: 0; padding: 0; }
+              .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+              .header { background: #1A1A1A; color: #D4AF37; padding: 30px; text-align: center; }
+              .header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase; }
+              .content { padding: 40px; }
+              .tracking-box { background: #f0f7ff; padding: 20px; border: 1px solid #cce5ff; border-radius: 4px; text-align: center; margin: 20px 0; }
+              .footer { background: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #eee; }
+              .button { display: inline-block; padding: 12px 24px; background-color: #D4AF37; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>Order Shipped</h1>
+              </div>
+              <div class="content">
+                <p>Dear ${order.customer_name},</p>
+                <p>Great news! Your order <strong>#${order.order_number}</strong> is on its way.</p>
+                
+                <div class="tracking-box">
+                  <h3>Tracking Number</h3>
+                  <p style="font-family: monospace; font-size: 18px; font-weight: bold; letter-spacing: 1px;">${order.tracking_number}</p>
+                  ${order.carrier_name ? `<p>Carrier: ${order.carrier_name}</p>` : ''}
+                  ${order.tracking_url ? `<a href="${order.tracking_url}" class="button">Track Package</a>` : ''}
+                </div>
+
+                <p>The following items are in this shipment:</p>
+                <ul style="padding-left: 20px; color: #666;">
+                  ${order.items.map(item => `<li>${item.quantity} x ${item.name}</li>`).join('')}
+                </ul>
+
+                <p>You can also track your order status in your account.</p>
+              </div>
+              <div class="footer">
+                &copy; ${new Date().getFullYear()} Vishwa Lifestyle. All rights reserved.
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+
+    if (error) {
+      log.error('Resend error', error, { type: 'order_shipped' });
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, id: result?.id };
+  } catch (error: any) {
+    log.error('Email send error', error, { type: 'order_shipped' });
+    return { success: false, error: error.message };
+  }
+}
+
+// Order Delivered - Customer Email
+export async function sendOrderDeliveredEmail(order: {
+  order_number: string;
+  customer_email: string;
+  customer_name: string;
+}) {
+  if (!isEmailConfigured()) {
+    return { success: false, error: 'Email not configured' };
+  }
+
+  try {
+    const { data: result, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: order.customer_email,
+      subject: `Delivered - ${order.order_number}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f5f5f5; margin: 0; padding: 0; }
+              .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+              .header { background: #1A1A1A; color: #D4AF37; padding: 30px; text-align: center; }
+              .header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase; }
+              .content { padding: 40px; text-align: center; }
+              .icon { font-size: 48px; color: #44b700; margin-bottom: 20px; }
+              .footer { background: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #eee; }
+              .button { display: inline-block; padding: 12px 24px; background-color: #D4AF37; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 20px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>It's Here!</h1>
+              </div>
+              <div class="content">
+                <div class="icon">✓</div>
+                <h2 style="margin-top: 0;">Order Delivered</h2>
+                <p>Dear ${order.customer_name},</p>
+                <p>Your order <strong>#${order.order_number}</strong> has been marked as delivered.</p>
+                <p>We hope you love your purchase! If you have any feedback or issues, please let us know.</p>
+                
+                <a href="${APP_URL}/account/orders" class="button">Leave a Review</a>
+              </div>
+              <div class="footer">
+                &copy; ${new Date().getFullYear()} Vishwa Lifestyle. All rights reserved.
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+
+    if (error) {
+      log.error('Resend error', error, { type: 'order_delivered' });
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, id: result?.id };
+  } catch (error: any) {
+    log.error('Email send error', error, { type: 'order_delivered' });
+    return { success: false, error: error.message };
+  }
+}
+
 // Order Notification - Admin Email
 export async function sendOrderNotificationToAdmin(order: {
   order_number: string;

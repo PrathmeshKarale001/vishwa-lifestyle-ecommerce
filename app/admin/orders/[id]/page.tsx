@@ -57,6 +57,8 @@ interface Order {
   payment_method: string;
   payment_id?: string;
   tracking_number?: string;
+  tracking_url?: string;
+  shipping_method?: string; // Used for Courier Name
   promo_code?: string;
 }
 
@@ -110,8 +112,19 @@ export default function AdminOrderDetailPage() {
     }
   };
 
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
+  const [carrierName, setCarrierName] = useState("");
+  const [trackingUrl, setTrackingUrl] = useState("");
+
   const updateOrderStatus = async (newStatus: string) => {
     if (!order) return;
+
+    // For cancellation, use the specific flow
+    if (newStatus === "cancelled") {
+      setCancelModalOpen(true);
+      return;
+    }
 
     setUpdating(true);
     try {
@@ -130,19 +143,45 @@ export default function AdminOrderDetailPage() {
     }
   };
 
+  const handleCancelOrder = async () => {
+    if (!order) return;
+    setUpdating(true);
+    try {
+      const { cancelOrderAction } = await import("@/app/actions/orders");
+      const result = await cancelOrderAction(order.id, cancelReason || "No reason provided");
+
+      if (!result.success) throw new Error(result.error);
+
+      setOrder({ ...order, status: "cancelled" });
+      setCancelModalOpen(false);
+      toast.success("Order cancelled and inventory restored.");
+    } catch (error) {
+      log.error("Error cancelling order", error, { orderId: order.id });
+      toast.error("Failed to cancel order.");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
   const updateTrackingNumber = async () => {
     if (!order) return;
 
     setUpdating(true);
     try {
       const { updateOrderTrackingAction } = await import("@/app/actions/orders");
-      const result = await updateOrderTrackingAction(order.id, trackingNumber);
+      const result = await updateOrderTrackingAction(order.id, trackingNumber, carrierName, trackingUrl);
 
       if (!result.success) throw new Error(result.error);
 
-      setOrder({ ...order, tracking_number: trackingNumber, status: "shipped" });
+      setOrder({
+        ...order,
+        tracking_number: trackingNumber,
+        status: "shipped",
+        // Update local state assumptions
+        shipping_method: carrierName
+      });
       setShowTrackingInput(false);
-      toast.success("Tracking number added and order marked as shipped!");
+      toast.success("Order dispatched and email sent!");
     } catch (error) {
       log.error("Error updating tracking number", error, { orderId: order.id });
       toast.error("Unable to update tracking number. Please try again.");
@@ -307,6 +346,18 @@ export default function AdminOrderDetailPage() {
                 ))}
               </div>
 
+              {/* Cancel Button */}
+              {order.status !== "cancelled" && order.status !== "delivered" && (
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <button
+                    onClick={() => setCancelModalOpen(true)}
+                    className="w-full py-2 border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 rounded text-sm font-medium transition-colors"
+                  >
+                    Cancel Order
+                  </button>
+                </div>
+              )}
+
               {/* Tracking Number */}
               <div className="mt-6 pt-6 border-t border-gray-100">
                 <div className="flex items-center justify-between mb-4">
@@ -321,30 +372,48 @@ export default function AdminOrderDetailPage() {
                   )}
                 </div>
                 {showTrackingInput ? (
-                  <div className="flex gap-2">
+                  <div className="flex flex-col gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <input
+                        type="text"
+                        value={trackingNumber}
+                        onChange={(e) => setTrackingNumber(e.target.value)}
+                        placeholder="Tracking Number *"
+                        className="border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:border-accent-gold rounded"
+                      />
+                      <input
+                        type="text"
+                        value={carrierName}
+                        onChange={(e) => setCarrierName(e.target.value)}
+                        placeholder="Courier Name (e.g. Bluedart)"
+                        className="border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:border-accent-gold rounded"
+                      />
+                    </div>
                     <input
                       type="text"
-                      value={trackingNumber}
-                      onChange={(e) => setTrackingNumber(e.target.value)}
-                      placeholder="Enter tracking number"
-                      className="flex-1 border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:border-accent-gold"
+                      value={trackingUrl}
+                      onChange={(e) => setTrackingUrl(e.target.value)}
+                      placeholder="Tracking Link (Optional)"
+                      className="border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:border-accent-gold rounded"
                     />
-                    <button
-                      onClick={updateTrackingNumber}
-                      disabled={updating}
-                      className="px-4 py-2 bg-foreground text-white text-sm hover:bg-accent-gold"
-                    >
-                      {updating ? "Saving..." : "Save"}
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowTrackingInput(false);
-                        setTrackingNumber(order.tracking_number || "");
-                      }}
-                      className="px-4 py-2 border border-gray-200 text-sm hover:bg-gray-50"
-                    >
-                      Cancel
-                    </button>
+                    <div className="flex gap-2 justify-end">
+                      <button
+                        onClick={() => {
+                          setShowTrackingInput(false);
+                          setTrackingNumber(order.tracking_number || "");
+                        }}
+                        className="px-4 py-2 border border-gray-200 text-sm hover:bg-gray-50 rounded"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={updateTrackingNumber}
+                        disabled={updating || !trackingNumber}
+                        className="px-4 py-2 bg-foreground text-white text-sm hover:bg-accent-gold rounded disabled:opacity-50"
+                      >
+                        {updating ? "Dispatching..." : "Mark Dispatched"}
+                      </button>
+                    </div>
                   </div>
                 ) : order.tracking_number ? (
                   <div className="flex items-center gap-2">
@@ -538,7 +607,58 @@ export default function AdminOrderDetailPage() {
           </div>
         </div>
       </div>
+      {/* Cancel Order Modal */}
+      {cancelModalOpen && order && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-lg shadow-xl max-w-md w-full p-6"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-serif text-red-600">Cancel Order</h2>
+              <button onClick={() => setCancelModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                <XCircle size={20} />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <p className="text-sm text-foreground-muted">
+                Are you sure you want to cancel order <strong>{order.order_number}</strong>?
+                This action cannot be undone. Inventory will be restored automatically.
+              </p>
+
+              <div>
+                <label className="text-sm font-medium mb-1 block">Reason for Cancellation</label>
+                <textarea
+                  value={cancelReason}
+                  onChange={(e) => setCancelReason(e.target.value)}
+                  className="w-full border border-gray-200 rounded p-2 text-sm focus:outline-none focus:border-red-300"
+                  rows={3}
+                  placeholder="e.g. Customer request, Out of stock, Fraudulent..."
+                />
+              </div>
+
+              <div className="flex gap-3 justify-end pt-2">
+                <button
+                  onClick={() => setCancelModalOpen(false)}
+                  className="px-4 py-2 border border-gray-200 rounded text-sm hover:bg-gray-50"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={handleCancelOrder}
+                  disabled={updating}
+                  className="px-4 py-2 bg-red-600 text-white rounded text-sm hover:bg-red-700 disabled:opacity-50 flex items-center gap-2"
+                >
+                  {updating && <Loader2 size={14} className="animate-spin" />}
+                  Confirm Cancellation
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </main>
   );
 }
-

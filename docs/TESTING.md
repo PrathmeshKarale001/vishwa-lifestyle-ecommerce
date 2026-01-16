@@ -23,7 +23,7 @@ Our testing strategy follows the testing pyramid approach:
        /  \      E2E Tests (Few)
       /____\     - Critical user flows
      /      \    - Cross-browser testing
-    /        \   
+    /        \
    /__________\  Integration Tests (Some)
   /            \ - API integration
  /              \- Component integration
@@ -125,13 +125,14 @@ CODECOV_TOKEN=your_codecov_token (optional)
 **Purpose**: Test individual functions and components in isolation
 
 **Example**:
+
 ```typescript
 // tests/unit/utils.test.ts
-import { formatPrice } from '@/lib/utils';
+import { formatPrice } from "@/lib/utils";
 
-describe('formatPrice', () => {
-  it('should format price correctly', () => {
-    expect(formatPrice(1000)).toBe('₹1,000');
+describe("formatPrice", () => {
+  it("should format price correctly", () => {
+    expect(formatPrice(1000)).toBe("₹1,000");
   });
 });
 ```
@@ -225,9 +226,9 @@ npm run build && npm start
 ### Test Naming Convention
 
 ```typescript
-describe('ComponentName or Feature', () => {
-  describe('specific functionality', () => {
-    it('should do something specific', () => {
+describe("ComponentName or Feature", () => {
+  describe("specific functionality", () => {
+    it("should do something specific", () => {
       // Test implementation
     });
   });
@@ -238,19 +239,19 @@ describe('ComponentName or Feature', () => {
 
 ```typescript
 // tests/integration/sanity-queries.test.ts
-import { getFilteredProducts } from '@/lib/sanity';
+import { getFilteredProducts } from "@/lib/sanity";
 
-describe('Sanity Queries', () => {
-  it('should filter products by category and subcategory', async () => {
+describe("Sanity Queries", () => {
+  it("should filter products by category and subcategory", async () => {
     const result = await getFilteredProducts({
-      category: 'aromas',
-      sub: 'Incense',
+      category: "aromas",
+      sub: "Incense",
     });
 
     expect(result.products).toBeInstanceOf(Array);
     result.products.forEach((product) => {
-      expect(product.category).toBe('aromas');
-      expect(product.subCategory).toBe('Incense');
+      expect(product.category).toBe("aromas");
+      expect(product.subCategory).toBe("Incense");
     });
   });
 });
@@ -260,19 +261,19 @@ describe('Sanity Queries', () => {
 
 ```typescript
 // tests/e2e/checkout.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('complete checkout flow', async ({ page }) => {
-  await page.goto('/shop');
-  
+test("complete checkout flow", async ({ page }) => {
+  await page.goto("/shop");
+
   // Add product to cart
   await page.click('[data-testid="product-card"]');
   await page.click('[data-testid="add-to-cart"]');
-  
+
   // Go to checkout
   await page.click('[data-testid="cart-icon"]');
   await page.click('[data-testid="checkout-button"]');
-  
+
   // Verify on checkout page
   await expect(page).toHaveURL(/\/checkout/);
 });
@@ -335,6 +336,7 @@ test('complete checkout flow', async ({ page }) => {
 **Cause**: Environment differences
 
 **Solution**:
+
 ```bash
 # Use same Node version as CI
 nvm use 20
@@ -349,9 +351,10 @@ npm ci
 **Cause**: Slow network or heavy page
 
 **Solution**:
+
 ```typescript
 // Increase timeout in test
-test('slow test', async ({ page }) => {
+test("slow test", async ({ page }) => {
   test.setTimeout(60000); // 60 seconds
   // ...
 });
@@ -362,6 +365,7 @@ test('slow test', async ({ page }) => {
 **Cause**: UI changes
 
 **Solution**:
+
 ```bash
 # Update snapshots
 npm test -- -u
@@ -372,6 +376,7 @@ npm test -- -u
 **Cause**: Missing type definitions
 
 **Solution**:
+
 ```bash
 npm install --save-dev @types/jest @types/node
 ```
@@ -387,6 +392,7 @@ coverage/lcov-report/index.html
 ```
 
 **Coverage Goals**:
+
 - Statements: > 50%
 - Branches: > 50%
 - Functions: > 50%

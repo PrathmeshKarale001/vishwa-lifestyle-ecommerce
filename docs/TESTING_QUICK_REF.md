@@ -27,14 +27,14 @@ npm run dev                  # Development server
 
 ## 🎯 When to Run What
 
-| Situation | Command | Why |
-|-----------|---------|-----|
-| Before commit | `npm run validate` | Catch all issues |
-| After pulling code | `npm test` | Ensure tests pass |
-| Fixing a bug | `npm run test:watch` | TDD workflow |
-| Before PR | `npm run test:e2e` | Test user flows |
-| Debugging test | `npm run test:e2e:debug` | Step through |
-| Check coverage | `npm run test:coverage` | See gaps |
+| Situation          | Command                  | Why               |
+| ------------------ | ------------------------ | ----------------- |
+| Before commit      | `npm run validate`       | Catch all issues  |
+| After pulling code | `npm test`               | Ensure tests pass |
+| Fixing a bug       | `npm run test:watch`     | TDD workflow      |
+| Before PR          | `npm run test:e2e`       | Test user flows   |
+| Debugging test     | `npm run test:e2e:debug` | Step through      |
+| Check coverage     | `npm run test:coverage`  | See gaps          |
 
 ## 🔍 Test File Locations
 
@@ -52,30 +52,34 @@ tests/
 
 Check: `https://github.com/YOUR_USERNAME/YOUR_REPO/actions`
 
-| Workflow | Trigger | Purpose |
-|----------|---------|---------|
-| CI Pipeline | Push/PR | Run all tests |
-| Deploy Preview | PR | Create preview |
+| Workflow       | Trigger | Purpose        |
+| -------------- | ------- | -------------- |
+| CI Pipeline    | Push/PR | Run all tests  |
+| Deploy Preview | PR      | Create preview |
 
 ## 🐛 Quick Fixes
 
 ### Tests failing locally?
+
 ```powershell
 Remove-Item -Recurse -Force node_modules, package-lock.json
 npm install
 ```
 
 ### Pre-commit hook not working?
+
 ```powershell
 npm run prepare
 ```
 
 ### E2E tests timing out?
+
 ```typescript
 test.setTimeout(60000); // In test file
 ```
 
 ### Type errors in tests?
+
 ```powershell
 npm install --save-dev @types/jest @types/node
 ```

@@ -1,4 +1,32 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"],
-  "rules": {}
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "react/no-unescaped-entities": "warn",
+    "prefer-const": "warn"
+  },
+  "overrides": [
+    {
+      "files": [
+        "scripts/**/*.js",
+        "*.config.js",
+        "jest.config.js",
+        "debug-search.js",
+        "lib/csrf.ts",
+        "lib/razorpay.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/no-require-imports": "off"
+      }
+    }
+  ]
 }

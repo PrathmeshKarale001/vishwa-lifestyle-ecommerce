@@ -120,7 +120,7 @@ export default function ProductGrid({
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
-                <nav className="flex justify-center items-center gap-2" aria-label="Pagination">
+                <nav className="flex justify-center items-center gap-2" aria-label="Pagination" data-testid="pagination">
                     {currentPage <= 1 ? (
                         <span className="p-2 border border-gray-200 rounded opacity-50 cursor-not-allowed" aria-disabled="true">
                             <ChevronLeft size={20} />
@@ -140,6 +140,7 @@ export default function ProductGrid({
                         className={`p-2 border border-gray-200 rounded hover:bg-gray-50 ${currentPage >= totalPages ? "pointer-events-none opacity-50" : ""
                             }`}
                         aria-disabled={currentPage >= totalPages}
+                        data-testid="next-page"
                     >
                         <ChevronRight size={20} />
                     </Link>

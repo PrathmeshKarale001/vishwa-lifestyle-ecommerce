@@ -47,6 +47,7 @@ export default function CookieConsent() {
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: "spring", damping: 25 }}
           className="fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-gray-200 shadow-lg"
+          data-testid="cookie-banner"
         >
           <div className="container mx-auto px-6 py-4">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -54,7 +55,7 @@ export default function CookieConsent() {
                 <Cookie size={24} className="text-accent-gold flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-sm">
-                    We use cookies to enhance your experience. By continuing to visit this site, 
+                    We use cookies to enhance your experience. By continuing to visit this site,
                     you agree to our use of cookies.{" "}
                     <Link href="/privacy" className="text-accent-gold hover:underline">
                       Learn more
@@ -72,6 +73,7 @@ export default function CookieConsent() {
                 <button
                   onClick={handleAccept}
                   className="px-6 py-2 bg-foreground text-white text-sm uppercase tracking-widest hover:bg-accent-gold transition-colors"
+                  data-testid="accept-cookies"
                 >
                   Accept
                 </button>

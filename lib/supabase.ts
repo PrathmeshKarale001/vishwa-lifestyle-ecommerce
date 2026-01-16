@@ -12,6 +12,21 @@ const hasValidCredentials =
   supabaseUrl.startsWith('https://');
 
 // Create Supabase client with proper auth configuration
+export const getURL = () => {
+  let url =
+    process.env.NEXT_PUBLIC_APP_URL ?? // Set this to your site URL in production env.
+    process.env.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
+    'http://localhost:3000';
+  
+  // Make sure to include `https://` when not localhost.
+  url = url.includes('http') ? url : `https://${url}`;
+  
+  // Make sure to include a trailing `/`.
+  url = url.charAt(url.length - 1) === '/' ? url : `${url}/`;
+  
+  return url;
+};
+
 export const supabase: SupabaseClient = hasValidCredentials
   ? createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
@@ -71,12 +86,12 @@ export async function signIn(email: string, password: string) {
 export async function signInWithGoogle() {
   if (!supabase) throw new Error('Supabase not configured');
 
-  const redirectUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const redirectUrl = getURL();
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${redirectUrl}/auth/callback`,
+      redirectTo: `${redirectUrl}auth/callback`,
       queryParams: {
         access_type: 'offline',
         prompt: 'consent',
@@ -99,7 +114,7 @@ export async function resetPassword(email: string) {
   if (!supabase) throw new Error('Supabase not configured');
 
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password`,
+    redirectTo: `${getURL()}auth/reset-password`,
   });
 
   if (error) throw error;

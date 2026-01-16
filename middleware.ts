@@ -64,18 +64,18 @@ export async function middleware(request: NextRequest) {
             isAdminRoute: request.nextUrl.pathname.startsWith('/admin'),
             adminEmails: process.env.NEXT_PUBLIC_ADMIN_EMAILS
         });
-    } catch (e) {
-        console.error('Middleware auth error:', e)
+    } catch (error: any) {
+        console.error('Middleware auth error:', error)
     }
 
     // --- PROTECTED ROUTES: Admin ---
     if (request.nextUrl.pathname.startsWith('/admin')) {
         // 1. Require Authenticated User
         if (!user) {
-            const url = request.nextUrl.clone();
-            url.pathname = '/auth/login';
-            url.searchParams.set('redirect', request.nextUrl.pathname);
-            return NextResponse.redirect(url);
+            const baseUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin;
+            const redirectUrl = new URL('/auth/login', baseUrl);
+            redirectUrl.searchParams.set('redirect', request.nextUrl.pathname);
+            return NextResponse.redirect(redirectUrl);
         }
 
         // 2. Require Admin Email

@@ -101,8 +101,13 @@ export default function ProductCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
       className="group relative"
+      data-testid="product-card"
     >
-      <Link href={`/product/${slug}`} aria-label={`View ${name}`}>
+      <Link
+        href={`/product/${slug}`}
+        aria-label={`View ${name}`}
+        data-testid="product-card-link"
+      >
         <div className="relative aspect-square overflow-hidden bg-background-alt mb-4 group-hover:shadow-lg transition-shadow duration-500">
           {/* Tag */}
           {tag && (
@@ -181,6 +186,7 @@ export default function ProductCard({
                 : "bg-black text-white hover:bg-accent-gold"
                 }`}
               aria-label={isOutOfStock ? "Out of stock" : `Add ${name} to cart`}
+              data-testid="add-to-cart"
             >
               <ShoppingBag size={14} /> {isOutOfStock ? "Out" : "Add"}
             </button>
@@ -196,6 +202,7 @@ export default function ProductCard({
                 : "bg-black text-white"
                 }`}
               aria-label={`Add ${name} to cart`}
+              data-testid="add-to-cart"
             >
               <ShoppingBag size={16} />
             </button>
@@ -213,7 +220,7 @@ export default function ProductCard({
             </p>
           )}
           <div className="flex items-center justify-center gap-1.5 sm:gap-2">
-            <span className="text-sm sm:text-base font-medium">{formatPrice(price)}</span>
+            <span className="text-sm sm:text-base font-medium" data-testid="product-price">{formatPrice(price)}</span>
             {compareAtPrice && compareAtPrice > price && (
               <span className="text-[10px] sm:text-sm text-foreground-muted line-through opacity-70">
                 {formatPrice(compareAtPrice)}

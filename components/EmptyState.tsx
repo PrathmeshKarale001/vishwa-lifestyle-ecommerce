@@ -45,6 +45,7 @@ export default function EmptyState({
         <Link
           href={action.href}
           className="bg-foreground text-white px-6 py-3 uppercase tracking-widest text-sm hover:bg-accent-gold transition-colors"
+          data-testid="clear-all"
         >
           {action.label}
         </Link>

@@ -68,6 +68,7 @@ function SearchBarContent({
                     onBlur={() => setIsFocused(false)}
                     placeholder={placeholder}
                     className="w-full bg-transparent text-white placeholder:text-white/70 rounded-full py-3.5 pl-12 pr-12 focus:outline-none relative z-10 transition-all duration-300"
+                    data-testid="search-input"
                 />
 
                 <Search

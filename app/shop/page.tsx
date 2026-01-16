@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 import Image from "next/image";
 
-import ShopFilters from "@/components/ShopFilters";
+
 import ProductGrid from "@/components/ProductGrid";
 import SearchBar from "@/components/SearchBar";
 import CategorySidebar from "@/components/CategorySidebar";
@@ -37,6 +37,7 @@ interface ShopPageProps {
   searchParams: Promise<{
     category?: string;
     sub?: string;
+    segment?: string;
     sort?: string;
     search?: string;
     minPrice?: string;
@@ -47,7 +48,7 @@ interface ShopPageProps {
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const resolvedParams = await searchParams;
-  const { category, sub, sort, search, minPrice, maxPrice, page } = resolvedParams;
+  const { category, sub, segment, sort, search, minPrice, maxPrice, page } = resolvedParams;
 
   const currentPage = Number(page) || 1;
   const limit = 12;
@@ -57,6 +58,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     getFilteredProducts({
       category,
       sub,
+      segment,
       sort,
       search,
       minPrice: minPrice ? Number(minPrice) : 0,

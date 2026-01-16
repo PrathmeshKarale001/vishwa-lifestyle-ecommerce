@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase, getURL } from './supabase';
 import type { User } from '@supabase/supabase-js';
 
 // Sign up with email and password
@@ -10,7 +10,7 @@ export async function signUp(email: string, password: string, name: string) {
       data: {
         name,
       },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+      emailRedirectTo: `${getURL()}auth/callback`,
     },
   });
 
@@ -40,7 +40,7 @@ export async function signInWithGoogle() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+      redirectTo: `${getURL()}auth/callback`,
     },
   });
 
@@ -74,7 +74,7 @@ export async function getSession() {
 // Reset password
 export async function resetPassword(email: string) {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password`,
+    redirectTo: `${getURL()}auth/reset-password`,
   });
 
   if (error) {

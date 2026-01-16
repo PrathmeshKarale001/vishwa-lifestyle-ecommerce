@@ -200,8 +200,8 @@ export const queries = {
   // Get filtered products with dynamic sorting
   filteredProducts: `*[_type == "product" 
     && ($category == "all" || lower(category->slug.current) == lower($category))
-    && ($sub == "" || subCategory match $sub)
-    && ($segment == "" || segments match $segment)
+    && ($sub == "" || subCategory == $sub)
+    && ($segment == "" || $segment in segments)
     && ($search == "" || name match $search || description match $search)
     && price >= $minPrice && price <= $maxPrice
   ]`,

@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 Documentation Index
 
-## Getting Started
+Welcome to the Vishwa Lifestyle project documentation!
 
-First, run the development server:
+## 🧪 Testing & Quality Assurance
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Quick Start
+- **[Testing Quick Reference](./TESTING_QUICK_REF.md)** - Daily commands and quick fixes
+- **[Setup Guide](./SETUP_TESTING.md)** - Complete setup instructions
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Deep Dive
+- **[Testing Guide](./TESTING.md)** - Comprehensive testing documentation
+- **[Testing Architecture](./TESTING_ARCHITECTURE.md)** - Visual pipeline diagrams
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📖 What's Inside
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. [TESTING_QUICK_REF.md](./TESTING_QUICK_REF.md)
+**Quick reference for daily development**
+- Common commands
+- When to run what
+- Quick troubleshooting
+- Emergency fixes
 
-## Learn More
+**Best for:** Daily development, quick lookups
 
-To learn more about Next.js, take a look at the following resources:
+### 2. [SETUP_TESTING.md](./SETUP_TESTING.md)
+**Complete setup guide**
+- GitHub Actions configuration
+- Setting up secrets
+- Installing dependencies
+- First-time setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Best for:** New team members, initial setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. [TESTING.md](./TESTING.md)
+**Comprehensive testing guide**
+- Testing strategy
+- Writing tests
+- Test types explained
+- Best practices
+- Troubleshooting
 
-## Deploy on Vercel
+**Best for:** Understanding the testing approach, writing new tests
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 4. [TESTING_ARCHITECTURE.md](./TESTING_ARCHITECTURE.md)
+**Visual architecture documentation**
+- Pipeline flow diagrams
+- Testing layers
+- How issues are caught
+- Deployment pipeline
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Best for:** Understanding the big picture, presentations
+
+## 🎯 Getting Started
+
+### For New Developers
+
+1. Read [SETUP_TESTING.md](./SETUP_TESTING.md) - Set up your environment
+2. Bookmark [TESTING_QUICK_REF.md](./TESTING_QUICK_REF.md) - Use daily
+3. Refer to [TESTING.md](./TESTING.md) - When writing tests
+
+### For Team Leads
+
+1. Review [TESTING_ARCHITECTURE.md](./TESTING_ARCHITECTURE.md) - Understand the pipeline
+2. Share [SETUP_TESTING.md](./SETUP_TESTING.md) - Onboard new members
+3. Enforce [TESTING.md](./TESTING.md) - Best practices
+
+## 🔗 External Resources
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Sanity Documentation](https://www.sanity.io/docs)
+- [Supabase Documentation](https://supabase.com/docs)
+- [Jest Documentation](https://jestjs.io/)
+- [Playwright Documentation](https://playwright.dev/)
+
+## 📝 Contributing
+
+When adding new documentation:
+
+1. Keep it organized and scannable
+2. Use examples and code snippets
+3. Update this index
+4. Link between related docs
+
+## 🆘 Need Help?
+
+1. Check [TESTING_QUICK_REF.md](./TESTING_QUICK_REF.md) for quick fixes
+2. Search [TESTING.md](./TESTING.md) for detailed explanations
+3. Review [TESTING_ARCHITECTURE.md](./TESTING_ARCHITECTURE.md) for understanding the flow
+4. Ask the team in Slack/Discord
+
+---
+
+**Last Updated:** 2026-01-16
+
+**Maintained by:** Development Team

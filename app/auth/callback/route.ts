@@ -12,7 +12,13 @@ export async function GET(request: Request) {
         const supabase = await createClient()
         const { error } = await supabase.auth.exchangeCodeForSession(code)
         if (!error) {
-            return NextResponse.redirect(`${origin}${next}`)
+            // Use configured app URL if available, otherwise fallback to request origin
+            const baseUrl = process.env.NEXT_PUBLIC_APP_URL || origin;
+            // Ensure we don't double slashes if baseUrl has trailing slash and next starts with slash
+            const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+            const cleanNext = next.startsWith('/') ? next : `/${next}`;
+
+            return NextResponse.redirect(`${cleanBaseUrl}${cleanNext}`)
         }
     }
 

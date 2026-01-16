@@ -442,6 +442,7 @@ export default function ProductPageContent({ product, relatedProducts, slug }: P
                                         ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                                         : "bg-foreground text-white hover:bg-accent-gold"
                                         }`}
+                                    data-testid="add-to-cart"
                                 >
                                     <ShoppingBag size={16} className="sm:w-5 sm:h-5" /> {isOutOfStock ? "Out of Stock" : "Add to Cart"}
                                 </button>

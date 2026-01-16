@@ -319,10 +319,11 @@ export default function Header({ categories = [], settings }: HeaderProps) {
               onClick={openCart}
               className="hover:text-accent-gold transition-colors relative"
               aria-label="Cart"
+              data-testid="cart-icon"
             >
               <ShoppingBag size={20} strokeWidth={1.5} />
               {itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 text-[10px] bg-accent-gold text-white w-4 h-4 flex items-center justify-center rounded-full">
+                <span className="absolute -top-1 -right-1 text-[10px] bg-accent-gold text-white w-4 h-4 flex items-center justify-center rounded-full" data-testid="cart-count">
                   {itemCount}
                 </span>
               )}

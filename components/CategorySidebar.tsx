@@ -96,6 +96,7 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                             ? "bg-accent-gold border-accent-gold text-white"
                             : "bg-white border-gray-100 text-foreground-muted hover:border-accent-gold/50"
                             }`}
+                        data-testid="mobile-category-chip"
                     >
                         {category.name}
                     </Link>
@@ -166,7 +167,7 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                                             <Link
                                                 href={buildUrl(category.slug)}
                                                 className="flex-1"
-                                                onClick={(e) => e.stopPropagation()}
+                                                data-testid="category-link"
                                             >
                                                 {category.name}
                                             </Link>
@@ -201,6 +202,7 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                                                                             ? "text-accent-gold font-medium bg-accent-gold/5"
                                                                             : "text-gray-500 hover:text-foreground"
                                                                             }`}
+                                                                        data-testid="subcategory-link"
                                                                     >
                                                                         {sub}
                                                                     </Link>
@@ -216,6 +218,7 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                                                                                         ? "text-accent-gold font-medium"
                                                                                         : "text-gray-400 hover:text-foreground"
                                                                                         }`}
+                                                                                    data-testid="segment-link"
                                                                                 >
                                                                                     {seg}
                                                                                 </Link>

@@ -1,6 +1,6 @@
-import { createClient } from 'next-sanity';
-import imageUrlBuilder from '@sanity/image-url';
-import { apiVersion, dataset, projectId, useCdn } from '@/sanity/env';
+import { createClient } from "next-sanity";
+import imageUrlBuilder from "@sanity/image-url";
+import { apiVersion, dataset, projectId, useCdn } from "@/sanity/env";
 
 // Create Sanity client
 export const sanityClient = createClient({
@@ -80,7 +80,6 @@ export const queries = {
       "image": image.asset->url
     }
   }`,
-
 
   // Get products by category
   productsByCategory: `*[_type == "product" && category->slug.current == $category] | order(_createdAt desc) {
@@ -200,8 +199,8 @@ export const queries = {
   // Get filtered products with dynamic sorting
   filteredProducts: `*[_type == "product" 
     && ($category == "all" || lower(category->slug.current) == lower($category))
-    && ($sub == "" || subCategory == $sub)
-    && ($segment == "" || $segment in segments)
+    && ($sub == "" || lower(subCategory) == lower($sub))
+    && ($segment == "" || lower(segments) == lower($segment))
     && ($search == "" || name match $search || description match $search)
     && price >= $minPrice && price <= $maxPrice
   ]`,
@@ -255,7 +254,7 @@ export const queries = {
       backgroundColor,
       textColor
     }
-  }`
+  }`,
 };
 
 export async function getHeroProduct() {
@@ -325,33 +324,41 @@ export async function getFilteredProducts({
           segments
 } `;
 
-
   // We need two queries: one for data, one for count
   const query = `{
   "products": ${queries.filteredProducts} ${orderClause} [${start}...${end}] ${projection},
   "total": count(${queries.filteredProducts})
 } `;
 
-  console.log("Fetching products with params:", JSON.stringify(params, null, 2));
-  const result = await sanityClient.fetch(query, params, { cache: 'no-store' });
-  console.log(`Fetched ${result?.products?.length || 0} products. Total matching: ${result?.total || 0}`);
+  console.log(
+    "Fetching products with params:",
+    JSON.stringify(params, null, 2),
+  );
+  const result = await sanityClient.fetch(query, params, { cache: "no-store" });
+  console.log(
+    `Fetched ${result?.products?.length || 0} products. Total matching: ${result?.total || 0}`,
+  );
 
   return result;
 }
 export async function getProductBySlug(slug: string) {
   console.log(`Fetching product by slug: ${slug}`);
-  const altSlug = slug.replace(/-/g, ' ');
+  const altSlug = slug.replace(/-/g, " ");
   const data = await sanityClient.fetch(
     queries.productBySlug,
     { slug, altSlug } as Record<string, unknown>,
-    { cache: 'no-store' }
+    { cache: "no-store" },
   );
-  console.log(`Product data ${data ? 'found' : 'NOT found'} for slug: ${slug} (alt: ${altSlug})`);
+  console.log(
+    `Product data ${data ? "found" : "NOT found"} for slug: ${slug} (alt: ${altSlug})`,
+  );
   return data;
 }
 
 export async function getProductsByCategory(category: string) {
-  return await sanityClient.fetch(queries.productsByCategory, { category } as Record<string, unknown>);
+  return await sanityClient.fetch(queries.productsByCategory, {
+    category,
+  } as Record<string, unknown>);
 }
 
 export async function getFeaturedProducts() {
@@ -363,7 +370,9 @@ export async function getSaleProducts() {
 }
 
 export async function searchProducts(searchQuery: string) {
-  return await sanityClient.fetch(queries.searchProducts, { query: `* ${searchQuery}* ` } as Record<string, unknown>);
+  return await sanityClient.fetch(queries.searchProducts, {
+    query: `* ${searchQuery}* `,
+  } as Record<string, unknown>);
 }
 
 export async function getPosts() {
@@ -371,7 +380,10 @@ export async function getPosts() {
 }
 
 export async function getPostBySlug(slug: string) {
-  return await sanityClient.fetch(queries.postBySlug, { slug } as Record<string, unknown>);
+  return await sanityClient.fetch(queries.postBySlug, { slug } as Record<
+    string,
+    unknown
+  >);
 }
 
 export async function getCategories() {
@@ -379,12 +391,15 @@ export async function getCategories() {
 }
 
 export async function getHomePage() {
-  return await sanityClient.fetch(queries.homePage, {}, { cache: 'no-store' });
+  return await sanityClient.fetch(queries.homePage, {}, { cache: "no-store" });
 }
 
-
 export async function getSiteSettings() {
-  return await sanityClient.fetch(queries.siteSettings, {}, { cache: 'no-store' });
+  return await sanityClient.fetch(
+    queries.siteSettings,
+    {},
+    { cache: "no-store" },
+  );
 }
 
 export async function getProductsByIds(ids: string[]) {
@@ -398,6 +413,6 @@ export async function getProductsByIds(ids: string[]) {
       variants
     }`,
     { ids },
-    { cache: 'no-store' }
+    { cache: "no-store" },
   );
 }

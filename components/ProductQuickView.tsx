@@ -54,6 +54,23 @@ export default function ProductQuickView({
     setMounted(true);
   }, []);
 
+  // Body scroll lock + Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "";
+    };
+  }, [isOpen, onClose]);
+
   useEffect(() => {
     if (isOpen && productSlug) {
       setLoading(true);
@@ -112,7 +129,9 @@ export default function ProductQuickView({
       slug: product.slug,
     });
 
-    toast.success(isInWishlist(product._id) ? "Removed from wishlist" : "Added to wishlist");
+    toast.success(
+      isInWishlist(product._id) ? "Removed from wishlist" : "Added to wishlist",
+    );
   };
 
   const formatPrice = (amount: number) => {
@@ -126,12 +145,16 @@ export default function ProductQuickView({
 
   if (!isOpen || !mounted) return null;
 
-  const productImages = product?.images?.filter(Boolean) ||
+  const productImages =
+    product?.images?.filter(Boolean) ||
     (product?.mainImage ? [product.mainImage] : []) ||
     [];
-  const displayImages = productImages.length > 0
-    ? productImages
-    : ["https://images.unsplash.com/photo-1602825266970-721285fc6e43?q=80&w=1200&auto=format&fit=crop"];
+  const displayImages =
+    productImages.length > 0
+      ? productImages
+      : [
+          "https://images.unsplash.com/photo-1602825266970-721285fc6e43?q=80&w=1200&auto=format&fit=crop",
+        ];
   const currentImage = displayImages[selectedImage] || displayImages[0];
   const effectiveInventory = product?.inventory ?? 10;
   const isOutOfStock = effectiveInventory <= 0;
@@ -154,8 +177,8 @@ export default function ProductQuickView({
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b">
-            <h2 className="text-2xl font-serif">Quick View</h2>
+          <div className="flex items-center justify-between p-4 sm:p-6 border-b flex-shrink-0">
+            <h2 className="text-lg sm:text-2xl font-serif">Quick View</h2>
             <button
               onClick={onClose}
               className="text-foreground-muted hover:text-foreground transition-colors"
@@ -173,7 +196,7 @@ export default function ProductQuickView({
                 <p className="mt-4 text-foreground-muted">Loading product...</p>
               </div>
             ) : product ? (
-              <div className="grid md:grid-cols-2 gap-8 p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 p-4 sm:p-6">
                 {/* Images */}
                 <div>
                   <div className="relative aspect-square bg-background-alt rounded-lg overflow-hidden mb-4">
@@ -185,7 +208,12 @@ export default function ProductQuickView({
                       className="object-cover"
                       priority
                       placeholder="blur"
-                      blurDataURL={product.imageLqips?.[selectedImage] || product.lqip || product.mainImageLqip || getBlurPlaceholder(currentImage)}
+                      blurDataURL={
+                        product.imageLqips?.[selectedImage] ||
+                        product.lqip ||
+                        product.mainImageLqip ||
+                        getBlurPlaceholder(currentImage)
+                      }
                     />
                   </div>
                   {displayImages.length > 1 && (
@@ -194,10 +222,11 @@ export default function ProductQuickView({
                         <button
                           key={idx}
                           onClick={() => setSelectedImage(idx)}
-                          className={`aspect-square rounded overflow-hidden border-2 transition-colors ${selectedImage === idx
-                            ? "border-accent-gold"
-                            : "border-transparent hover:border-gray-300"
-                            }`}
+                          className={`aspect-square rounded overflow-hidden border-2 transition-colors ${
+                            selectedImage === idx
+                              ? "border-accent-gold"
+                              : "border-transparent hover:border-gray-300"
+                          }`}
                         >
                           <div className="relative w-full h-full">
                             <Image
@@ -207,7 +236,10 @@ export default function ProductQuickView({
                               sizes="100px"
                               className="object-cover"
                               placeholder="blur"
-                              blurDataURL={product.imageLqips?.[idx] || getBlurPlaceholder(img)}
+                              blurDataURL={
+                                product.imageLqips?.[idx] ||
+                                getBlurPlaceholder(img)
+                              }
                             />
                           </div>
                         </button>
@@ -222,24 +254,33 @@ export default function ProductQuickView({
                     <span className="text-accent-gold text-xs tracking-[0.2em] uppercase font-medium mb-2 block">
                       {product.category}
                     </span>
-                    <h3 className="text-3xl font-serif mb-4">{product.name}</h3>
+                    <h3 className="text-xl sm:text-3xl font-serif mb-4">
+                      {product.name}
+                    </h3>
                     <div className="flex items-center gap-4 mb-4">
-                      <span className="text-2xl font-light">{formatPrice(product.price)}</span>
-                      {product.compareAtPrice && product.compareAtPrice > product.price && (
-                        <span className="text-lg text-foreground-muted line-through">
-                          {formatPrice(product.compareAtPrice)}
-                        </span>
-                      )}
+                      <span className="text-2xl font-light">
+                        {formatPrice(product.price)}
+                      </span>
+                      {product.compareAtPrice &&
+                        product.compareAtPrice > product.price && (
+                          <span className="text-lg text-foreground-muted line-through">
+                            {formatPrice(product.compareAtPrice)}
+                          </span>
+                        )}
                       {product.rating && (
                         <div className="flex items-center gap-1">
-                          <Star size={16} className="fill-accent-gold text-accent-gold" />
+                          <Star
+                            size={16}
+                            className="fill-accent-gold text-accent-gold"
+                          />
                           <span className="text-sm text-foreground-muted">
-                            {product.rating.toFixed(1)} ({product.reviewCount || 0})
+                            {product.rating.toFixed(1)} (
+                            {product.reviewCount || 0})
                           </span>
                         </div>
                       )}
                     </div>
-                    <p className="text-foreground-muted leading-relaxed mb-6 whitespace-pre-wrap">
+                    <p className="text-sm text-foreground-muted leading-relaxed mb-6 whitespace-pre-wrap line-clamp-4 sm:line-clamp-none">
                       {product.description}
                     </p>
                   </div>
@@ -255,7 +296,9 @@ export default function ProductQuickView({
                       >
                         <Minus size={16} />
                       </button>
-                      <span className="px-4 py-2 min-w-[60px] text-center">{quantity}</span>
+                      <span className="px-4 py-2 min-w-[60px] text-center">
+                        {quantity}
+                      </span>
                       <button
                         onClick={() => {
                           const max = product.inventory ?? 10;
@@ -267,11 +310,14 @@ export default function ProductQuickView({
                         <Plus size={16} />
                       </button>
                     </div>
-                    {product.inventory !== undefined && product.inventory !== null && (
-                      <span className="text-sm text-foreground-muted">
-                        {isOutOfStock ? "Out of Stock" : `${product.inventory} available`}
-                      </span>
-                    )}
+                    {product.inventory !== undefined &&
+                      product.inventory !== null && (
+                        <span className="text-sm text-foreground-muted">
+                          {isOutOfStock
+                            ? "Out of Stock"
+                            : `${product.inventory} available`}
+                        </span>
+                      )}
                   </div>
 
                   {/* Actions */}
@@ -286,13 +332,21 @@ export default function ProductQuickView({
                     </button>
                     <button
                       onClick={handleToggleWishlist}
-                      className={`p-3 border-2 transition-colors ${isWishlisted
-                        ? "border-red-500 text-red-500"
-                        : "border-gray-200 text-foreground-muted hover:border-red-500 hover:text-red-500"
-                        }`}
-                      aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                      className={`p-3 border-2 transition-colors ${
+                        isWishlisted
+                          ? "border-red-500 text-red-500"
+                          : "border-gray-200 text-foreground-muted hover:border-red-500 hover:text-red-500"
+                      }`}
+                      aria-label={
+                        isWishlisted
+                          ? "Remove from wishlist"
+                          : "Add to wishlist"
+                      }
                     >
-                      <Heart size={20} fill={isWishlisted ? "currentColor" : "none"} />
+                      <Heart
+                        size={20}
+                        fill={isWishlisted ? "currentColor" : "none"}
+                      />
                     </button>
                   </div>
 
@@ -315,6 +369,6 @@ export default function ProductQuickView({
         </motion.div>
       </motion.div>
     </AnimatePresence>,
-    document.body
+    document.body,
   );
 }

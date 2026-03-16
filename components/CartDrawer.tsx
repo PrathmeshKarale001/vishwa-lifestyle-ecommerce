@@ -46,9 +46,9 @@ export default function CartDrawer() {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(price);
@@ -84,7 +84,9 @@ export default function CartDrawer() {
               <div className="flex items-center gap-3">
                 <ShoppingBag size={20} aria-hidden="true" />
                 <h2 className="text-lg font-serif">Your Cart</h2>
-                <span className="text-sm text-foreground-muted">({itemCount} items)</span>
+                <span className="text-sm text-foreground-muted">
+                  ({itemCount} items)
+                </span>
               </div>
               <button
                 onClick={closeCart}
@@ -124,7 +126,7 @@ export default function CartDrawer() {
                     >
                       {/* Product Image */}
                       <Link
-                        href={`/product/${item.slug}`}
+                        href={`/products/${item.slug}`}
                         onClick={closeCart}
                         className="relative w-24 h-24 bg-background-alt flex-shrink-0 overflow-hidden"
                       >
@@ -141,7 +143,7 @@ export default function CartDrawer() {
                       {/* Product Details */}
                       <div className="flex-1 flex flex-col">
                         <Link
-                          href={`/product/${item.slug}`}
+                          href={`/products/${item.slug}`}
                           onClick={closeCart}
                           className="font-serif text-sm hover:text-accent-gold transition-colors"
                         >
@@ -160,19 +162,30 @@ export default function CartDrawer() {
 
                         {/* Quantity Controls */}
                         <div className="flex items-center justify-between mt-auto">
-                          <div className="flex items-center border border-gray-200" role="group" aria-label="Quantity controls">
+                          <div
+                            className="flex items-center border border-gray-200"
+                            role="group"
+                            aria-label="Quantity controls"
+                          >
                             <button
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              onClick={() =>
+                                updateQuantity(item.id, item.quantity - 1)
+                              }
                               className="p-2 hover:bg-gray-50 transition-colors"
                               aria-label="Decrease quantity"
                             >
                               <Minus size={14} />
                             </button>
-                            <span className="w-8 text-center text-sm" aria-label={`Quantity: ${item.quantity}`}>
+                            <span
+                              className="w-8 text-center text-sm"
+                              aria-label={`Quantity: ${item.quantity}`}
+                            >
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              onClick={() =>
+                                updateQuantity(item.id, item.quantity + 1)
+                              }
                               disabled={item.quantity >= item.maxQuantity}
                               className="p-2 hover:bg-gray-50 transition-colors disabled:opacity-50"
                               aria-label="Increase quantity"
@@ -209,7 +222,9 @@ export default function CartDrawer() {
                       <div className="flex items-center gap-2 text-green-700">
                         <Tag size={16} aria-hidden="true" />
                         <span className="text-sm font-medium">{promoCode}</span>
-                        <span className="text-sm">(-{formatPrice(discount)})</span>
+                        <span className="text-sm">
+                          (-{formatPrice(discount)})
+                        </span>
                       </div>
                       <button
                         onClick={() => {
@@ -224,7 +239,9 @@ export default function CartDrawer() {
                     </div>
                   ) : (
                     <div className="flex gap-2">
-                      <label htmlFor="promo-input" className="sr-only">Promo code</label>
+                      <label htmlFor="promo-input" className="sr-only">
+                        Promo code
+                      </label>
                       <input
                         id="promo-input"
                         type="text"

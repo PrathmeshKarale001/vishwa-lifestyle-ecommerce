@@ -12,7 +12,14 @@ import { log } from "@/lib/logger";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  phone: z.string().regex(/^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/, "Invalid phone number").optional().or(z.literal("")),
+  phone: z
+    .string()
+    .regex(
+      /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/,
+      "Invalid phone number",
+    )
+    .optional()
+    .or(z.literal("")),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -30,8 +37,15 @@ interface EditProfileModalProps {
   onUpdate: () => void;
 }
 
-export default function EditProfileModal({ isOpen, onClose, user, onUpdate }: EditProfileModalProps) {
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(user.avatar_url);
+export default function EditProfileModal({
+  isOpen,
+  onClose,
+  user,
+  onUpdate,
+}: EditProfileModalProps) {
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(
+    user.avatar_url,
+  );
   const [uploading, setUploading] = useState(false);
 
   const {
@@ -96,9 +110,9 @@ export default function EditProfileModal({ isOpen, onClose, user, onUpdate }: Ed
       }
 
       // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(filePath);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("avatars").getPublicUrl(filePath);
 
       setAvatarPreview(publicUrl);
       toast.success("Avatar uploaded successfully!");
@@ -132,15 +146,13 @@ export default function EditProfileModal({ isOpen, onClose, user, onUpdate }: Ed
 
       // Also update profile in profiles table if it exists
       try {
-        await supabase
-          .from("profiles")
-          .upsert({
-            id: user.id,
-            name: data.name,
-            phone: data.phone || null,
-            avatar_url: avatarPreview || null,
-            updated_at: new Date().toISOString(),
-          });
+        await supabase.from("profiles").upsert({
+          id: user.id,
+          name: data.name,
+          phone: data.phone || null,
+          avatar_url: avatarPreview || null,
+          updated_at: new Date().toISOString(),
+        });
       } catch (e) {
         // Profiles table might not exist, that's okay
         log.debug("Profiles table not available");
@@ -151,7 +163,9 @@ export default function EditProfileModal({ isOpen, onClose, user, onUpdate }: Ed
       onClose();
     } catch (error: any) {
       log.error("Profile update error", error);
-      toast.error(error.message || "Unable to update profile. Please try again.");
+      toast.error(
+        error.message || "Unable to update profile. Please try again.",
+      );
     }
   };
 
@@ -174,9 +188,12 @@ export default function EditProfileModal({ isOpen, onClose, user, onUpdate }: Ed
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            onClick={(e) => e.stopPropagation()}
+            onClick={onClose}
           >
-            <div className="bg-white w-full max-w-md p-6 relative">
+            <div
+              className="bg-white w-full max-w-md p-6 relative"
+              onClick={(e) => e.stopPropagation()}
+            >
               {/* Close Button */}
               <button
                 onClick={onClose}
@@ -201,7 +218,8 @@ export default function EditProfileModal({ isOpen, onClose, user, onUpdate }: Ed
                       ) : (
                         <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                           <span className="text-2xl text-gray-400">
-                            {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
+                            {user.name?.[0]?.toUpperCase() ||
+                              user.email[0].toUpperCase()}
                           </span>
                         </div>
                       )}
@@ -221,7 +239,8 @@ export default function EditProfileModal({ isOpen, onClose, user, onUpdate }: Ed
                       disabled={uploading}
                     />
                     <span className="text-sm text-accent-gold hover:underline flex items-center gap-2">
-                      <Upload size={14} /> {uploading ? "Uploading..." : "Change Photo"}
+                      <Upload size={14} />{" "}
+                      {uploading ? "Uploading..." : "Change Photo"}
                     </span>
                   </label>
                 </div>
@@ -232,12 +251,15 @@ export default function EditProfileModal({ isOpen, onClose, user, onUpdate }: Ed
                   <input
                     type="text"
                     {...register("name")}
-                    className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.name ? "border-red-500" : "border-gray-200"
-                      }`}
+                    className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
+                      errors.name ? "border-red-500" : "border-gray-200"
+                    }`}
                     placeholder="Enter your name"
                   />
                   {errors.name && (
-                    <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.name.message}
+                    </p>
                   )}
                 </div>
 
@@ -247,12 +269,15 @@ export default function EditProfileModal({ isOpen, onClose, user, onUpdate }: Ed
                   <input
                     type="tel"
                     {...register("phone")}
-                    className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${errors.phone ? "border-red-500" : "border-gray-200"
-                      }`}
+                    className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
+                      errors.phone ? "border-red-500" : "border-gray-200"
+                    }`}
                     placeholder="+91 74474 89101"
                   />
                   {errors.phone && (
-                    <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.phone.message}
+                    </p>
                   )}
                 </div>
 
@@ -295,4 +320,3 @@ export default function EditProfileModal({ isOpen, onClose, user, onUpdate }: Ed
     </AnimatePresence>
   );
 }
-

@@ -1,20 +1,22 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import type { CartItem, Cart } from '@/types';
-import { trackAddToCart, trackRemoveFromCart } from '@/lib/analytics';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import type { CartItem, Cart } from "@/types";
+import { trackAddToCart, trackRemoveFromCart } from "@/lib/analytics";
 
 // Constants
 const SHIPPING_THRESHOLD = 0; // Free shipping for all
 const SHIPPING_COST = 0;
-const TAX_RATE = 0.18; // 18% GST
+// Note: Product prices are already inclusive of GST, so no additional tax is applied
 
 interface CartState extends Cart {
   // Actions
-  addItem: (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => void;
+  addItem: (item: Omit<CartItem, "quantity"> & { quantity?: number }) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
-  applyPromoCode: (code: string) => Promise<{ success: boolean; message?: string }>;
+  applyPromoCode: (
+    code: string,
+  ) => Promise<{ success: boolean; message?: string }>;
   removePromoCode: () => void;
 
   // UI State
@@ -25,12 +27,15 @@ interface CartState extends Cart {
 }
 
 // Calculate cart totals
+// Note: All product prices are inclusive of GST, so no additional tax is added
 const calculateTotals = (items: CartItem[], discount: number = 0) => {
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
   const shipping = 0; // Always free shipping
-  const taxableAmount = subtotal - discount;
-  const tax = Math.round(taxableAmount * TAX_RATE);
-  const total = subtotal - discount + shipping + tax;
+  const tax = 0; // Prices are inclusive of GST — no additional tax
+  const total = subtotal - discount + shipping;
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return { subtotal, shipping, tax, total, itemCount };
@@ -64,13 +69,16 @@ export const useCartStore = create<CartState>()(
           if (existingItem) {
             const newQuantity = Math.min(
               existingItem.quantity + quantityToAdd,
-              item.maxQuantity
+              item.maxQuantity,
             );
             newItems = state.items.map((i) =>
-              i.id === item.id ? { ...i, quantity: newQuantity } : i
+              i.id === item.id ? { ...i, quantity: newQuantity } : i,
             );
           } else {
-            newItems = [...state.items, { ...item, quantity: quantityToAdd } as CartItem];
+            newItems = [
+              ...state.items,
+              { ...item, quantity: quantityToAdd } as CartItem,
+            ];
           }
 
           // Track analytics
@@ -131,7 +139,7 @@ export const useCartStore = create<CartState>()(
           const newItems = state.items.map((i) =>
             i.id === id
               ? { ...i, quantity: Math.min(quantity, i.maxQuantity) }
-              : i
+              : i,
           );
           const totals = calculateTotals(newItems, state.discount);
           return { items: newItems, ...totals };
@@ -158,24 +166,26 @@ export const useCartStore = create<CartState>()(
 
         try {
           // Get user ID if available
-          const { supabase } = await import('@/lib/supabase');
-          const { data: { user } } = await supabase?.auth.getUser() || { data: { user: null } };
+          const { supabase } = await import("@/lib/supabase");
+          const {
+            data: { user },
+          } = (await supabase?.auth.getUser()) || { data: { user: null } };
 
           // Validate coupon via API
           // Clean code: uppercase and remove all spaces
-          const cleanCode = code.toUpperCase().replace(/\s/g, '');
+          const cleanCode = code.toUpperCase().replace(/\s/g, "");
 
-          const payloadItems = state.items.map(item => ({
+          const payloadItems = state.items.map((item) => ({
             productId: item.productId,
             category: item.category,
             price: item.price,
-            quantity: item.quantity
+            quantity: item.quantity,
           }));
 
-          const response = await fetch('/api/coupons/validate', {
-            method: 'POST',
+          const response = await fetch("/api/coupons/validate", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({
               code: cleanCode,
@@ -188,10 +198,10 @@ export const useCartStore = create<CartState>()(
           const result = await response.json();
 
           if (!result.success) {
-            console.error('Promo code validation failed:', result);
+            console.error("Promo code validation failed:", result);
             return {
               success: false,
-              message: result.error || `Debug: ${JSON.stringify(result)}`
+              message: result.error || `Debug: ${JSON.stringify(result)}`,
             };
           }
 
@@ -200,8 +210,11 @@ export const useCartStore = create<CartState>()(
           set({ discount, promoCode: code.toUpperCase(), ...totals });
           return { success: true };
         } catch (error: any) {
-          console.error('Error applying promo code:', error);
-          return { success: false, message: error.message || 'Failed to apply promo code' };
+          console.error("Error applying promo code:", error);
+          return {
+            success: false,
+            message: error.message || "Failed to apply promo code",
+          };
         }
       },
 
@@ -219,7 +232,7 @@ export const useCartStore = create<CartState>()(
       toggleCart: () => set((state) => ({ isCartOpen: !state.isCartOpen })),
     }),
     {
-      name: 'vishwa-cart',
+      name: "vishwa-cart",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         items: state.items,
@@ -233,6 +246,6 @@ export const useCartStore = create<CartState>()(
           Object.assign(state, totals);
         }
       },
-    }
-  )
+    },
+  ),
 );

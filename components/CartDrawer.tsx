@@ -278,8 +278,8 @@ export default function CartDrawer() {
                     <dd>{shipping === 0 ? "Free" : formatPrice(shipping)}</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-foreground-muted">GST (18%)</dt>
-                    <dd>{formatPrice(tax)}</dd>
+                    <dt className="text-foreground-muted">GST</dt>
+                    <dd className="text-foreground-muted">Included</dd>
                   </div>
                   <div className="flex justify-between font-medium text-base pt-2 border-t border-gray-100">
                     <dt>Total</dt>

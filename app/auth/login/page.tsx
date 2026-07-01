@@ -21,7 +21,13 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen pt-24 flex items-center justify-center">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen pt-24 flex items-center justify-center">
+          Loading...
+        </div>
+      }
+    >
       <LoginForm />
     </Suspense>
   );
@@ -59,7 +65,9 @@ function LoginForm() {
       router.refresh();
     } catch (error: any) {
       log.error("Login error", error);
-      const errorMessage = error.message || "Invalid email or password. Please check your credentials and try again.";
+      const errorMessage =
+        error.message ||
+        "Invalid email or password. Please check your credentials and try again.";
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -70,10 +78,10 @@ function LoginForm() {
     const supabase = createClient();
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+        provider: "google",
         options: {
           redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirect)}`,
-        }
+        },
       });
       if (error) throw error;
     } catch (error: any) {
@@ -137,31 +145,49 @@ function LoginForm() {
           {/* Login Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
-              <label className="block text-sm mb-2">Email</label>
+              <label htmlFor="login-email" className="block text-sm mb-2">
+                Email Address
+              </label>
               <div className="relative">
-                <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted" />
+                <Mail
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted pointer-events-none"
+                />
                 <input
+                  id="login-email"
                   type="email"
+                  autoComplete="email"
                   {...register("email")}
-                  className={`w-full border pl-12 pr-4 py-3 focus:outline-none focus:border-accent-gold ${errors.email ? "border-red-500" : "border-gray-200"
-                    }`}
+                  className={`w-full border pl-12 pr-4 py-3 focus:outline-none focus:border-accent-gold ${
+                    errors.email ? "border-red-500" : "border-gray-200"
+                  }`}
                   placeholder="your@email.com"
                 />
               </div>
               {errors.email && (
-                <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm mb-2">Password</label>
+              <label htmlFor="login-password" className="block text-sm mb-2">
+                Password
+              </label>
               <div className="relative">
-                <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted" />
+                <Lock
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted pointer-events-none"
+                />
                 <input
+                  id="login-password"
                   type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
                   {...register("password")}
-                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${errors.password ? "border-red-500" : "border-gray-200"
-                    }`}
+                  className={`w-full border pl-12 pr-12 py-3 focus:outline-none focus:border-accent-gold ${
+                    errors.password ? "border-red-500" : "border-gray-200"
+                  }`}
                   placeholder="••••••••"
                 />
                 <button
@@ -173,7 +199,9 @@ function LoginForm() {
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
@@ -182,7 +210,10 @@ function LoginForm() {
                 <input type="checkbox" className="accent-accent-gold" />
                 <span className="text-sm">Remember me</span>
               </label>
-              <Link href="/auth/forgot-password" className="text-sm text-accent-gold hover:underline">
+              <Link
+                href="/auth/forgot-password"
+                className="text-sm text-accent-gold hover:underline"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -198,7 +229,10 @@ function LoginForm() {
 
           <p className="text-center mt-8 text-sm text-foreground-muted">
             Don't have an account?{" "}
-            <Link href="/auth/register" className="text-accent-gold hover:underline">
+            <Link
+              href="/auth/register"
+              className="text-accent-gold hover:underline"
+            >
               Create one
             </Link>
           </p>

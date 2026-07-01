@@ -1,13 +1,19 @@
-import { Resend } from 'resend';
-import { log } from './logger';
+import { Resend } from "resend";
+import { log } from "./logger";
 
 // Initialize Resend client
-const resend = new Resend(process.env.RESEND_API_KEY || 're_123456789');
+const resend = new Resend(process.env.RESEND_API_KEY || "re_123456789");
 
 // Email configuration
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Vishwa Lifestyle <noreply@vishwaglobal.com>';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',')[0] || 'crm@vishwaglobal.com';
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://vishwalifestyle.com';
+const FROM_EMAIL =
+  process.env.RESEND_FROM_EMAIL ||
+  "Vishwa Lifestyle <noreply@vishwaglobal.com>";
+const ADMIN_EMAIL =
+  process.env.ADMIN_EMAIL ||
+  process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(",")[0] ||
+  "crm@vishwaglobal.com";
+const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL || "https://vishwalifestyle.com";
 
 // Check if email is configured
 export const isEmailConfigured = () => {
@@ -23,8 +29,8 @@ export async function sendContactNotification(data: {
   message: string;
 }) {
   if (!isEmailConfigured()) {
-    log.debug('Email not configured. Skipping contact notification.');
-    return { success: false, error: 'Email not configured' };
+    log.debug("Email not configured. Skipping contact notification.");
+    return { success: false, error: "Email not configured" };
   }
 
   try {
@@ -62,19 +68,23 @@ export async function sendContactNotification(data: {
                   <div class="label">Email:</div>
                   <div class="value"><a href="mailto:${data.email}">${data.email}</a></div>
                 </div>
-                ${data.phone ? `
+                ${
+                  data.phone
+                    ? `
                 <div class="field">
                   <div class="label">Phone:</div>
                   <div class="value">${data.phone}</div>
                 </div>
-                ` : ''}
+                `
+                    : ""
+                }
                 <div class="field">
                   <div class="label">Subject:</div>
                   <div class="value">${data.subject}</div>
                 </div>
                 <div class="field">
                   <div class="label">Message:</div>
-                  <div class="message-box">${data.message.replace(/\n/g, '<br>')}</div>
+                  <div class="message-box">${data.message.replace(/\n/g, "<br>")}</div>
                 </div>
                 <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd;">
                   <a href="mailto:${data.email}" style="background: #D4AF37; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">
@@ -89,13 +99,13 @@ export async function sendContactNotification(data: {
     });
 
     if (error) {
-      log.error('Resend error', error, { type: 'contact_notification' });
+      log.error("Resend error", error, { type: "contact_notification" });
       return { success: false, error: error.message };
     }
 
     return { success: true, id: result?.id };
   } catch (error: any) {
-    log.error('Email send error', error, { type: 'contact_notification' });
+    log.error("Email send error", error, { type: "contact_notification" });
     return { success: false, error: error.message };
   }
 }
@@ -107,7 +117,7 @@ export async function sendContactAutoReply(data: {
   subject: string;
 }) {
   if (!isEmailConfigured()) {
-    return { success: false, error: 'Email not configured' };
+    return { success: false, error: "Email not configured" };
   }
 
   try {
@@ -146,13 +156,13 @@ export async function sendContactAutoReply(data: {
     });
 
     if (error) {
-      log.error('Resend error', error, { type: 'contact_notification' });
+      log.error("Resend error", error, { type: "contact_notification" });
       return { success: false, error: error.message };
     }
 
     return { success: true, id: result?.id };
   } catch (error: any) {
-    log.error('Email send error', error, { type: 'contact_notification' });
+    log.error("Email send error", error, { type: "contact_notification" });
     return { success: false, error: error.message };
   }
 }
@@ -160,14 +170,14 @@ export async function sendContactAutoReply(data: {
 // Newsletter - Confirmation Email
 export async function sendNewsletterConfirmation(email: string, name?: string) {
   if (!isEmailConfigured()) {
-    return { success: false, error: 'Email not configured' };
+    return { success: false, error: "Email not configured" };
   }
 
   try {
     const { data: result, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: 'Welcome to Vishwa Lifestyle Newsletter',
+      subject: "Welcome to Vishwa Lifestyle Newsletter",
       html: `
         <!DOCTYPE html>
         <html>
@@ -186,7 +196,7 @@ export async function sendNewsletterConfirmation(email: string, name?: string) {
                 <h1>Welcome to Vishwa Lifestyle</h1>
               </div>
               <div class="content">
-                <p>${name ? `Dear ${name},` : 'Hello,'}</p>
+                <p>${name ? `Dear ${name},` : "Hello,"}</p>
                 <p>Thank you for subscribing to our newsletter! You'll now receive updates about:</p>
                 <ul>
                   <li>New product launches</li>
@@ -205,13 +215,13 @@ export async function sendNewsletterConfirmation(email: string, name?: string) {
     });
 
     if (error) {
-      log.error('Resend error', error, { type: 'contact_notification' });
+      log.error("Resend error", error, { type: "contact_notification" });
       return { success: false, error: error.message };
     }
 
     return { success: true, id: result?.id };
   } catch (error: any) {
-    log.error('Email send error', error, { type: 'contact_notification' });
+    log.error("Email send error", error, { type: "contact_notification" });
     return { success: false, error: error.message };
   }
 }
@@ -244,13 +254,13 @@ export async function sendOrderConfirmationEmail(order: {
   tracking_number?: string;
 }) {
   if (!isEmailConfigured()) {
-    return { success: false, error: 'Email not configured' };
+    return { success: false, error: "Email not configured" };
   }
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
       minimumFractionDigits: 0,
     }).format(price);
   };
@@ -290,31 +300,39 @@ export async function sendOrderConfirmationEmail(order: {
                 
                 <div class="order-info">
                   <h2 style="margin-top: 0;">Order Details</h2>
-                  ${order.items.map(item => `
+                  ${order.items
+                    .map(
+                      (item) => `
                     <div class="item-row">
                       <strong>${item.name}</strong> × ${item.quantity}<br>
                       <span style="color: #666;">${formatPrice(item.price * item.quantity)}</span>
                     </div>
-                  `).join('')}
+                  `,
+                    )
+                    .join("")}
                   
                   <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                       <span>Subtotal:</span>
                       <span>${formatPrice(order.subtotal)}</span>
                     </div>
-                    ${order.discount > 0 ? `
+                    ${
+                      order.discount > 0
+                        ? `
                     <div style="display: flex; justify-content: space-between; margin-bottom: 5px; color: green;">
                       <span>Discount:</span>
                       <span>-${formatPrice(order.discount)}</span>
                     </div>
-                    ` : ''}
+                    `
+                        : ""
+                    }
                     <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                       <span>Shipping:</span>
                       <span>${formatPrice(order.shipping)}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                      <span>Tax:</span>
-                      <span>${formatPrice(order.tax)}</span>
+                      <span>GST:</span>
+                      <span>Included</span>
                     </div>
                     <div class="total-row" style="display: flex; justify-content: space-between;">
                       <span>Total:</span>
@@ -328,21 +346,25 @@ export async function sendOrderConfirmationEmail(order: {
                   <p>
                     ${order.shipping_address.name}<br>
                     ${order.shipping_address.line1}<br>
-                    ${order.shipping_address.line2 ? `${order.shipping_address.line2}<br>` : ''}
+                    ${order.shipping_address.line2 ? `${order.shipping_address.line2}<br>` : ""}
                     ${order.shipping_address.city}, ${order.shipping_address.state} ${order.shipping_address.postal_code}<br>
                     Phone: ${order.shipping_address.phone}
                   </p>
                 </div>
 
-                ${order.tracking_number ? `
+                ${
+                  order.tracking_number
+                    ? `
                 <div class="order-info">
                   <h3 style="margin-top: 0;">Tracking Information</h3>
                   <p><strong>Tracking Number:</strong> ${order.tracking_number}</p>
                   <p>You can track your order using this tracking number on the courier's website.</p>
                 </div>
-                ` : `
+                `
+                    : `
                 <p>We'll send you tracking information as soon as your order ships.</p>
-                `}
+                `
+                }
 
                 <p>Payment Method: ${order.payment_method}</p>
                 
@@ -362,15 +384,15 @@ export async function sendOrderConfirmationEmail(order: {
     });
 
     if (error) {
-      console.error('Resend error:', error);
+      console.error("Resend error:", error);
       return { success: false, error: error.message };
     }
 
     return { success: true, id: result?.id };
   } catch (error: any) {
     // Log error but don't throw (email failures shouldn't break the app)
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Email send error:', error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Email send error:", error);
     }
     return { success: false, error: error.message };
   }
@@ -389,13 +411,13 @@ export async function sendOrderCancelledEmail(order: {
   total: number;
 }) {
   if (!isEmailConfigured()) {
-    return { success: false, error: 'Email not configured' };
+    return { success: false, error: "Email not configured" };
   }
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
       minimumFractionDigits: 0,
     }).format(price);
   };
@@ -436,12 +458,16 @@ export async function sendOrderCancelledEmail(order: {
 
                 <div class="order-summary">
                   <h3 style="margin-top: 0; color: #1A1A1A;">Cancelled Items</h3>
-                  ${order.items.map(item => `
+                  ${order.items
+                    .map(
+                      (item) => `
                     <div class="item-row">
                       <span>${item.name} × ${item.quantity}</span>
                       <span>${formatPrice(item.price * item.quantity)}</span>
                     </div>
-                  `).join('')}
+                  `,
+                    )
+                    .join("")}
                   <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #ddd; display: flex; justify-content: space-between; font-weight: bold;">
                     <span>Total Refund Amount:</span>
                     <span>${formatPrice(order.total)}</span>
@@ -464,13 +490,13 @@ export async function sendOrderCancelledEmail(order: {
     });
 
     if (error) {
-      log.error('Resend error', error, { type: 'order_cancelled' });
+      log.error("Resend error", error, { type: "order_cancelled" });
       return { success: false, error: error.message };
     }
 
     return { success: true, id: result?.id };
   } catch (error: any) {
-    log.error('Email send error', error, { type: 'order_cancelled' });
+    log.error("Email send error", error, { type: "order_cancelled" });
     return { success: false, error: error.message };
   }
 }
@@ -489,7 +515,7 @@ export async function sendOrderShippedEmail(order: {
   tracking_url?: string;
 }) {
   if (!isEmailConfigured()) {
-    return { success: false, error: 'Email not configured' };
+    return { success: false, error: "Email not configured" };
   }
 
   try {
@@ -525,13 +551,13 @@ export async function sendOrderShippedEmail(order: {
                 <div class="tracking-box">
                   <h3>Tracking Number</h3>
                   <p style="font-family: monospace; font-size: 18px; font-weight: bold; letter-spacing: 1px;">${order.tracking_number}</p>
-                  ${order.carrier_name ? `<p>Carrier: ${order.carrier_name}</p>` : ''}
-                  ${order.tracking_url ? `<a href="${order.tracking_url}" class="button">Track Package</a>` : ''}
+                  ${order.carrier_name ? `<p>Carrier: ${order.carrier_name}</p>` : ""}
+                  ${order.tracking_url ? `<a href="${order.tracking_url}" class="button">Track Package</a>` : ""}
                 </div>
 
                 <p>The following items are in this shipment:</p>
                 <ul style="padding-left: 20px; color: #666;">
-                  ${order.items.map(item => `<li>${item.quantity} x ${item.name}</li>`).join('')}
+                  ${order.items.map((item) => `<li>${item.quantity} x ${item.name}</li>`).join("")}
                 </ul>
 
                 <p>You can also track your order status in your account.</p>
@@ -546,13 +572,13 @@ export async function sendOrderShippedEmail(order: {
     });
 
     if (error) {
-      log.error('Resend error', error, { type: 'order_shipped' });
+      log.error("Resend error", error, { type: "order_shipped" });
       return { success: false, error: error.message };
     }
 
     return { success: true, id: result?.id };
   } catch (error: any) {
-    log.error('Email send error', error, { type: 'order_shipped' });
+    log.error("Email send error", error, { type: "order_shipped" });
     return { success: false, error: error.message };
   }
 }
@@ -564,7 +590,7 @@ export async function sendOrderDeliveredEmail(order: {
   customer_name: string;
 }) {
   if (!isEmailConfigured()) {
-    return { success: false, error: 'Email not configured' };
+    return { success: false, error: "Email not configured" };
   }
 
   try {
@@ -612,13 +638,13 @@ export async function sendOrderDeliveredEmail(order: {
     });
 
     if (error) {
-      log.error('Resend error', error, { type: 'order_delivered' });
+      log.error("Resend error", error, { type: "order_delivered" });
       return { success: false, error: error.message };
     }
 
     return { success: true, id: result?.id };
   } catch (error: any) {
-    log.error('Email send error', error, { type: 'order_delivered' });
+    log.error("Email send error", error, { type: "order_delivered" });
     return { success: false, error: error.message };
   }
 }
@@ -641,13 +667,13 @@ export async function sendOrderNotificationToAdmin(order: {
   };
 }) {
   if (!isEmailConfigured()) {
-    return { success: false, error: 'Email not configured' };
+    return { success: false, error: "Email not configured" };
   }
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
       minimumFractionDigits: 0,
     }).format(price);
   };
@@ -687,9 +713,13 @@ export async function sendOrderNotificationToAdmin(order: {
 
                 <div class="order-info">
                   <h2 style="margin-top: 0;">Order Items</h2>
-                  ${order.items.map(item => `
+                  ${order.items
+                    .map(
+                      (item) => `
                     <p><strong>${item.name}</strong> × ${item.quantity} - ${formatPrice(item.price * item.quantity)}</p>
-                  `).join('')}
+                  `,
+                    )
+                    .join("")}
                   <p style="font-size: 18px; font-weight: bold; margin-top: 15px; padding-top: 15px; border-top: 2px solid #ddd;">
                     Total: ${formatPrice(order.total)}
                   </p>
@@ -704,13 +734,13 @@ export async function sendOrderNotificationToAdmin(order: {
     });
 
     if (error) {
-      log.error('Resend error', error, { type: 'contact_notification' });
+      log.error("Resend error", error, { type: "contact_notification" });
       return { success: false, error: error.message };
     }
 
     return { success: true, id: result?.id };
   } catch (error: any) {
-    log.error('Email send error', error, { type: 'contact_notification' });
+    log.error("Email send error", error, { type: "contact_notification" });
     return { success: false, error: error.message };
   }
 }
@@ -729,13 +759,13 @@ export async function sendAbandonedCartEmail(data: {
   cartId: string;
 }) {
   if (!isEmailConfigured()) {
-    return { success: false, error: 'Email not configured' };
+    return { success: false, error: "Email not configured" };
   }
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
       minimumFractionDigits: 0,
     }).format(price);
   };
@@ -746,7 +776,7 @@ export async function sendAbandonedCartEmail(data: {
     const { data: result, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: data.email,
-      subject: 'Complete Your Purchase - Your Cart is Waiting!',
+      subject: "Complete Your Purchase - Your Cart is Waiting!",
       html: `
         <!DOCTYPE html>
         <html>
@@ -773,12 +803,16 @@ export async function sendAbandonedCartEmail(data: {
                 
                 <div style="background: white; padding: 15px; margin: 15px 0; border-left: 3px solid #D4AF37;">
                   <h3 style="margin-top: 0;">Items in Your Cart:</h3>
-                  ${data.items.map(item => `
+                  ${data.items
+                    .map(
+                      (item) => `
                     <div class="item-row">
                       <strong>${item.name}</strong> × ${item.quantity}<br>
                       <span style="color: #666;">${formatPrice(item.price * item.quantity)}</span>
                     </div>
-                  `).join('')}
+                  `,
+                    )
+                    .join("")}
                   <div style="font-size: 18px; font-weight: bold; margin-top: 15px; padding-top: 15px; border-top: 2px solid #ddd;">
                     Total: ${formatPrice(data.total)}
                   </div>
@@ -801,13 +835,13 @@ export async function sendAbandonedCartEmail(data: {
     });
 
     if (error) {
-      log.error('Resend error', error, { type: 'contact_notification' });
+      log.error("Resend error", error, { type: "contact_notification" });
       return { success: false, error: error.message };
     }
 
     return { success: true, id: result?.id };
   } catch (error: any) {
-    log.error('Email send error', error, { type: 'contact_notification' });
+    log.error("Email send error", error, { type: "contact_notification" });
     return { success: false, error: error.message };
   }
 }

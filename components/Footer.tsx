@@ -30,7 +30,6 @@ export default function Footer({ settings }: FooterProps) {
       links: [
         { label: "Our Story", url: "/story" },
         { label: "Philosophy", url: "/philosophy" },
-        { label: "Gallery", url: "/gallery" },
         { label: "Contact Us", url: "/contact" },
       ],
     },

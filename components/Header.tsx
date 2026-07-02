@@ -311,13 +311,6 @@ export default function Header({ categories = [], settings }: HeaderProps) {
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
             </Link>
             <Link
-              href="/gallery"
-              className="hover:text-accent-gold transition-colors relative group"
-            >
-              <span>Gallery</span>
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link
               href="/contact"
               className="hover:text-accent-gold transition-colors relative group"
             >
@@ -474,13 +467,6 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                 className="hover:text-accent-gold transition-colors"
               >
                 Philosophy
-              </Link>
-              <Link
-                href="/gallery"
-                onClick={() => setIsMenuOpen(false)}
-                className="hover:text-accent-gold transition-colors"
-              >
-                Gallery
               </Link>
               <Link
                 href="/contact"

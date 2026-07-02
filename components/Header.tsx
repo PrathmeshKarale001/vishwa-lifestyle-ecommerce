@@ -4,8 +4,24 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import { Search, User, ShoppingBag, Menu, X, Heart, ChevronDown, ArrowRight, Plus, Minus } from "lucide-react";
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
+import {
+  Search,
+  User,
+  ShoppingBag,
+  Menu,
+  X,
+  Heart,
+  ChevronDown,
+  ArrowRight,
+  Plus,
+  Minus,
+} from "lucide-react";
+import {
+  motion,
+  useScroll,
+  useMotionValueEvent,
+  AnimatePresence,
+} from "framer-motion";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
 import { useAppKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
@@ -30,9 +46,16 @@ export default function Header({ categories = [], settings }: HeaderProps) {
     }
   }, [categories, activeCategory]);
 
-  const activeCategoryData = categories.find(c => c.slug === activeCategory) || categories[0];
+  const activeCategoryData =
+    categories.find((c) => c.slug === activeCategory) || categories[0];
 
-  const announcement = settings?.announcementBar || { show: false, text: "", link: "", backgroundColor: "#D4AF37", textColor: "#FFFFFF" };
+  const announcement = settings?.announcementBar || {
+    show: false,
+    text: "",
+    link: "",
+    backgroundColor: "#D4AF37",
+    textColor: "#FFFFFF",
+  };
   const logoSrc = settings?.logo || "/vishwalogo-v2.png";
   const { scrollY } = useScroll();
   const pathname = usePathname();
@@ -61,7 +84,7 @@ export default function Header({ categories = [], settings }: HeaderProps) {
             exit={{ height: 0, opacity: 0 }}
             style={{
               backgroundColor: announcement.backgroundColor || "#D4AF37",
-              color: announcement.textColor || "#FFFFFF"
+              color: announcement.textColor || "#FFFFFF",
             }}
             className="text-[10px] sm:text-xs py-2 px-4 text-center tracking-widest uppercase font-medium relative z-[60]"
           >
@@ -77,10 +100,11 @@ export default function Header({ categories = [], settings }: HeaderProps) {
       </AnimatePresence>
 
       <header
-        className={`transition-all duration-500 ease-in-out border-b ${isSolidHeader
-          ? "bg-white/90 backdrop-blur-md py-3 sm:py-4 text-black border-gray-100 shadow-sm"
-          : "bg-transparent py-6 sm:py-8 text-white border-transparent"
-          }`}
+        className={`transition-all duration-500 ease-in-out border-b ${
+          isSolidHeader
+            ? "bg-white/90 backdrop-blur-md py-3 sm:py-4 text-black border-gray-100 shadow-sm"
+            : "bg-transparent py-6 sm:py-8 text-white border-transparent"
+        }`}
         onMouseLeave={() => setIsShopHovered(false)}
       >
         <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between relative">
@@ -95,16 +119,23 @@ export default function Header({ categories = [], settings }: HeaderProps) {
 
           {/* Navigation - Left */}
           <nav
-            className={`hidden lg:flex items-center space-x-8 text-sm tracking-[0.15em] uppercase font-medium transition-colors duration-300 ${isSolidHeader ? "text-black" : "text-white"
-              }`}
+            className={`hidden lg:flex items-center space-x-8 text-sm tracking-[0.15em] uppercase font-medium transition-colors duration-300 ${
+              isSolidHeader ? "text-black" : "text-white"
+            }`}
           >
             <div
               className="relative group"
               onMouseEnter={() => setIsShopHovered(true)}
             >
-              <Link href="/shop" className="hover:text-accent-gold transition-colors flex items-center gap-1 py-4">
+              <Link
+                href="/shop"
+                className="hover:text-accent-gold transition-colors flex items-center gap-1 py-4"
+              >
                 <span>Shop</span>
-                <ChevronDown size={14} className={`transition-transform duration-300 ${isShopHovered ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform duration-300 ${isShopHovered ? "rotate-180" : ""}`}
+                />
                 <span className="absolute bottom-3 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
               </Link>
 
@@ -129,25 +160,29 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                         {categories.map((category: any) => (
                           <button
                             key={category.slug}
-                            onMouseEnter={() => setActiveCategory(category.slug)}
+                            onMouseEnter={() =>
+                              setActiveCategory(category.slug)
+                            }
                             onClick={() => {
                               setIsShopHovered(false);
                               router.push(`/shop?category=${category.slug}`);
                             }}
-                            className={`w-full text-left px-4 py-4 rounded-xl transition-all duration-300 flex items-center justify-between group/cat ${activeCategory === category.slug
-                              ? "bg-white shadow-sm ring-1 ring-gray-100 text-accent-gold"
-                              : "text-gray-600 hover:bg-white hover:text-black"
-                              }`}
+                            className={`w-full text-left px-4 py-4 rounded-xl transition-all duration-300 flex items-center justify-between group/cat ${
+                              activeCategory === category.slug
+                                ? "bg-white shadow-sm ring-1 ring-gray-100 text-accent-gold"
+                                : "text-gray-600 hover:bg-white hover:text-black"
+                            }`}
                           >
                             <span className="text-sm font-serif font-bold tracking-wider">
                               {category.name}
                             </span>
                             <ArrowRight
                               size={14}
-                              className={`transition-all duration-300 ${activeCategory === category.slug
-                                ? "opacity-100 translate-x-0"
-                                : "opacity-0 -translate-x-2 group-hover/cat:opacity-100 group-hover/cat:translate-x-0"
-                                }`}
+                              className={`transition-all duration-300 ${
+                                activeCategory === category.slug
+                                  ? "opacity-100 translate-x-0"
+                                  : "opacity-0 -translate-x-2 group-hover/cat:opacity-100 group-hover/cat:translate-x-0"
+                              }`}
                             />
                           </button>
                         ))}
@@ -181,7 +216,8 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                                 {activeCategoryData?.name}
                               </h3>
                               <p className="text-xs text-gray-500 font-sans tracking-wide">
-                                Explore our curated {activeCategoryData?.name} collection.
+                                Explore our curated {activeCategoryData?.name}{" "}
+                                collection.
                               </p>
                             </div>
                             <Link
@@ -190,57 +226,67 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                               className="text-xs uppercase tracking-[0.15em] font-bold text-accent-gold hover:text-black transition-colors flex items-center gap-2 group"
                             >
                               View All {activeCategoryData?.name}
-                              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                              <ArrowRight
+                                size={14}
+                                className="group-hover:translate-x-1 transition-transform"
+                              />
                             </Link>
                           </div>
 
                           <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12 pb-10">
-                            {activeCategoryData?.subCategories?.map((sub: string) => {
-                              const segments = activeCategoryData.categorySegments?.find(
-                                (cs: any) => cs.subCategoryName === sub
-                              )?.segments;
+                            {activeCategoryData?.subCategories?.map(
+                              (sub: string) => {
+                                const segments =
+                                  activeCategoryData.categorySegments?.find(
+                                    (cs: any) => cs.subCategoryName === sub,
+                                  )?.segments;
 
-                              return (
-                                <div key={sub} className="space-y-6">
-                                  <Link
-                                    href={`/shop?category=${activeCategoryData.slug}&sub=${sub}`}
-                                    onClick={() => setIsShopHovered(false)}
-                                    className="block relative group/sub"
-                                  >
-                                    <h4 className="text-sm font-bold text-black uppercase tracking-widest inline-block relative">
-                                      {sub}
-                                      <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent-gold transition-all duration-300 group-hover/sub:w-full"></span>
-                                    </h4>
-                                  </Link>
+                                return (
+                                  <div key={sub} className="space-y-6">
+                                    <Link
+                                      href={`/shop?category=${activeCategoryData.slug}&sub=${sub}`}
+                                      onClick={() => setIsShopHovered(false)}
+                                      className="block relative group/sub"
+                                    >
+                                      <h4 className="text-sm font-bold text-black uppercase tracking-widest inline-block relative">
+                                        {sub}
+                                        <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent-gold transition-all duration-300 group-hover/sub:w-full"></span>
+                                      </h4>
+                                    </Link>
 
-                                  <ul className="space-y-3 pl-1">
-                                    {segments && segments.length > 0 ? (
-                                      segments.map((seg: string) => (
-                                        <li key={seg}>
+                                    <ul className="space-y-3 pl-1">
+                                      {segments && segments.length > 0 ? (
+                                        segments.map((seg: string) => (
+                                          <li key={seg}>
+                                            <Link
+                                              href={`/shop?category=${activeCategoryData.slug}&sub=${sub}&segment=${seg}`}
+                                              onClick={() =>
+                                                setIsShopHovered(false)
+                                              }
+                                              className="text-[12px] text-gray-500 hover:text-accent-gold hover:translate-x-1 transition-all duration-200 block font-sans"
+                                            >
+                                              {seg}
+                                            </Link>
+                                          </li>
+                                        ))
+                                      ) : (
+                                        <li>
                                           <Link
-                                            href={`/shop?category=${activeCategoryData.slug}&sub=${sub}&segment=${seg}`}
-                                            onClick={() => setIsShopHovered(false)}
-                                            className="text-[12px] text-gray-500 hover:text-accent-gold hover:translate-x-1 transition-all duration-200 block font-sans"
+                                            href={`/shop?category=${activeCategoryData.slug}&sub=${sub}`}
+                                            onClick={() =>
+                                              setIsShopHovered(false)
+                                            }
+                                            className="text-[12px] text-gray-400 italic hover:text-accent-gold transition-colors block font-sans"
                                           >
-                                            {seg}
+                                            Browse Selection
                                           </Link>
                                         </li>
-                                      ))
-                                    ) : (
-                                      <li>
-                                        <Link
-                                          href={`/shop?category=${activeCategoryData.slug}&sub=${sub}`}
-                                          onClick={() => setIsShopHovered(false)}
-                                          className="text-[12px] text-gray-400 italic hover:text-accent-gold transition-colors block font-sans"
-                                        >
-                                          Browse Selection
-                                        </Link>
-                                      </li>
-                                    )}
-                                  </ul>
-                                </div>
-                              );
-                            })}
+                                      )}
+                                    </ul>
+                                  </div>
+                                );
+                              },
+                            )}
                           </div>
                         </motion.div>
                       </AnimatePresence>
@@ -250,15 +296,31 @@ export default function Header({ categories = [], settings }: HeaderProps) {
               </AnimatePresence>
             </div>
 
-            <Link href="/story" className="hover:text-accent-gold transition-colors relative group">
+            <Link
+              href="/story"
+              className="hover:text-accent-gold transition-colors relative group"
+            >
               <span>Our Story</span>
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link href="/philosophy" className="hover:text-accent-gold transition-colors relative group">
+            <Link
+              href="/philosophy"
+              className="hover:text-accent-gold transition-colors relative group"
+            >
               <span>Philosophy</span>
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link href="/contact" className="hover:text-accent-gold transition-colors relative group">
+            <Link
+              href="/gallery"
+              className="hover:text-accent-gold transition-colors relative group"
+            >
+              <span>Gallery</span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+            <Link
+              href="/contact"
+              className="hover:text-accent-gold transition-colors relative group"
+            >
               <span>Contact</span>
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-gold transition-all duration-300 group-hover:w-full"></span>
             </Link>
@@ -272,10 +334,11 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                 alt="Vishwa Lifestyle"
                 width={120}
                 height={40}
-                className={`transition-all duration-500 ease-out transform ${isSolidHeader
-                  ? "h-8 sm:h-10 w-auto"
-                  : "h-10 sm:h-12 w-auto group-hover:scale-105"
-                  }`}
+                className={`transition-all duration-500 ease-out transform ${
+                  isSolidHeader
+                    ? "h-8 sm:h-10 w-auto"
+                    : "h-10 sm:h-12 w-auto group-hover:scale-105"
+                }`}
                 priority
               />
             </Link>
@@ -283,8 +346,9 @@ export default function Header({ categories = [], settings }: HeaderProps) {
 
           {/* Actions - Right */}
           <div
-            className={`flex items-center space-x-3 sm:space-x-5 transition-colors duration-300 z-10 ${isSolidHeader ? "text-black" : "text-white"
-              }`}
+            className={`flex items-center space-x-3 sm:space-x-5 transition-colors duration-300 z-10 ${
+              isSolidHeader ? "text-black" : "text-white"
+            }`}
           >
             <button className="hover:text-accent-gold transition-colors hidden lg:flex items-center text-xs tracking-widest font-medium">
               INR
@@ -311,7 +375,11 @@ export default function Header({ categories = [], settings }: HeaderProps) {
               )}
             </Link>
 
-            <Link href="/account" className="hover:text-accent-gold transition-colors" aria-label="Account">
+            <Link
+              href="/account"
+              className="hover:text-accent-gold transition-colors"
+              aria-label="Account"
+            >
               <User size={20} strokeWidth={1.5} />
             </Link>
 
@@ -323,7 +391,10 @@ export default function Header({ categories = [], settings }: HeaderProps) {
             >
               <ShoppingBag size={20} strokeWidth={1.5} />
               {itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 text-[10px] bg-accent-gold text-white w-4 h-4 flex items-center justify-center rounded-full" data-testid="cart-count">
+                <span
+                  className="absolute -top-1 -right-1 text-[10px] bg-accent-gold text-white w-4 h-4 flex items-center justify-center rounded-full"
+                  data-testid="cart-count"
+                >
                   {itemCount}
                 </span>
               )}
@@ -354,7 +425,10 @@ export default function Header({ categories = [], settings }: HeaderProps) {
           >
             <div className="p-6 flex justify-between items-center border-b border-gray-100">
               <span className="font-serif text-xl font-bold">Menu</span>
-              <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                aria-label="Close menu"
+              >
                 <X size={24} />
               </button>
             </div>
@@ -378,7 +452,11 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                 {/* Mobile Submenu with Accordions */}
                 <div className="pl-2 space-y-4">
                   {categories.map((cat: any) => (
-                    <CategoryAccordion key={cat.slug} category={cat} onNavigate={() => setIsMenuOpen(false)} />
+                    <CategoryAccordion
+                      key={cat.slug}
+                      category={cat}
+                      onNavigate={() => setIsMenuOpen(false)}
+                    />
                   ))}
                 </div>
               </div>
@@ -396,6 +474,13 @@ export default function Header({ categories = [], settings }: HeaderProps) {
                 className="hover:text-accent-gold transition-colors"
               >
                 Philosophy
+              </Link>
+              <Link
+                href="/gallery"
+                onClick={() => setIsMenuOpen(false)}
+                className="hover:text-accent-gold transition-colors"
+              >
+                Gallery
               </Link>
               <Link
                 href="/contact"
@@ -428,7 +513,13 @@ export default function Header({ categories = [], settings }: HeaderProps) {
   );
 }
 
-function CategoryAccordion({ category, onNavigate }: { category: any, onNavigate: () => void }) {
+function CategoryAccordion({
+  category,
+  onNavigate,
+}: {
+  category: any;
+  onNavigate: () => void;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -462,7 +553,11 @@ function CategoryAccordion({ category, onNavigate }: { category: any, onNavigate
                 key={sub}
                 sub={sub}
                 categorySlug={category.slug}
-                segments={category.categorySegments?.find((cs: any) => cs.subCategoryName === sub)?.segments}
+                segments={
+                  category.categorySegments?.find(
+                    (cs: any) => cs.subCategoryName === sub,
+                  )?.segments
+                }
                 onNavigate={onNavigate}
               />
             ))}
@@ -473,7 +568,17 @@ function CategoryAccordion({ category, onNavigate }: { category: any, onNavigate
   );
 }
 
-function SubCategoryAccordion({ sub, categorySlug, segments, onNavigate }: { sub: string, categorySlug: string, segments?: string[], onNavigate: () => void }) {
+function SubCategoryAccordion({
+  sub,
+  categorySlug,
+  segments,
+  onNavigate,
+}: {
+  sub: string;
+  categorySlug: string;
+  segments?: string[];
+  onNavigate: () => void;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const hasSegments = segments && segments.length > 0;
 
@@ -492,7 +597,10 @@ function SubCategoryAccordion({ sub, categorySlug, segments, onNavigate }: { sub
             onClick={() => setIsOpen(!isOpen)}
             className="p-1 text-gray-400 hover:text-accent-gold transition-colors"
           >
-            <ChevronDown size={16} className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown
+              size={16}
+              className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+            />
           </button>
         )}
       </div>

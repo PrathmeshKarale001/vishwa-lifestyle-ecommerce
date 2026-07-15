@@ -29,7 +29,7 @@ export default function Footer({ settings }: FooterProps) {
       title: "About",
       links: [
         { label: "Our Story", url: "/story" },
-        { label: "Philosophy", url: "/philosophy" },
+        { label: "Philosophy", url: "/story#philosophy" },
         { label: "Contact Us", url: "/contact" },
       ],
     },

@@ -19,10 +19,50 @@ import {
   ShoppingBag,
   Tag,
   XCircle,
+  Loader2,
 } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import toast from "react-hot-toast";
 import { log } from "@/lib/logger";
+
+const INDIAN_STATES = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Lakshadweep",
+  "Puducherry",
+];
 
 const shippingSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -124,6 +164,8 @@ export default function CheckoutPage() {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<ShippingFormData>({
     resolver: zodResolver(shippingSchema),
@@ -131,6 +173,63 @@ export default function CheckoutPage() {
       saveInfo: true,
     },
   });
+
+  // Pincode auto-fetch state
+  const [pincodeFetching, setPincodeFetching] = useState(false);
+  const [pincodeError, setPincodeError] = useState<string | null>(null);
+  const [cityOptions, setCityOptions] = useState<string[]>([]);
+  const watchedPincode = watch("postalCode");
+  const watchedState = watch("state");
+
+  // Auto-fetch city and state from pincode
+  useEffect(() => {
+    const pincode = watchedPincode?.trim();
+    if (!pincode || pincode.length !== 6 || !/^\d{6}$/.test(pincode)) {
+      return;
+    }
+
+    const fetchPincodeData = async () => {
+      setPincodeFetching(true);
+      setPincodeError(null);
+      try {
+        const res = await fetch(`/api/pincode?code=${pincode}`);
+        const data = await res.json();
+        if (data.success) {
+          // Match state name to our list (case-insensitive)
+          const matchedState = INDIAN_STATES.find(
+            (s) => s.toLowerCase() === data.state.toLowerCase(),
+          );
+          if (matchedState) {
+            setValue("state", matchedState, { shouldValidate: true });
+          }
+
+          setCityOptions(data.cities);
+          if (data.cities.length === 1) {
+            setValue("city", data.cities[0], { shouldValidate: true });
+          } else if (data.cities.length > 1) {
+            // Set the district as default city if available
+            if (data.district) {
+              setValue("city", data.district, { shouldValidate: true });
+              // Add district to options if not present
+              if (!data.cities.includes(data.district)) {
+                setCityOptions([data.district, ...data.cities]);
+              }
+            }
+          }
+        } else {
+          setPincodeError("Invalid PIN code. Please check and try again.");
+          setCityOptions([]);
+        }
+      } catch {
+        setPincodeError("Could not fetch location. Please enter manually.");
+        setCityOptions([]);
+      } finally {
+        setPincodeFetching(false);
+      }
+    };
+
+    fetchPincodeData();
+  }, [watchedPincode, setValue]);
 
   // Redirect if cart is empty
   useEffect(() => {
@@ -477,39 +576,110 @@ export default function CheckoutPage() {
                       />
                     </div>
 
-                    {/* City, State, PIN */}
-                    <div className="grid grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm mb-2">City</label>
-                        <input
-                          type="text"
-                          {...register("city")}
-                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                            errors.city ? "border-red-500" : "border-gray-200"
-                          }`}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm mb-2">State</label>
-                        <input
-                          type="text"
-                          {...register("state")}
-                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                            errors.state ? "border-red-500" : "border-gray-200"
-                          }`}
-                        />
-                      </div>
+                    {/* PIN Code → State → City */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      {/* PIN Code */}
                       <div>
                         <label className="block text-sm mb-2">PIN Code</label>
-                        <input
-                          type="text"
-                          {...register("postalCode")}
-                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
-                            errors.postalCode
-                              ? "border-red-500"
-                              : "border-gray-200"
+                        <div className="relative">
+                          <input
+                            type="text"
+                            maxLength={6}
+                            inputMode="numeric"
+                            {...register("postalCode")}
+                            className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
+                              errors.postalCode || pincodeError
+                                ? "border-red-500"
+                                : "border-gray-200"
+                            }`}
+                            placeholder="e.g. 413216"
+                          />
+                          {pincodeFetching && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <Loader2
+                                size={16}
+                                className="animate-spin text-accent-gold"
+                              />
+                            </div>
+                          )}
+                        </div>
+                        {errors.postalCode && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {errors.postalCode.message}
+                          </p>
+                        )}
+                        {pincodeError && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {pincodeError}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* State Dropdown */}
+                      <div>
+                        <label className="block text-sm mb-2">State</label>
+                        <select
+                          {...register("state")}
+                          className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold bg-white appearance-none ${
+                            errors.state ? "border-red-500" : "border-gray-200"
                           }`}
-                        />
+                          style={{
+                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "right 12px center",
+                          }}
+                        >
+                          <option value="">Select State</option>
+                          {INDIAN_STATES.map((state) => (
+                            <option key={state} value={state}>
+                              {state}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.state && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {errors.state.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* City Dropdown / Input */}
+                      <div>
+                        <label className="block text-sm mb-2">City</label>
+                        {cityOptions.length > 0 ? (
+                          <select
+                            {...register("city")}
+                            className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold bg-white appearance-none ${
+                              errors.city ? "border-red-500" : "border-gray-200"
+                            }`}
+                            style={{
+                              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
+                              backgroundRepeat: "no-repeat",
+                              backgroundPosition: "right 12px center",
+                            }}
+                          >
+                            <option value="">Select City</option>
+                            {cityOptions.map((city) => (
+                              <option key={city} value={city}>
+                                {city}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <input
+                            type="text"
+                            {...register("city")}
+                            className={`w-full border px-4 py-3 focus:outline-none focus:border-accent-gold ${
+                              errors.city ? "border-red-500" : "border-gray-200"
+                            }`}
+                            placeholder="Enter city"
+                          />
+                        )}
+                        {errors.city && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {errors.city.message}
+                          </p>
+                        )}
                       </div>
                     </div>
 

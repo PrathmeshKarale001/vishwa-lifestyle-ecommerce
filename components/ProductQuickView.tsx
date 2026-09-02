@@ -34,6 +34,15 @@ interface Product {
   inventory?: number;
   rating?: number;
   reviewCount?: number;
+  variants?: ProductVariant[];
+}
+
+interface ProductVariant {
+  size: string;
+  sku: string;
+  price: number;
+  compareAtPrice?: number;
+  inventory?: number;
 }
 
 export default function ProductQuickView({
@@ -45,6 +54,10 @@ export default function ProductQuickView({
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
+    null,
+  );
+  const [sizeError, setSizeError] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const addItem = useCartStore((state) => state.addItem);
@@ -80,6 +93,8 @@ export default function ProductQuickView({
             setProduct(data);
             setSelectedImage(0);
             setQuantity(1);
+            setSelectedVariant(null);
+            setSizeError(false);
           }
         })
         .catch((error) => {
@@ -95,7 +110,15 @@ export default function ProductQuickView({
   const handleAddToCart = () => {
     if (!product) return;
 
-    const effectiveInventory = product.inventory ?? 10;
+    const requiresSize = !!(product.variants && product.variants.length > 0);
+    if (requiresSize && !selectedVariant) {
+      setSizeError(true);
+      toast.error("Please select a size before adding to cart");
+      return;
+    }
+
+    const effectiveInventory =
+      (selectedVariant ? selectedVariant.inventory : product.inventory) ?? 10;
     const isOutOfStock = effectiveInventory <= 0;
     if (isOutOfStock) {
       toast.error("This product is out of stock");
@@ -103,17 +126,24 @@ export default function ProductQuickView({
     }
 
     addItem({
-      id: `${product._id}-${Date.now()}`,
+      id: selectedVariant
+        ? `${product._id}-${selectedVariant.sku}`
+        : `${product._id}-no-size`,
       productId: product._id,
       name: product.name,
-      price: product.price,
+      price: selectedVariant ? selectedVariant.price : product.price,
       image: product.images?.[0] || product.mainImage || "",
       slug: product.slug,
-      maxQuantity: product.inventory ?? 10,
+      maxQuantity: effectiveInventory,
+      quantity,
+      size: selectedVariant?.size,
+      variantSku: selectedVariant?.sku,
       category: product.category,
     });
 
-    toast.success(`${product.name} added to cart`);
+    toast.success(
+      `${product.name}${selectedVariant ? ` (${selectedVariant.size})` : ""} added to cart`,
+    );
     onClose();
   };
 
@@ -284,6 +314,38 @@ export default function ProductQuickView({
                       {product.description}
                     </p>
                   </div>
+
+                  {/* Size Selector */}
+                  {product.variants && product.variants.length > 0 && (
+                    <div className="mb-6">
+                      <span className="text-sm font-medium">
+                        Select Size <span className="text-red-500">*</span>
+                      </span>
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {product.variants.map((v) => (
+                          <button
+                            key={v.sku}
+                            onClick={() => {
+                              setSelectedVariant(v);
+                              setSizeError(false);
+                            }}
+                            className={`min-w-[48px] h-11 px-4 border text-sm transition-all ${
+                              selectedVariant?.sku === v.sku
+                                ? "border-foreground bg-foreground text-white"
+                                : "border-gray-200 hover:border-foreground"
+                            }`}
+                          >
+                            {v.size}
+                          </button>
+                        ))}
+                      </div>
+                      {sizeError && (
+                        <p className="mt-2 text-sm text-red-600">
+                          Please select a size to continue
+                        </p>
+                      )}
+                    </div>
+                  )}
 
                   {/* Quantity Selector */}
                   <div className="flex items-center gap-4 mb-6">

@@ -20,9 +20,9 @@ export default function WishlistPage() {
     }).format(price);
   };
 
-  const handleAddToCart = (item: typeof items[0]) => {
+  const handleAddToCart = (item: (typeof items)[0]) => {
     addToCart({
-      id: `${item.productId}-${Date.now()}`,
+      id: `${item.productId}-no-size`,
       productId: item.productId,
       name: item.name,
       price: item.price,
@@ -129,7 +129,9 @@ export default function WishlistPage() {
           ) : (
             <div className="text-center py-16 bg-background-alt">
               <Heart size={64} className="mx-auto text-gray-300 mb-4" />
-              <h2 className="font-serif text-xl mb-2">Your wishlist is empty</h2>
+              <h2 className="font-serif text-xl mb-2">
+                Your wishlist is empty
+              </h2>
               <p className="text-foreground-muted mb-6">
                 Save items you love to your wishlist
               </p>
@@ -143,9 +145,6 @@ export default function WishlistPage() {
           )}
         </motion.div>
       </div>
-
-
     </main>
   );
 }
-

@@ -47,6 +47,8 @@ const Invoice = forwardRef<HTMLDivElement, InvoiceProps>(({ order }, ref) => {
             GSTIN: 07AABCU9603R1Z2
             <br />
             crm@vishwaglobal.com
+            <br />
+            +91 74474 89101
           </p>
         </div>
         <div className="text-right">

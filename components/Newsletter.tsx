@@ -18,11 +18,21 @@ export default function Newsletter() {
     setIsSubmitting(true);
 
     try {
-      // In production, send to API
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setIsSubscribed(true);
-      toast.success("Welcome to the Vishwa family!");
-      setEmail("");
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setIsSubscribed(true);
+        toast.success("Welcome to the Vishwa family!");
+        setEmail("");
+      } else {
+        toast.error(result.error || "Failed to subscribe. Please try again.");
+      }
     } catch (error) {
       toast.error("Failed to subscribe. Please try again.");
     } finally {
@@ -55,10 +65,14 @@ export default function Newsletter() {
           <Mail size={32} className="mx-auto text-accent-gold mb-4" />
           <h2 className="text-3xl font-serif mb-4">Join the Sacred Circle</h2>
           <p className="text-foreground-muted mb-8">
-            Subscribe to receive wisdom, rituals, and exclusive offers delivered to your inbox.
+            Subscribe to receive wisdom, rituals, and exclusive offers delivered
+            to your inbox.
           </p>
 
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
+          >
             <input
               type="email"
               value={email}
@@ -83,11 +97,11 @@ export default function Newsletter() {
           </form>
 
           <p className="text-xs text-foreground-muted mt-4">
-            By subscribing, you agree to our Privacy Policy. Unsubscribe anytime.
+            By subscribing, you agree to our Privacy Policy. Unsubscribe
+            anytime.
           </p>
         </div>
       </div>
     </section>
   );
 }
-

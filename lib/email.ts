@@ -8,10 +8,13 @@ const resend = new Resend(process.env.RESEND_API_KEY || "re_123456789");
 const FROM_EMAIL =
   process.env.RESEND_FROM_EMAIL ||
   "Vishwa Lifestyle <noreply@vishwaglobal.com>";
-const ADMIN_EMAIL =
-  process.env.ADMIN_EMAIL ||
-  process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(",")[0] ||
-  "crm@vishwaglobal.com";
+// Supports a comma-separated list so sales/CRM inboxes all receive notifications.
+// Note: intentionally does NOT fall back to NEXT_PUBLIC_ADMIN_EMAILS — that var
+// controls admin panel access, not who receives customer/order mail.
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "crm@vishwaglobal.com")
+  .split(",")
+  .map((e) => e.trim())
+  .filter(Boolean);
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL || "https://vishwalifestyle.com";
 

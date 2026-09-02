@@ -23,6 +23,7 @@ interface ProductCardProps {
   tag?: string;
   inventory?: number;
   lqip?: string;
+  variants?: { size: string; sku: string; price: number; inventory?: number }[];
 }
 
 export default function ProductCard({
@@ -37,6 +38,7 @@ export default function ProductCard({
   tag,
   inventory = 10,
   lqip,
+  variants,
 }: ProductCardProps) {
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
@@ -46,6 +48,7 @@ export default function ProductCard({
   const effectiveInventory = inventory ?? 10;
   const isOutOfStock = effectiveInventory <= 0;
   const isLowStock = effectiveInventory > 0 && effectiveInventory <= 5;
+  const requiresSize = !!(variants && variants.length > 0);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -56,8 +59,16 @@ export default function ProductCard({
       return;
     }
 
+    // Products with size variants must have a size chosen explicitly.
+    // Open Quick View so the customer selects one instead of defaulting.
+    if (requiresSize) {
+      setIsQuickViewOpen(true);
+      toast("Please select a size", { icon: "📏" });
+      return;
+    }
+
     addItem({
-      id: `${id}-${Date.now()}`,
+      id: `${id}-no-size`,
       productId: id,
       name,
       price,
@@ -131,13 +142,20 @@ export default function ProductCard({
           {/* Wishlist Button */}
           <button
             onClick={handleToggleWishlist}
-            className={`absolute top-3 right-3 z-20 p-2.5 bg-white/90 backdrop-blur-md rounded-full shadow-sm transition-all duration-300 hover:scale-110 active:scale-95 ${isWishlisted
-              ? "text-red-500"
-              : "text-foreground-muted hover:text-red-500"
-              }`}
-            aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            className={`absolute top-3 right-3 z-20 p-2.5 bg-white/90 backdrop-blur-md rounded-full shadow-sm transition-all duration-300 hover:scale-110 active:scale-95 ${
+              isWishlisted
+                ? "text-red-500"
+                : "text-foreground-muted hover:text-red-500"
+            }`}
+            aria-label={
+              isWishlisted ? "Remove from wishlist" : "Add to wishlist"
+            }
           >
-            <Heart size={16} fill={isWishlisted ? "currentColor" : "none"} strokeWidth={1.5} />
+            <Heart
+              size={16}
+              fill={isWishlisted ? "currentColor" : "none"}
+              strokeWidth={1.5}
+            />
           </button>
 
           {/* Product Image */}
@@ -147,11 +165,17 @@ export default function ProductCard({
               alt={name}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-              className={`object-cover transition-all duration-1000 ease-out group-hover:scale-110 ${isOutOfStock ? "opacity-50 grayscale" : "opacity-100"
-                }`}
+              className={`object-cover transition-all duration-1000 ease-out group-hover:scale-110 ${
+                isOutOfStock ? "opacity-50 grayscale" : "opacity-100"
+              }`}
               loading="lazy"
               placeholder="blur"
-              blurDataURL={lqip || (image && image.trim() ? getBlurPlaceholder(image) : getBlurPlaceholder("/placeholder-product.svg"))}
+              blurDataURL={
+                lqip ||
+                (image && image.trim()
+                  ? getBlurPlaceholder(image)
+                  : getBlurPlaceholder("/placeholder-product.svg"))
+              }
               onError={(e) => {
                 // Fallback to placeholder if image fails to load
                 const target = e.target as HTMLImageElement;
@@ -181,14 +205,22 @@ export default function ProductCard({
             <button
               onClick={handleAddToCart}
               disabled={isOutOfStock}
-              className={`flex-1 py-2.5 text-[10px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${isOutOfStock
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-black text-white hover:bg-accent-gold"
-                }`}
-              aria-label={isOutOfStock ? "Out of stock" : `Add ${name} to cart`}
+              className={`flex-1 py-2.5 text-[10px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${
+                isOutOfStock
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-black text-white hover:bg-accent-gold"
+              }`}
+              aria-label={
+                isOutOfStock
+                  ? "Out of stock"
+                  : requiresSize
+                    ? `Select size for ${name}`
+                    : `Add ${name} to cart`
+              }
               data-testid="add-to-cart"
             >
-              <ShoppingBag size={14} /> {isOutOfStock ? "Out" : "Add"}
+              <ShoppingBag size={14} />{" "}
+              {isOutOfStock ? "Out" : requiresSize ? "Select Size" : "Add"}
             </button>
           </div>
 
@@ -197,11 +229,14 @@ export default function ProductCard({
             <button
               onClick={handleAddToCart}
               disabled={isOutOfStock}
-              className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all active:scale-90 ${isOutOfStock
-                ? "bg-gray-200 text-gray-400"
-                : "bg-black text-white"
-                }`}
-              aria-label={`Add ${name} to cart`}
+              className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all active:scale-90 ${
+                isOutOfStock
+                  ? "bg-gray-200 text-gray-400"
+                  : "bg-black text-white"
+              }`}
+              aria-label={
+                requiresSize ? `Select size for ${name}` : `Add ${name} to cart`
+              }
               data-testid="add-to-cart"
             >
               <ShoppingBag size={16} />
@@ -220,7 +255,12 @@ export default function ProductCard({
             </p>
           )}
           <div className="flex items-center justify-center gap-1.5 sm:gap-2">
-            <span className="text-sm sm:text-base font-medium" data-testid="product-price">{formatPrice(price)}</span>
+            <span
+              className="text-sm sm:text-base font-medium"
+              data-testid="product-price"
+            >
+              {formatPrice(price)}
+            </span>
             {compareAtPrice && compareAtPrice > price && (
               <span className="text-[10px] sm:text-sm text-foreground-muted line-through opacity-70">
                 {formatPrice(compareAtPrice)}
@@ -228,7 +268,6 @@ export default function ProductCard({
             )}
           </div>
         </div>
-
       </Link>
 
       {/* Quick View Modal */}

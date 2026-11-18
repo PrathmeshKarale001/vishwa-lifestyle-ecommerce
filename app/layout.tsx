@@ -11,7 +11,7 @@ import Providers from "@/components/Providers";
 import { generateOrganizationSchema } from "@/lib/seo";
 import ConditionalWrapper from "@/components/ConditionalWrapper";
 import { getCategories, getSiteSettings } from "@/lib/sanity";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
